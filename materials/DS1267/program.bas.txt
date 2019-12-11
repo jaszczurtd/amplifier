@@ -1,0 +1,106 @@
+'************* Konfiguracja uC *****************
+'***********************************************
+$regfile = "attiny13.dat"
+$crystal = 9600000
+Config Portb = &B11111010 : Portb = &B11100101
+
+Rst Alias Portb.3
+Dq Alias Portb.1
+Clk Alias Portb.4
+Splus Alias Pinb.0
+Sminus Alias Pinb.2
+
+$hwstack = 20
+$swstack = 10
+$framesize = 40
+'********** Konfiguracja uC Koniec  ************
+
+'******************  Zmienne *******************
+'***********************************************
+Dim N As Byte , Dane As Word
+Dim Licz_sw(2) As Byte
+Dim Glos As Byte
+Dim Autosave As Byte
+'*************  Zmienne Koniec  ****************
+
+'************ Warunki Poczatkowe ***************
+'***********************************************
+N = 15
+Readeeprom Glos , 1
+
+Glos = Glos / 2                                             'te dwie linijki robiš zawsze parzystš wartsc
+Glos = Glos * 2                                             'na wypadek bledu odczytu
+
+Clk = 0
+Dane = 256 * Glos
+Dane = Dane + Glos
+Rst = 1
+
+'*******  Warunki Poczatkowe Koniec  ***********
+
+'**************  Petla glowna ******************
+'***********************************************
+Do
+  If Rst = 1 Then                                           'wysylanie
+    If Clk = 1 Then
+      If N <> 255 Then
+        Dq = Dane.n
+        Decr N
+      Else
+        Rst = 0
+        Dq = 0
+        N = 15
+      End If
+    End If
+    Toggle Clk
+  Else
+    Waitms 5
+    '******************************** przyciski
+    If Splus = 0 Then
+      Incr Licz_sw(1)
+      If Licz_sw(1) = 10 Then
+        Licz_sw(1) = 0
+        If Glos <= 253 Then
+          Autosave = 250
+          Glos = Glos + 2
+          Clk = 0
+          Dane = 256 * Glos
+          Dane = Dane + Glos
+          Rst = 1
+          Waitms 50
+        End If
+      End If
+    Else
+      Licz_sw(1) = 0
+    End If
+
+    If Sminus = 0 Then
+      Incr Licz_sw(2)
+      If Licz_sw(2) = 10 Then
+        Licz_sw(2) = 0
+        If Glos >= 2 Then
+          Autosave = 250
+          Glos = Glos - 2
+          Clk = 0
+          Dane = 256 * Glos
+          Dane = Dane + Glos
+          Rst = 1
+          Waitms 50
+        End If
+      End If
+    Else
+      Licz_sw(2) = 0
+    End If
+    '******************************** przyciski koniec
+
+    If Autosave > 0 Then
+      Decr Autosave
+      If Autosave = 0 Then
+        Writeeeprom Glos , 1
+      End If
+    End If
+
+  End If
+Loop
+End
+'************ Petla glowna Koniec **************
