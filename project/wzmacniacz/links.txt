@@ -1,0 +1,7 @@
+https://www.youtube.com/watch?v=qG60WB4pJaE
+https://www.electronicwings.com/avr-atmega/atmega1632-external-hardware-interrupts
+https://community.atmel.com/projects/nokia5110-graphical-display-interfacing-atmega16-32
+http://hobby.abxyz.bplaced.net/index.php?pid=3&aid=16
+http://mirley.firlej.org/programowanie_mikrokontrolerow_avrdude
+http://akademia.nettigo.pl/attiny_010/
+https://blog.podkalicki.com/100-projects-on-attiny13/

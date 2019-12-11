@@ -13,6 +13,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A318E61A23A16F8E00BAF965 /* links.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = links.txt; sourceTree = "<group>"; };
 		A34F48B6239BFFAA00D9D1E2 /* Index */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Index; sourceTree = BUILT_PRODUCTS_DIR; };
 		A34F48B9239BFFAA00D9D1E2 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		A34F48BC239BFFAA00D9D1E2 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -50,6 +51,7 @@
 				A34F48B9239BFFAA00D9D1E2 /* main.c */,
 				A34F48CE239C029500D9D1E2 /* main.h */,
 				A34F48CF239C030000D9D1E2 /* version.h */,
+				A318E61A23A16F8E00BAF965 /* links.txt */,
 				A34F48BB239BFFAA00D9D1E2 /* Makefiles */,
 			);
 			path = wzmacniacz;
