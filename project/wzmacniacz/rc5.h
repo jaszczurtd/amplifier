@@ -20,12 +20,21 @@
 #define RC5_H
 
 #include <stdint.h>
+#include <stdbool.h>
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <inttypes.h>
+
+#include "utils.h"
 
 #define RC5_GetStartBits(command) ((command & 0x3000) >> 12)
 #define RC5_GetToggleBit(command) ((command & 0x800) >> 11)
 #define RC5_GetAddressBits(command) ((command & 0x7C0) >> 6)
 #define RC5_GetCommandBits(command) (command & 0x3F)
 #define RC5_GetCommandAddressBits(command) (command & 0x7FF)
+
+#define RC5_STABILITY_VALUE 15
 
 /* Initialize timer and interrupt */
 void RC5_Init(void);
@@ -43,8 +52,7 @@ void RC5_Reset(void);
  * should be polled at least once per ~150ms to ensure
  * that no command is missed.
  */
-uint8_t RC5_NewCommandReceived(uint16_t *new_command);
-
+int RC5_NewCommandReceived(void);
 
 #endif
 

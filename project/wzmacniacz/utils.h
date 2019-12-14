@@ -2,8 +2,7 @@
 //  utils.h
 //  Index
 //
-//  Created by ministerq on 07/12/2019.
-//  Copyright © 2019 Commend. All rights reserved.
+//  Created by Marcin Kielesiński on 07/12/2019.
 //
 
 #ifndef utils_h
@@ -42,5 +41,6 @@
 void delay_ms(int ms);
 int strlength(char *s);
 int binatoi(char *s);
+char *decToBinary(int n);
 
 #endif /* utils_h */

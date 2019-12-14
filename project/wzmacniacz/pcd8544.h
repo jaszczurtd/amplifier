@@ -10,9 +10,15 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include "utils.h"
+#include <string.h>
+
 #include <avr/pgmspace.h>
+#include <avr/interrupt.h>
+#include <avr/io.h>
 #include <util/delay.h>
+
+
+#include "utils.h"
 
 // --------------- Wartoci zwrotne
 #define OK                         0

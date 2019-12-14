@@ -1,7 +1,5 @@
 #include "rc5.h"
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
 
 #define SHORT_MIN 888   /* 444 microseconds */
 #define SHORT_MAX 2666  /* 1333 microseconds */
@@ -26,6 +24,8 @@ volatile uint16_t command;
 uint8_t ccounter;
 volatile uint8_t has_new;
 State state = STATE_BEGIN;
+static int resultCommand = 0;
+static int counter = 0;
 
 void RC5_Init(void) {
     /* Set INT0 to trigger on any edge */
@@ -41,6 +41,9 @@ void RC5_Init(void) {
     TCCR1B = _BV(CS11);
     
     RC5_Reset();
+    
+    resultCommand = 0;
+    counter = 0;
 }
 
 
@@ -55,13 +58,28 @@ void RC5_Reset(void) {
     GICR |= _BV(INT0);
 }
 
-
-uint8_t RC5_NewCommandReceived(uint16_t *new_command) {
-    if(has_new) {
-        *new_command = command; 
-    } 
+void nailResult(void) {
+    if(has_new &&
+       counter == 0 &&
+       resultCommand == 0 &&
+       command != 0) {
+        resultCommand = command &~ 2048;
+    }
     
-    return has_new; 
+    if(has_new) {
+        RC5_Reset();
+        counter = RC5_STABILITY_VALUE;
+    } else {
+        if(counter > 0) {
+            counter--;
+        } else {
+            resultCommand = 0;
+        }
+    }
+}
+
+int RC5_NewCommandReceived(void) {
+    return resultCommand;
 }
 
 ISR(INT0_vect) {
@@ -132,4 +150,7 @@ ISR(INT0_vect) {
     }
     
     TCNT1 = 0;
+    
+    nailResult();
 }
+

@@ -9,10 +9,6 @@
  *
  */
 
-#include <avr/io.h>
-#include <string.h>
-#include <avr/pgmspace.h>
-#include <avr/interrupt.h>
 #include "pcd8544.h"
 
 

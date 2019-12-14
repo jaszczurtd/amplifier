@@ -3,7 +3,6 @@
 //  Index
 //
 //  Created by Marcin Kielesiński on 07/12/2019.
-//  Copyright © 2019 Commend. All rights reserved.
 //
 
 #include "utils.h"
@@ -40,3 +39,21 @@ int binatoi(char *s) {
     return(l);
 }
 
+static char binaryNum[16 + 1];
+char *decToBinary(int n) {
+    // array to store binary number
+    int a = 0, c, k;
+    
+    memset(binaryNum, 0, sizeof(binaryNum));
+    
+    for (c = 15; c >= 0; c--) {
+        k = n >> c;
+        
+        if (k & 1) {
+            binaryNum[a++] = '1';
+        } else {
+            binaryNum[a++] = '0';
+        }
+    }
+    return binaryNum;
+}

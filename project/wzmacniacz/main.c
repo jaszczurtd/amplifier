@@ -11,10 +11,6 @@
 
 #include "main.h"
 
-#define MAIN_DELAY_TIME 10 //in ms
-#define POWER_RES_COUNTER 100 //* MAIN_DELAY_TIME
-#define SPEAKERS_COUNTER 20      //POWER_RES_COUNTER + (* MAIN_DELAY_TIME)
-
 static bool powerIsOn = false;
 static int powerResCounter = 0;
 static int speakersCounter = 0;
@@ -145,45 +141,56 @@ void setup(void) {
     sbi(DDRD,PA0);    //LED
 }
 
+static int command = 0;
 int main(void) {
     
-    RC5_Init();
-    
+    cli();
+
     PCD_Ini();
     PCD_Contr(0x3f);
-    
     PCD_Clr();
-    PCD_GotoXYFont(0,0);
-    //PCD_FStr(FONT_1X,(unsigned char*)PSTR(" Czesc moje"));
+    PCD_Upd();
+
     /*
+    PCD_GotoXYFont(0,0);
+
+    PCD_FStr(FONT_1X,(unsigned char*)PSTR(" Czesc moje"));
     PCD_GotoXYFont(0,1);
     PCD_FStr(FONT_1X,(unsigned char*)PSTR("  koffanie "));
     PCD_GotoXYFont(0,2);
     PCD_FStr(FONT_1X,(unsigned char*)PSTR("--!@#$%^&*()--"));
     PCD_SBar ( 0, 25, 16, 12, PIXEL_ON);
+     
     */
-    PCD_Upd();
+    
+    RC5_Init();
+    Impulsator_Init();
+
     
     sei();
     
     while(1) {
         char s[20];
-        uint16_t command;
         
         PCD_Clr();
         PCD_GotoXYFont(0,0);
         
-        if(RC5_NewCommandReceived(&command)) {
-            RC5_Reset();
-            
-            memset(s, 0, sizeof(s));
-            snprintf(s, sizeof(s), "wartosc: %d", command);
-        } else {
-            strncpy(s, "no RC5 code", sizeof(s));
-        }
+        command = RC5_NewCommandReceived();
+
+        memset(s, 0, sizeof(s));
+        snprintf(s, sizeof(s), "%s", decToBinary(command));
         
         PCD_print(FONT_1X, (byte*)s);
+        
+        memset(s, 0, sizeof(s));
+        snprintf(s, sizeof(s), "%d", getImpulsatorValue());
+        
+        PCD_GotoXYFont(0,2);
+        PCD_print(FONT_1X, (byte*)s);
+        
         PCD_Upd();
+
+        delay_ms(MAIN_DELAY_TIME);
     }
     return 0;
 

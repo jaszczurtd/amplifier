@@ -7,12 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A304161023A53440000D6180 /* Impulsator.c in Sources */ = {isa = PBXBuildFile; fileRef = A304160F23A53440000D6180 /* Impulsator.c */; };
 		A34F48BA239BFFAA00D9D1E2 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A34F48B9239BFFAA00D9D1E2 /* main.c */; };
 		A34F48D2239C2DA500D9D1E2 /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = A34F48D1239C2DA500D9D1E2 /* utils.c */; };
 		A34F48DE239EF69A00D9D1E2 /* pcd8544.c in Sources */ = {isa = PBXBuildFile; fileRef = A34F48DD239EF69A00D9D1E2 /* pcd8544.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A304160E23A53440000D6180 /* Impulsator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Impulsator.h; sourceTree = "<group>"; };
+		A304160F23A53440000D6180 /* Impulsator.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Impulsator.c; sourceTree = "<group>"; };
 		A318E61A23A16F8E00BAF965 /* links.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = links.txt; sourceTree = "<group>"; };
 		A34F48B6239BFFAA00D9D1E2 /* Index */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Index; sourceTree = BUILT_PRODUCTS_DIR; };
 		A34F48B9239BFFAA00D9D1E2 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
@@ -74,6 +77,8 @@
 				A34F48DD239EF69A00D9D1E2 /* pcd8544.c */,
 				A34F48D1239C2DA500D9D1E2 /* utils.c */,
 				A34F48D0239C2DA500D9D1E2 /* utils.h */,
+				A304160E23A53440000D6180 /* Impulsator.h */,
+				A304160F23A53440000D6180 /* Impulsator.c */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -204,6 +209,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A34F48BA239BFFAA00D9D1E2 /* main.c in Sources */,
+				A304161023A53440000D6180 /* Impulsator.c in Sources */,
 				A34F48D2239C2DA500D9D1E2 /* utils.c in Sources */,
 				A34F48DE239EF69A00D9D1E2 /* pcd8544.c in Sources */,
 			);

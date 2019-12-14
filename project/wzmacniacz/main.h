@@ -8,7 +8,6 @@
 #include <stdio.h>
 
 
-//lcd includes
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <inttypes.h>
@@ -17,8 +16,13 @@
 #include "utils.h"
 #include "pcd8544.h"
 #include "rc5.h"
+#include "Impulsator.h"
 
 typedef unsigned char uint8_t;
+
+#define MAIN_DELAY_TIME 20 //in ms
+#define POWER_RES_COUNTER 100 //* MAIN_DELAY_TIME
+#define SPEAKERS_COUNTER 20      //POWER_RES_COUNTER + (* MAIN_DELAY_TIME)
 
 #ifndef MAIN_H
 #define MAIN_H
