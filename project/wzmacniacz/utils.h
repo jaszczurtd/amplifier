@@ -38,6 +38,14 @@
 #define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
 #endif
 
+#ifndef bitClear
+#define bitClear(dest, bit) dest &= ~(_BV(bit))
+#endif
+
+#ifndef bitSet
+#define bitSet(dest, bit) dest |= _BV(bit)
+#endif
+
 void delay_ms(int ms);
 int strlength(char *s);
 int binatoi(char *s);
