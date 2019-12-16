@@ -9,6 +9,8 @@
 #define utils_h
 
 #include <stdio.h>
+#include <stdbool.h>
+#include <inttypes.h>
 #include <string.h>
 #include <util/delay.h>
 #include <avr/wdt.h>
@@ -44,6 +46,10 @@
 
 #ifndef bitSet
 #define bitSet(dest, bit) dest |= _BV(bit)
+#endif
+
+#ifndef boolP
+#define boolP(x) (x) ? "true" : "false"
 #endif
 
 void delay_ms(int ms);

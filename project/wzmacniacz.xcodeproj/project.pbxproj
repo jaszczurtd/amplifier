@@ -73,12 +73,12 @@
 			children = (
 				A367140E23A12D27004B5B92 /* rc5.c */,
 				A367140F23A12D27004B5B92 /* rc5.h */,
-				A34F48DC239EF69A00D9D1E2 /* pcd8544.h */,
 				A34F48DD239EF69A00D9D1E2 /* pcd8544.c */,
+				A34F48DC239EF69A00D9D1E2 /* pcd8544.h */,
 				A34F48D1239C2DA500D9D1E2 /* utils.c */,
 				A34F48D0239C2DA500D9D1E2 /* utils.h */,
-				A304160E23A53440000D6180 /* Impulsator.h */,
 				A304160F23A53440000D6180 /* Impulsator.c */,
+				A304160E23A53440000D6180 /* Impulsator.h */,
 			);
 			name = tools;
 			sourceTree = "<group>";

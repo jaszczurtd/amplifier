@@ -141,7 +141,7 @@ void setup(void) {
     sbi(DDRD,PA0);    //LED
 }
 
-static int command = 0;
+static int speed = 0;
 int main(void) {
     
     cli();
@@ -164,7 +164,8 @@ int main(void) {
     */
     
     RC5_Init();
-    Impulsator_Init();
+    Impulsator_Init(256);
+    setImpulsatorStep(2);
 
     
     sei();
@@ -175,17 +176,9 @@ int main(void) {
         PCD_Clr();
         PCD_GotoXYFont(0,0);
         
-        command = RC5_NewCommandReceived();
-
         memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%s", decToBinary(command));
+        snprintf(s, sizeof(s), "%d %d %d", getImpulsatorValue(), RC5_NewCommandReceived(), speed++);
         
-        PCD_print(FONT_1X, (byte*)s);
-        
-        memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%d", getImpulsatorValue());
-        
-        PCD_GotoXYFont(0,2);
         PCD_print(FONT_1X, (byte*)s);
         
         PCD_Upd();

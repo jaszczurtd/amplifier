@@ -9,13 +9,21 @@
 #define Impulsator_h
 
 #include <stdio.h>
+#include <stdbool.h>
+
 #include <string.h>
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include "utils.h"
 
-void Impulsator_Init(void);
+#define NONE 0
+#define LEFT 1
+#define RIGHT 2
+
+void Impulsator_Init(int max);
+void setImpulsatorMaxValue(int value);
+void setImpulsatorStep(int step);
 int getImpulsatorValue(void);
 
 #endif /* Impulsator_h */

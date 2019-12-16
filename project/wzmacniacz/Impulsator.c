@@ -7,34 +7,112 @@
 
 #include "Impulsator.h"
 
-static int counter = 0;
+//experimental value
+#define DETERMINATION_TIME 250
 
-void Impulsator_Init(void) {
-    
-    //enable INT1 interrupts (PD3)
-    bitSet(GIMSK, INT1);
-    bitSet(GICR, INT1);
-    
-    //falling edge of INT1
-    bitClear(MCUCR, ISC01);
-    bitSet(MCUCR, ISC11);
-    
-    //PD0 and PD1 - impulsator input, PD3 - interrupt
-    cbi(DDRD,PD0);
-    cbi(DDRD,PD1);
-    cbi(DDRD,PD3);
+static int currentValue, maxValue, stepValue, stepValueCounter;
+static bool determined = false;
+static uint16_t pulses = 0;
+static uint8_t delta = NONE;
+static bool lastLeft = false, lastRight = false;
+
+bool getImpulsatorLSW(void) {
+    return bit_is_clear(PIND, PD0);
 }
 
-ISR(INT1_vect) {
+bool getImpulsatorRSW(void) {
+    return bit_is_clear(PIND, PD1);
+}
+
+void Impulsator_Init(int max) {
+
+    bitClear(TCCR2, CS22);
+    bitSet(TCCR2, CS21);
+    bitClear(TCCR2, CS20);
     
-    if(bit_is_clear(PIND, PD0)) {
-        counter++;
+    bitSet(TIMSK, TOIE2);
+    
+    TCNT2 = 0;
+
+    cbi(DDRD,PD0);
+    cbi(DDRD,PD1);
+
+    lastLeft = getImpulsatorLSW();
+    lastRight = getImpulsatorRSW();
+    
+    pulses = 0;
+    delta = NONE;
+    determined = false;
+    stepValue = 1;
+    stepValueCounter = 0;
+    
+    setImpulsatorMaxValue(max);
+}
+
+void setImpulsatorMaxValue(int value) {
+    maxValue = value;
+}
+
+void setImpulsatorStep(int step) {
+    stepValue = step;
+}
+
+void Read1StepEncoder(void) {
+    
+    bool left = getImpulsatorLSW();
+    bool right = getImpulsatorRSW();
+    
+    bool movement = true;
+    if(left == lastLeft && right == lastRight) {
+        movement = false;
     }
-    if(bit_is_clear(PIND, PD1)) {
-        counter++;
+    lastLeft = left;
+    lastRight = right;
+
+    if(determined) {
+        pulses--;
+        if(pulses <= 0) {
+            determined = false;
+            delta = NONE;
+            return;
+        }
+        if(delta == RIGHT && movement) {
+            if(currentValue < maxValue) {
+                if(stepValueCounter++ > stepValue){
+                    currentValue++;
+                    stepValueCounter = 0;
+                }
+            }
+            pulses = DETERMINATION_TIME;
+        }
+        if(delta == LEFT && movement) {
+            if(currentValue > 0) {
+                if(stepValueCounter++ > stepValue){
+                    currentValue--;
+                    stepValueCounter = 0;
+                }
+            }
+            pulses = DETERMINATION_TIME;
+        }
+    } else {
+        
+        if(left && !right) {
+            delta = LEFT;
+            determined = true;
+            pulses = DETERMINATION_TIME;
+        }
+        if(!left && right) {
+            delta = RIGHT;
+            determined = true;
+            pulses = DETERMINATION_TIME;
+        }
     }
+}
+
+ISR(TIMER2_OVF_vect) {
+    Read1StepEncoder();
 }
 
 int getImpulsatorValue(void) {
-    return counter;
+    return currentValue;
 }

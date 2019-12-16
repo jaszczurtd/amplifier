@@ -58,7 +58,7 @@ void RC5_Reset(void) {
     GICR |= _BV(INT0);
 }
 
-void nailResult(void) {
+int RC5_NewCommandReceived(void) {
     if(has_new &&
        counter == 0 &&
        resultCommand == 0 &&
@@ -76,13 +76,11 @@ void nailResult(void) {
             resultCommand = 0;
         }
     }
-}
-
-int RC5_NewCommandReceived(void) {
     return resultCommand;
 }
 
 ISR(INT0_vect) {
+    
     uint16_t delay = TCNT1;
 
     /* TSOP2236 pulls the data line up, giving active low,
@@ -150,7 +148,5 @@ ISR(INT0_vect) {
     }
     
     TCNT1 = 0;
-    
-    nailResult();
 }
 
