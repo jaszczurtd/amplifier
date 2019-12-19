@@ -17,6 +17,8 @@
 #include "pcd8544.h"
 #include "rc5.h"
 #include "Impulsator.h"
+#include "i2cEeprom.h"
+#include "UART.h"
 
 typedef unsigned char uint8_t;
 

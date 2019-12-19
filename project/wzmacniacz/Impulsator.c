@@ -43,7 +43,7 @@ void Impulsator_Init(int max) {
     pulses = 0;
     delta = NONE;
     determined = false;
-    stepValue = 1;
+    stepValue = 0;
     stepValueCounter = 0;
     
     setImpulsatorMaxValue(max);

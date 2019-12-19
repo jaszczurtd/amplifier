@@ -142,6 +142,7 @@ void setup(void) {
 }
 
 static int speed = 0;
+static char result = 0;
 int main(void) {
     
     cli();
@@ -164,12 +165,18 @@ int main(void) {
     */
     
     RC5_Init();
+    
     Impulsator_Init(256);
     setImpulsatorStep(2);
 
-    
     sei();
     
+    TWI_Init();
+    
+    EEPROMwrite(1, 44);
+    
+    result = EEPROMread(1);
+
     while(1) {
         char s[20];
         
@@ -177,7 +184,7 @@ int main(void) {
         PCD_GotoXYFont(0,0);
         
         memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%d %d %d", getImpulsatorValue(), RC5_NewCommandReceived(), speed++);
+        snprintf(s, sizeof(s), "%d %d %d", getImpulsatorValue(), RC5_NewCommandReceived(), result);
         
         PCD_print(FONT_1X, (byte*)s);
         
