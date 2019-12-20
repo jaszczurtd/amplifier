@@ -12,7 +12,7 @@ void TWI_Init(void) {
     TWBR = (((F_CPU / 100000) - 16) / 2);      // ((Fclk/Ftwi)-16)/2
 }
 
-void EEPROMwrite(unsigned char ucAddress, unsigned char ucData) {
+bool EEPROMwrite(unsigned char ucAddress, unsigned char ucData) {
     do {
         //Put Start Condition on TWI Bus
         TWCR=(1<<TWINT)|(1<<TWSTA)|(1<<TWEN);
@@ -83,6 +83,7 @@ void EEPROMwrite(unsigned char ucAddress, unsigned char ucData) {
 
     //Wait untill Writing is complete
     _delay_ms(12);
+    return TRUE;
 }
 
 unsigned char EEPROMread(unsigned char ucAddress) {

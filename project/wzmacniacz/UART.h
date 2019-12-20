@@ -19,6 +19,7 @@
 #include <util/delay.h>
 #include "utils.h"
 
+void UART_Init(void);
 unsigned char UART_Receive(void);
 void UART_Sent(unsigned char data);
 

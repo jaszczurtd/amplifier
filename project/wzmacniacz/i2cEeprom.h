@@ -18,9 +18,8 @@
 #include "utils.h"
 
 
-void UART_Init(void);
 void TWI_Init(void);
-void EEPROMwrite(unsigned char ucAddress, unsigned char ucData);
+bool EEPROMwrite(unsigned char ucAddress, unsigned char ucData);
 unsigned char EEPROMread(unsigned char ucAddress);
 
 #endif /* i2cEeprom_h */
