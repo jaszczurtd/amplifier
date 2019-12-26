@@ -167,7 +167,7 @@ int main(void) {
     RC5_Init();
     
     Impulsator_Init(256);
-    setImpulsatorStep(2);
+    setImpulsatorStep(1);
 
     sei();
     

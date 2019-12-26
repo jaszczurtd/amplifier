@@ -8,7 +8,7 @@
 #include "Impulsator.h"
 
 //experimental value
-#define DETERMINATION_TIME 250
+#define DETERMINATION_TIME 400
 
 static int currentValue, maxValue, stepValue, stepValueCounter;
 static bool determined = false;
@@ -22,6 +22,22 @@ bool getImpulsatorLSW(void) {
 
 bool getImpulsatorRSW(void) {
     return bit_is_clear(PIND, PD1);
+}
+
+void determination(int deltaTo) {
+    switch(deltaTo) {
+        case LEFT:
+        case RIGHT:
+            delta = deltaTo;
+            determined = true;
+            pulses = DETERMINATION_TIME;
+            break;
+        case NONE:
+            determined = false;
+            delta = NONE;
+            pulses = 0;
+            break;
+    }
 }
 
 void Impulsator_Init(int max) {
@@ -40,9 +56,8 @@ void Impulsator_Init(int max) {
     lastLeft = getImpulsatorLSW();
     lastRight = getImpulsatorRSW();
     
-    pulses = 0;
-    delta = NONE;
-    determined = false;
+    determination(NONE);
+    
     stepValue = 0;
     stepValueCounter = 0;
     
@@ -55,6 +70,26 @@ void setImpulsatorMaxValue(int value) {
 
 void setImpulsatorStep(int step) {
     stepValue = step;
+}
+
+void decrease(void) {
+    if(currentValue > 0) {
+        if(stepValueCounter++ > stepValue){
+            currentValue--;
+            stepValueCounter = 0;
+        }
+    }
+    pulses = DETERMINATION_TIME;
+}
+
+void increase(void) {
+    if(currentValue < maxValue) {
+        if(stepValueCounter++ > stepValue){
+            currentValue++;
+            stepValueCounter = 0;
+        }
+    }
+    pulses = DETERMINATION_TIME;
 }
 
 void Read1StepEncoder(void) {
@@ -70,41 +105,24 @@ void Read1StepEncoder(void) {
     lastRight = right;
 
     if(determined) {
-        pulses--;
-        if(pulses <= 0) {
-            determined = false;
-            delta = NONE;
+        if(pulses-- <= 0) {
+            determination(NONE);
             return;
         }
-        if(delta == RIGHT && movement) {
-            if(currentValue < maxValue) {
-                if(stepValueCounter++ > stepValue){
-                    currentValue++;
-                    stepValueCounter = 0;
-                }
+        if(movement){
+            if(delta == RIGHT) {
+                increase();
             }
-            pulses = DETERMINATION_TIME;
-        }
-        if(delta == LEFT && movement) {
-            if(currentValue > 0) {
-                if(stepValueCounter++ > stepValue){
-                    currentValue--;
-                    stepValueCounter = 0;
-                }
+            if(delta == LEFT) {
+                decrease();
             }
-            pulses = DETERMINATION_TIME;
         }
     } else {
-        
         if(left && !right) {
-            delta = LEFT;
-            determined = true;
-            pulses = DETERMINATION_TIME;
+            determination(LEFT);
         }
         if(!left && right) {
-            delta = RIGHT;
-            determined = true;
-            pulses = DETERMINATION_TIME;
+            determination(RIGHT);
         }
     }
 }
