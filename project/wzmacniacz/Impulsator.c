@@ -8,7 +8,7 @@
 #include "Impulsator.h"
 
 //experimental value
-#define DETERMINATION_TIME 400
+#define DETERMINATION_TIME 150
 
 static int currentValue, maxValue, stepValue, stepValueCounter;
 static bool determined = false;
@@ -92,22 +92,23 @@ void increase(void) {
     pulses = DETERMINATION_TIME;
 }
 
+int last = 0;
 void Read1StepEncoder(void) {
     
     bool left = getImpulsatorLSW();
     bool right = getImpulsatorRSW();
-    
+    int i = 0;
+
     bool movement = true;
     if(left == lastLeft && right == lastRight) {
         movement = false;
     }
     lastLeft = left;
     lastRight = right;
-
+    
     if(determined) {
         if(pulses-- <= 0) {
             determination(NONE);
-            return;
         }
         if(movement){
             if(delta == RIGHT) {
@@ -117,15 +118,26 @@ void Read1StepEncoder(void) {
                 decrease();
             }
         }
-    } else {
-        if(left && !right) {
-            determination(LEFT);
-        }
-        if(!left && right) {
-            determination(RIGHT);
+    }
+    
+    if(movement) {
+        
+        if(left) i++;
+        if(right) i ^= 3;
+        i -= last;
+        last += i;
+
+        if(delta == NONE) {
+            if(i & 1) {
+                if(i & 2) {
+                    determination(RIGHT);
+                } else {
+                    determination(LEFT);
+                }
+            }
         }
     }
-}
+ }
 
 ISR(TIMER2_OVF_vect) {
     Read1StepEncoder();

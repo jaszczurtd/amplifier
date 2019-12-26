@@ -34,3 +34,27 @@ void tmf_impulsator(void)
        }
    }
 } 
+
+
+
+if(left) newpos = 3;
+if(right) newpos ^= 1;
+diff = last-newpos;
+if(diff & 1) {
+    last = newpos;
+    enc_delta += (diff & 2) - 1;
+}
+
+int val = enc_delta;
+enc_delta = 0;
+
+if(delta == NONE) {
+    switch (val) {
+        case -1:
+            determination(LEFT);
+            break;
+        case 1:
+            determination(RIGHT);
+            break;
+     }
+}
