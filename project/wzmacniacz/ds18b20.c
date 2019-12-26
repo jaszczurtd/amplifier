@@ -150,11 +150,16 @@ int *ds18b20_gettemp_decimal(void) {
         
         double temp = ds18b20_gettemp();
         
-        returnVal[0] = (int)temp;
-        double decpart = temp - returnVal[0];
-        returnVal[1] = (decpart * 10);
+        int t1 = (int)temp;
+        if(t1 > -128) {
+            returnVal[0] = t1;
+            int t2 = (int) (((double)temp - returnVal[0]) * 10);
+            if(t2 >= 0) {
+                returnVal[1] = t2;
+            }
+        }
+        
     }
     
     return returnVal;
 }
-

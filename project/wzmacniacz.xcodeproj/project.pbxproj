@@ -11,6 +11,7 @@
 		A32D820E23A8022700B6546B /* i2cEeprom.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D820D23A8022700B6546B /* i2cEeprom.c */; };
 		A349451023AEB7F5009A636E /* ds1267.c in Sources */ = {isa = PBXBuildFile; fileRef = A349450F23AEB7F5009A636E /* ds1267.c */; };
 		A349451623B51F60009A636E /* ds18b20.c in Sources */ = {isa = PBXBuildFile; fileRef = A349451523B51F60009A636E /* ds18b20.c */; };
+		A349451923B5335C009A636E /* adc.c in Sources */ = {isa = PBXBuildFile; fileRef = A349451823B5335C009A636E /* adc.c */; };
 		A34F48BA239BFFAA00D9D1E2 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A34F48B9239BFFAA00D9D1E2 /* main.c */; };
 		A34F48D2239C2DA500D9D1E2 /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = A34F48D1239C2DA500D9D1E2 /* utils.c */; };
 		A34F48DE239EF69A00D9D1E2 /* pcd8544.c in Sources */ = {isa = PBXBuildFile; fileRef = A34F48DD239EF69A00D9D1E2 /* pcd8544.c */; };
@@ -27,6 +28,8 @@
 		A349450F23AEB7F5009A636E /* ds1267.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ds1267.c; sourceTree = "<group>"; };
 		A349451423B51F60009A636E /* ds18b20.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ds18b20.h; sourceTree = "<group>"; };
 		A349451523B51F60009A636E /* ds18b20.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ds18b20.c; sourceTree = "<group>"; };
+		A349451723B5335C009A636E /* adc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = adc.h; sourceTree = "<group>"; };
+		A349451823B5335C009A636E /* adc.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = adc.c; sourceTree = "<group>"; };
 		A34F48B6239BFFAA00D9D1E2 /* Index */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Index; sourceTree = BUILT_PRODUCTS_DIR; };
 		A34F48B9239BFFAA00D9D1E2 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		A34F48BC239BFFAA00D9D1E2 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
@@ -99,6 +102,8 @@
 				A349450E23AEB7F5009A636E /* ds1267.h */,
 				A349451523B51F60009A636E /* ds18b20.c */,
 				A349451423B51F60009A636E /* ds18b20.h */,
+				A349451823B5335C009A636E /* adc.c */,
+				A349451723B5335C009A636E /* adc.h */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -231,6 +236,7 @@
 				A34F48BA239BFFAA00D9D1E2 /* main.c in Sources */,
 				A349451023AEB7F5009A636E /* ds1267.c in Sources */,
 				A3EA49E723AC2FEF00071DE3 /* UART.c in Sources */,
+				A349451923B5335C009A636E /* adc.c in Sources */,
 				A304161023A53440000D6180 /* Impulsator.c in Sources */,
 				A34F48D2239C2DA500D9D1E2 /* utils.c in Sources */,
 				A32D820E23A8022700B6546B /* i2cEeprom.c in Sources */,

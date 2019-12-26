@@ -9,6 +9,8 @@
  *
  */
 
+#define DS18B20_ENABLED true
+
 #include "main.h"
 
 static bool powerIsOn = false;
@@ -142,14 +144,14 @@ void setup(void) {
 }
 
 static char result = 0;
-static int temp[2] = {0, 0};
-static int lastVolume = 0;
-static int lastRC5 = 0;
+static temp[2] = {0, 0};
 
 int main(void) {
     
     cli();
 
+    wdt_enable( WDTO_1S );
+    
     PCD_Ini();
     PCD_Contr(0x3f);
     PCD_Clr();
@@ -175,18 +177,19 @@ int main(void) {
     sei();
     
     TWI_Init();
-    
+    ADC_Init();
     EEPROMwrite(1, 44);
     
     result = EEPROMread(1);
 
     while(1) {
+        wdt_reset();
+        
         char s[120];
         
         PCD_Clr();
         PCD_GotoXYFont(0,0);
         
-        bool change = false;
         int rc5 = RC5_NewCommandReceived();
         switch(rc5) {
             case RC5_VOLUME_UP:
@@ -196,26 +199,23 @@ int main(void) {
                 Impulsator_decrease();
                 break;
         }
-        if(lastRC5 != rc5) {
-            lastRC5 = rc5;
-            change = true;
-        }
         
         int volume = getImpulsatorValue();
-        if(lastVolume != volume) {
-            lastVolume = volume;
-            change = true;
-        }
-
-        if(!change) {
-            int *t = ds18b20_gettemp_decimal();
-            temp[0] = t[0];
-            temp[1] = t[1];
-        }
+        int adc = getADCValue();
+        
+#if DS18B20_ENABLED
+        int *t = ds18b20_gettemp_decimal();
+        temp[0] = t[0]; temp[1] = t[1];
+#endif
         
         memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%d %d %d %d.%d", volume, rc5, result, temp[0], temp[1]);
+        snprintf(s, sizeof(s), "%d %d %d", volume, rc5, result);
         
+        PCD_print(FONT_1X, (byte*)s);
+        PCD_GotoXYFont(0,1);
+
+        memset(s, 0, sizeof(s));
+        snprintf(s, sizeof(s), "%d.%d %d", temp[0], temp[1], adc);
         PCD_print(FONT_1X, (byte*)s);
         
         PCD_Upd();

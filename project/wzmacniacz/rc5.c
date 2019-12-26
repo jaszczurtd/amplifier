@@ -1,5 +1,23 @@
-#include "rc5.h"
+/*
+* RC5 (36KHz Phillips protocol) Decoding library for AVR
+* Copyright (c) 2011 Filip Sobalski <pinkeen@gmail.com>
+* based on the idea presented by Guy Carpenter
+* on http://www.clearwater.com.au/rc5
+*
+* Tested on ATmega328P. Designed for 16MHz crystal.
+* Should work on the ATmega{4/8/16/32}8 family
+* without modification. Uses 16bit timer and an
+* external interrupt.
+*
+* I you use a different clock then adjust the timer
+* prescaler and pulse lengths accordingly.
+*
+* Should be trivial to adapt to other AVRs sporting
+* a 16bit timer and an external interrupt.
+*
+*/
 
+#include "rc5.h"
 
 #define SHORT_MIN 888   /* 444 microseconds */
 #define SHORT_MAX 2666  /* 1333 microseconds */

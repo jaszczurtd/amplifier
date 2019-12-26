@@ -22,6 +22,7 @@
 #include "i2cEeprom.h"
 #include "UART.h"
 #include "ds18b20.h"
+#include "adc.h"
 
 #ifndef true
 #define true 1

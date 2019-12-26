@@ -12,7 +12,6 @@ References:
     http://teslabs.com/openplayer/docs/docs/other/ds18b20_pre1.pdf
 */
 
-
 #ifndef DS18B20_H_
 #define DS18B20_H_
 
@@ -41,10 +40,11 @@ References:
 //stop any interrupt on read
 #define DS18B20_STOPINTERRUPTONREAD 0
 
-#define DS18B20_READ_FREQUENCY 40
+#define DS18B20_READ_FREQUENCY 100
 
 //functions
 double ds18b20_gettemp(void);
 int *ds18b20_gettemp_decimal(void);
 
 #endif
+
