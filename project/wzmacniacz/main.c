@@ -141,8 +141,11 @@ void setup(void) {
     sbi(DDRD,PA0);    //LED
 }
 
-static int speed = 0;
 static char result = 0;
+static int temp[2] = {0, 0};
+static int lastVolume = 0;
+static int lastRC5 = 0;
+
 int main(void) {
     
     cli();
@@ -178,13 +181,40 @@ int main(void) {
     result = EEPROMread(1);
 
     while(1) {
-        char s[20];
+        char s[120];
         
         PCD_Clr();
         PCD_GotoXYFont(0,0);
         
+        bool change = false;
+        int rc5 = RC5_NewCommandReceived();
+        switch(rc5) {
+            case RC5_VOLUME_UP:
+                Impulsator_increase();
+                break;
+            case RC5_VOLUME_DOWN:
+                Impulsator_decrease();
+                break;
+        }
+        if(lastRC5 != rc5) {
+            lastRC5 = rc5;
+            change = true;
+        }
+        
+        int volume = getImpulsatorValue();
+        if(lastVolume != volume) {
+            lastVolume = volume;
+            change = true;
+        }
+
+        if(!change) {
+            int *t = ds18b20_gettemp_decimal();
+            temp[0] = t[0];
+            temp[1] = t[1];
+        }
+        
         memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%d %d %d", getImpulsatorValue(), RC5_NewCommandReceived(), result);
+        snprintf(s, sizeof(s), "%d %d %d %d.%d", volume, rc5, result, temp[0], temp[1]);
         
         PCD_print(FONT_1X, (byte*)s);
         

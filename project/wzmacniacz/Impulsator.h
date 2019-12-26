@@ -22,8 +22,12 @@
 #define RIGHT 2
 
 void Impulsator_Init(int max);
+void Impulsator_decrease(void);
+void Impulsator_increase(void);
+
 void setImpulsatorMaxValue(int value);
 void setImpulsatorStep(int step);
 int getImpulsatorValue(void);
+void Read1StepEncoder(void);
 
 #endif /* Impulsator_h */

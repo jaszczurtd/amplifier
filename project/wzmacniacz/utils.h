@@ -16,6 +16,13 @@
 #include <avr/wdt.h>
 #include <avr/pgmspace.h>
 
+#include "pcd8544.h"
+#include "rc5.h"
+#include "Impulsator.h"
+#include "i2cEeprom.h"
+#include "UART.h"
+#include "ds18b20.h"
+
 #ifndef true
 #define true 1
 #endif

@@ -8,7 +8,7 @@
 #include "Impulsator.h"
 
 //experimental value
-#define DETERMINATION_TIME 150
+#define DETERMINATION_TIME 200
 
 static int currentValue, maxValue, stepValue, stepValueCounter;
 static bool determined = false;
@@ -72,7 +72,7 @@ void setImpulsatorStep(int step) {
     stepValue = step;
 }
 
-void decrease(void) {
+void Impulsator_decrease(void) {
     if(currentValue > 0) {
         if(stepValueCounter++ > stepValue){
             currentValue--;
@@ -82,7 +82,7 @@ void decrease(void) {
     pulses = DETERMINATION_TIME;
 }
 
-void increase(void) {
+void Impulsator_increase(void) {
     if(currentValue < maxValue) {
         if(stepValueCounter++ > stepValue){
             currentValue++;
@@ -112,10 +112,10 @@ void Read1StepEncoder(void) {
         }
         if(movement){
             if(delta == RIGHT) {
-                increase();
+                Impulsator_increase();
             }
             if(delta == LEFT) {
-                decrease();
+                Impulsator_decrease();
             }
         }
     }
