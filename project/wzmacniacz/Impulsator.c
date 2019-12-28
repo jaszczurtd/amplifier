@@ -106,20 +106,6 @@ void Read1StepEncoder(void) {
     lastLeft = left;
     lastRight = right;
     
-    if(determined) {
-        if(pulses-- <= 0) {
-            determination(NONE);
-        }
-        if(movement){
-            if(delta == RIGHT) {
-                Impulsator_increase();
-            }
-            if(delta == LEFT) {
-                Impulsator_decrease();
-            }
-        }
-    }
-    
     if(movement) {
         
         if(left) i++;
@@ -137,6 +123,21 @@ void Read1StepEncoder(void) {
             }
         }
     }
+
+    if(determined) {
+        if(pulses-- <= 0) {
+            determination(NONE);
+        }
+        if(movement){
+            if(delta == RIGHT) {
+                Impulsator_increase();
+            }
+            if(delta == LEFT) {
+                Impulsator_decrease();
+            }
+        }
+    }
+    
  }
 
 ISR(TIMER2_OVF_vect) {

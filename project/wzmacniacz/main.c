@@ -9,7 +9,7 @@
  *
  */
 
-#define DS18B20_ENABLED true
+#define DS18B20_ENABLED false
 
 #include "main.h"
 
@@ -175,6 +175,7 @@ int main(void) {
     setImpulsatorStep(1);
 
     TWI_Init();
+    PWM_Init(true, false);
     ADC_Init(true);
     EEPROMwrite(1, 44);
     
@@ -207,6 +208,8 @@ int main(void) {
         int *t = ds18b20_gettemp_decimal();
         temp[0] = t[0]; temp[1] = t[1];
 #endif
+        
+        PWM_SetValue(true, false, volume);
         
         memset(s, 0, sizeof(s));
         snprintf(s, sizeof(s), "%d %d %d", volume, rc5, result);

@@ -23,6 +23,7 @@
 #include "UART.h"
 #include "ds18b20.h"
 #include "adc.h"
+#include "pwm.h"
 
 #ifndef true
 #define true 1
