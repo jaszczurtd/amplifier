@@ -28,6 +28,7 @@ void Impulsator_increase(void);
 void setImpulsatorMaxValue(int value);
 void setImpulsatorStep(int step);
 int getImpulsatorValue(void);
+void setImpulsatorValue(int value);
 void Read1StepEncoder(void);
 
 #endif /* Impulsator_h */

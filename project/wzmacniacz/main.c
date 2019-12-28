@@ -9,7 +9,7 @@
  *
  */
 
-#define DS18B20_ENABLED false
+#define DS18B20_ENABLED true
 
 #include "main.h"
 
@@ -143,8 +143,18 @@ void setup(void) {
     sbi(DDRD,PA0);    //LED
 }
 
-static char result = 0;
-static temp[2] = {0, 0};
+static int temp[2] = {0, 0};
+
+
+static int lastADC = 0;
+static int lastVolume = 0;
+
+static int eepromDelay = 0;
+
+#define E_VOLUME 0
+
+static bool eepromWrite = false;
+static unsigned char EEPROM[10];
 
 int main(void) {
     
@@ -171,18 +181,19 @@ int main(void) {
     
     RC5_Init();
     
-    Impulsator_Init(256);
-    setImpulsatorStep(1);
-
     TWI_Init();
     PWM_Init(true, false);
     ADC_Init(true);
-    EEPROMwrite(1, 44);
     
+    Impulsator_Init(256);
+    setImpulsatorStep(1);
+    for(int a = 0; a < sizeof(EEPROM); a++) {
+        EEPROM[a] = EEPROMread(a);
+    }
+    setImpulsatorValue((lastVolume = EEPROM[E_VOLUME]));
+
     sei();
     
-    result = EEPROMread(1);
-
     while(1) {
         wdt_reset();
         
@@ -195,24 +206,39 @@ int main(void) {
         switch(rc5) {
             case RC5_VOLUME_UP:
                 Impulsator_increase();
+                eepromWrite = true;
                 break;
             case RC5_VOLUME_DOWN:
                 Impulsator_decrease();
+                eepromWrite = true;
                 break;
         }
         
-        int volume = getImpulsatorValue();
+        EEPROM[E_VOLUME] = getImpulsatorValue();
+        if(lastVolume != EEPROM[E_VOLUME]) {
+            lastVolume = EEPROM[E_VOLUME];
+            eepromWrite = true;
+        }
+        
         int adc = getADCValue();
+        if(lastADC != adc) {
+            lastADC = adc;
+            eepromWrite = true;
+        }
         
 #if DS18B20_ENABLED
         int *t = ds18b20_gettemp_decimal();
         temp[0] = t[0]; temp[1] = t[1];
 #endif
         
-        PWM_SetValue(true, false, volume);
+        PWM_SetValue(true, false, EEPROM[E_VOLUME]);
+        
+        if(eepromWrite) {
+            ds18b20_delayResult();
+        }
         
         memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%d %d %d", volume, rc5, result);
+        snprintf(s, sizeof(s), "%d %d", EEPROM[E_VOLUME], rc5);
         
         PCD_print(FONT_1X, (byte*)s);
         PCD_GotoXYFont(0,1);
@@ -224,6 +250,17 @@ int main(void) {
         PCD_Upd();
 
         delay_ms(MAIN_DELAY_TIME);
+        
+        if(eepromDelay-- <= 0) {
+            eepromDelay = WRITE_EEPROM_DELAY;
+            
+            if(eepromWrite) {
+                for(int a = 0; a < sizeof(EEPROM); a++) {
+                    EEPROMwrite(a, EEPROM[a]);
+                }
+                eepromWrite = false;
+            }
+        }
     }
     return 0;
 

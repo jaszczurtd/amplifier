@@ -5,3 +5,4 @@ http://hobby.abxyz.bplaced.net/index.php?pid=3&aid=16
 http://mirley.firlej.org/programowanie_mikrokontrolerow_avrdude
 http://akademia.nettigo.pl/attiny_010/
 https://blog.podkalicki.com/100-projects-on-attiny13/
+https://circuitdigest.com/microcontroller-projects/power-led-dimmer-using-atmega32-pwm

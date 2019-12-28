@@ -22,7 +22,6 @@
 /* Begin PBXFileReference section */
 		A304160E23A53440000D6180 /* Impulsator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Impulsator.h; sourceTree = "<group>"; };
 		A304160F23A53440000D6180 /* Impulsator.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Impulsator.c; sourceTree = "<group>"; };
-		A318E61A23A16F8E00BAF965 /* links.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = links.txt; sourceTree = "<group>"; };
 		A32D820C23A8022700B6546B /* i2cEeprom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = i2cEeprom.h; sourceTree = "<group>"; };
 		A32D820D23A8022700B6546B /* i2cEeprom.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = i2cEeprom.c; sourceTree = "<group>"; };
 		A349450E23AEB7F5009A636E /* ds1267.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ds1267.h; sourceTree = "<group>"; };
@@ -72,7 +71,6 @@
 				A34F48B9239BFFAA00D9D1E2 /* main.c */,
 				A34F48CE239C029500D9D1E2 /* main.h */,
 				A34F48CF239C030000D9D1E2 /* version.h */,
-				A318E61A23A16F8E00BAF965 /* links.txt */,
 				A34F48BB239BFFAA00D9D1E2 /* Makefiles */,
 			);
 			path = wzmacniacz;

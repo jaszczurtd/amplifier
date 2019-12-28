@@ -12,8 +12,8 @@
 
 static int currentValue, maxValue, stepValue, stepValueCounter;
 static bool determined = false;
-static uint16_t pulses = 0;
-static uint8_t delta = NONE;
+static int pulses = 0;
+static char delta = NONE;
 static bool lastLeft = false, lastRight = false;
 
 bool getImpulsatorLSW(void) {
@@ -92,14 +92,15 @@ void Impulsator_increase(void) {
     pulses = DETERMINATION_TIME;
 }
 
-int last = 0;
+static int last = 0;
 void Read1StepEncoder(void) {
     
-    bool left = getImpulsatorLSW();
-    bool right = getImpulsatorRSW();
+    register bool left = getImpulsatorLSW();
+    register bool right = getImpulsatorRSW();
+    register bool movement = true;
+    
     int i = 0;
 
-    bool movement = true;
     if(left == lastLeft && right == lastRight) {
         movement = false;
     }
@@ -146,4 +147,12 @@ ISR(TIMER2_OVF_vect) {
 
 int getImpulsatorValue(void) {
     return currentValue;
+}
+
+void setImpulsatorValue(int value) {
+    if(value > maxValue) {
+        currentValue = maxValue;
+    } else {
+        currentValue = value;
+    }
 }

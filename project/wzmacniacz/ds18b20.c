@@ -146,7 +146,7 @@ static int readFrequency = 0;
 int *ds18b20_gettemp_decimal(void) {
     
     if(--readFrequency < 0) {
-        readFrequency = DS18B20_READ_FREQUENCY;
+        ds18b20_delayResult();
         
         double temp = ds18b20_gettemp();
         
@@ -162,4 +162,8 @@ int *ds18b20_gettemp_decimal(void) {
     }
     
     return returnVal;
+}
+
+void ds18b20_delayResult(void) {
+    readFrequency = DS18B20_READ_FREQUENCY;
 }

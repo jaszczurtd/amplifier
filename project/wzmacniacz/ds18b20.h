@@ -45,6 +45,7 @@ References:
 //functions
 double ds18b20_gettemp(void);
 int *ds18b20_gettemp_decimal(void);
+void ds18b20_delayResult(void);
 
 #endif
 
