@@ -174,11 +174,11 @@ int main(void) {
     Impulsator_Init(256);
     setImpulsatorStep(1);
 
-    sei();
-    
     TWI_Init();
-    ADC_Init();
+    ADC_Init(true);
     EEPROMwrite(1, 44);
+    
+    sei();
     
     result = EEPROMread(1);
 

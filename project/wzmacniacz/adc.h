@@ -13,7 +13,7 @@
 #include <util/delay.h>
 #include "utils.h"
 
-void ADC_Init(void);
+void ADC_Init(bool interrupt);
 int getADCValue(void);
 
 #endif /* adc_h */

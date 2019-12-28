@@ -7,7 +7,12 @@
 
 #include "adc.h"
 
-void ADC_Init(void) {
+static int value;
+static bool byInterrupt = false;
+
+void ADC_Init(bool interrupt) {
+    byInterrupt = interrupt;
+    
     bitSet(ADMUX, REFS0);
     bitClear(ADMUX, REFS1);
     
@@ -16,12 +21,30 @@ void ADC_Init(void) {
     bitClear(ADMUX, MUX2);
 
     bitSet(ADCSRA, ADEN | ADPS0 | ADPS1 | ADPS2);
+    
+    if(interrupt) {
+        bitSet(ADCSRA, ADSC);
+        bitSet(ADCSRA, ADIE);
+    }
+    
+    value = 0;
 }
 
 int getADCValue(void) {
     
-    bitSet(ADCSRA, ADSC);
-    while(ADCSRA & (1<<ADSC));
-    
-    return ADC;
+    if(byInterrupt) {
+        bitSet(ADCSRA, ADIE);
+        bitSet(ADCSRA, ADSC);
+
+        return value;
+    } else {
+        bitSet(ADCSRA, ADSC);
+        while(ADCSRA & (1<<ADSC));
+        
+        return ADC;
+    }
+}
+
+ISR(ADC_vect) {
+    value = ADC;
 }
