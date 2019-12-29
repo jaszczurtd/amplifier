@@ -126,17 +126,9 @@ static const byte PROGMEM FontLookup [][5] =
 };
 
 void PCD_Ini ( void ) {
-    // Pull-up dla pinu reset.
-    LCD_PORT |= _BV ( LCD_RST_PIN );
     
     // Ustawienie pinów
-    LCD_DDR |= _BV( LCD_RST_PIN ) | _BV( LCD_DC_PIN ) | _BV( LCD_CE_PIN ) | _BV( SPI_MOSI_PIN ) | _BV( SPI_CLK_PIN );
-    
-    Delay();
-    
-    LCD_PORT &= ~( _BV( LCD_RST_PIN ) );
-    Delay();
-    LCD_PORT |= _BV ( LCD_RST_PIN );
+    LCD_DDR |= _BV( LCD_DC_PIN ) | _BV( LCD_CE_PIN ) | _BV( SPI_MOSI_PIN ) | _BV( SPI_CLK_PIN );
     
     // Włączenie SPI:
     // Bez przerwań , MSBit jak pierwszy, Master mode, CPOL->0, CPHA->0, Clk/4
