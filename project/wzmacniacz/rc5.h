@@ -28,6 +28,13 @@
 
 #include "utils.h"
 
+//pin configuration
+
+#define RC5_DDR DDRD
+#define RC5_PD PD2
+#define RC5_PIN PIND
+#define RC5_PIN_N PIND2
+
 #define RC5_GetStartBits(command) ((command & 0x3000) >> 12)
 #define RC5_GetToggleBit(command) ((command & 0x800) >> 11)
 #define RC5_GetAddressBits(command) ((command & 0x7C0) >> 6)

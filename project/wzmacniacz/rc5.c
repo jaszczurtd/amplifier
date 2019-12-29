@@ -49,8 +49,8 @@ void RC5_Init(void) {
     /* Set INT0 to trigger on any edge */
     //EICRA |= _BV(ISC00);
     MCUCR |= _BV(ISC00);
-    /* Set PD2 to input */
-    DDRD &= ~_BV(PD2);
+    
+    RC5_DDR &= ~_BV(RC5_PD);
     
     /* Reset Timer1 Counter */
     TCCR1A = 0;
@@ -111,7 +111,7 @@ ISR(INT0_vect) {
      *  4 - long space
      *  6 - long pulse
      */
-    uint8_t event = (PIND & _BV(PIND2)) ? 2 : 0;
+    uint8_t event = (RC5_PIN & _BV(RC5_PIN_N)) ? 2 : 0;
     
     if(delay > LONG_MIN && delay < LONG_MAX) {
         event += 4;

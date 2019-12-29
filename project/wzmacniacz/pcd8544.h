@@ -41,7 +41,7 @@
 #define LCD_DC_PIN                 PB1  // DC
 #define LCD_CE_PIN                 PB4  // CE
 #define SPI_MOSI_PIN               PB5  // MOSI
-#define LCD_RST_PIN                PB0  // RST
+#define LCD_RST_PIN                PB6  // RST
 #define SPI_CLK_PIN                PB7  // CLK
 
 // --------------- Pamięc Podręczna dla LCD ( 84 * 48 ) / 8 = 504 bytes
