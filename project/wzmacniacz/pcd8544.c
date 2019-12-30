@@ -133,6 +133,8 @@ void PCD_Ini ( void ) {
     // Włączenie SPI:
     // Bez przerwań , MSBit jak pierwszy, Master mode, CPOL->0, CPHA->0, Clk/4
     
+    Delay();
+    
     SPCR = 0x50;
     
     // Wyłaczenie kontrolera LCD

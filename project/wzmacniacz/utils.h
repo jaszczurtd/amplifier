@@ -24,6 +24,7 @@
 #include "ds18b20.h"
 #include "adc.h"
 #include "pwm.h"
+#include "74150.h"
 
 #ifndef true
 #define true 1

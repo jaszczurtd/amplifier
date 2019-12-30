@@ -16,6 +16,7 @@
 		A34F48BA239BFFAA00D9D1E2 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = A34F48B9239BFFAA00D9D1E2 /* main.c */; };
 		A34F48D2239C2DA500D9D1E2 /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = A34F48D1239C2DA500D9D1E2 /* utils.c */; };
 		A34F48DE239EF69A00D9D1E2 /* pcd8544.c in Sources */ = {isa = PBXBuildFile; fileRef = A34F48DD239EF69A00D9D1E2 /* pcd8544.c */; };
+		A3DB6C2823BA670400F4ACE5 /* 74150.c in Sources */ = {isa = PBXBuildFile; fileRef = A3DB6C2723BA670400F4ACE5 /* 74150.c */; };
 		A3EA49E723AC2FEF00071DE3 /* UART.c in Sources */ = {isa = PBXBuildFile; fileRef = A3EA49E623AC2FEF00071DE3 /* UART.c */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,8 @@
 		A34F48DD239EF69A00D9D1E2 /* pcd8544.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pcd8544.c; sourceTree = "<group>"; };
 		A367140E23A12D27004B5B92 /* rc5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rc5.c; sourceTree = "<group>"; };
 		A367140F23A12D27004B5B92 /* rc5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rc5.h; sourceTree = "<group>"; };
+		A3DB6C2623BA670400F4ACE5 /* 74150.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 74150.h; sourceTree = "<group>"; };
+		A3DB6C2723BA670400F4ACE5 /* 74150.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = 74150.c; sourceTree = "<group>"; };
 		A3EA49E523AC2FEF00071DE3 /* UART.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UART.h; sourceTree = "<group>"; };
 		A3EA49E623AC2FEF00071DE3 /* UART.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = UART.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -107,6 +110,8 @@
 				A349451723B5335C009A636E /* adc.h */,
 				A349451B23B7A79D009A636E /* pwm.c */,
 				A349451A23B7A79D009A636E /* pwm.h */,
+				A3DB6C2723BA670400F4ACE5 /* 74150.c */,
+				A3DB6C2623BA670400F4ACE5 /* 74150.h */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -238,6 +243,7 @@
 			files = (
 				A34F48BA239BFFAA00D9D1E2 /* main.c in Sources */,
 				A349451023AEB7F5009A636E /* ds1267.c in Sources */,
+				A3DB6C2823BA670400F4ACE5 /* 74150.c in Sources */,
 				A3EA49E723AC2FEF00071DE3 /* UART.c in Sources */,
 				A349451923B5335C009A636E /* adc.c in Sources */,
 				A304161023A53440000D6180 /* Impulsator.c in Sources */,

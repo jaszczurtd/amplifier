@@ -41,7 +41,7 @@
 #define RC5_GetCommandBits(command) (command & 0x3F)
 #define RC5_GetCommandAddressBits(command) (command & 0x7FF)
 
-#define RC5_STABILITY_VALUE 10
+#define RC5_STABILITY_VALUE 8
 
 /* Initialize timer and interrupt */
 void RC5_Init(void);

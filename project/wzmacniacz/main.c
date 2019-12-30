@@ -184,6 +184,7 @@ int main(void) {
     TWI_Init();
     PWM_Init(true, false);
     ADC_Init(true);
+    init74150();
     
     Impulsator_Init(256);
     setImpulsatorStep(1);
@@ -201,6 +202,8 @@ int main(void) {
         
         PCD_Clr();
         PCD_GotoXYFont(0,0);
+        
+        int activeInput = read74150();
         
         int rc5 = RC5_NewCommandReceived();
         switch(rc5) {
@@ -233,7 +236,7 @@ int main(void) {
         
         PWM_SetValue(true, false, EEPROM[E_VOLUME]);
         
-        if(eepromWrite) {
+        if(eepromWrite || activeInput != I_74150_NOT_ACTIVE) {
             ds18b20_delayResult();
         }
         
@@ -244,7 +247,7 @@ int main(void) {
         PCD_GotoXYFont(0,1);
 
         memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%d.%d %d", temp[0], temp[1], adc);
+        snprintf(s, sizeof(s), "%d.%d %d %d", temp[0], temp[1], adc, activeInput);
         PCD_print(FONT_1X, (byte*)s);
         
         PCD_Upd();
