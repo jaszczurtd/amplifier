@@ -9,7 +9,13 @@
 #include "ds1267.h"
 
 void initDS1267(void) {
+    sbi(DS_PORT_INIT, RST_PIN);
+    sbi(DS_PORT_INIT, DQ_PIN);
+    sbi(DS_PORT_INIT, CLK_PIN);
     
+    cbi(DS_PORT, RST_PIN);
+    cbi(DS_PORT, DQ_PIN);
+    cbi(DS_PORT, CLK_PIN);
 }
 
 void setDS1267(uint8_t Stack, uint8_t Pot0, uint8_t Pot1) {

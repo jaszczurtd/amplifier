@@ -19,6 +19,7 @@
 
 #define C_DELAY 4
 
+#define DS_PORT_INIT DDRC
 #define DS_PORT PORTC
 #define RST_PIN PC4
 #define DQ_PIN PC2
