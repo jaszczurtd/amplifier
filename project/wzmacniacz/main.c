@@ -180,7 +180,7 @@ int main(void) {
     */
     
     RC5_Init();
-    
+    initDS1267();
     TWI_Init();
     PWM_Init(true, false);
     ADC_Init(true);
