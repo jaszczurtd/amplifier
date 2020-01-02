@@ -8,7 +8,7 @@
 #include "Impulsator.h"
 
 //experimental value
-#define DETERMINATION_TIME 200
+#define DETERMINATION_TIME 250
 
 static int currentValue, maxValue, stepValue, stepValueCounter;
 static bool determined = false;
