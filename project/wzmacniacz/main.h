@@ -20,7 +20,7 @@ typedef unsigned char uint8_t;
 #define RC5_VOLUME_UP   12304
 #define RC5_VOLUME_DOWN 12305
 
-#define MAIN_DELAY_TIME 10 //in ms
+#define MAIN_DELAY_TIME 5 //in ms
 #define POWER_RES_COUNTER 100 //* MAIN_DELAY_TIME
 #define SPEAKERS_COUNTER 20      //POWER_RES_COUNTER + (* MAIN_DELAY_TIME)
 

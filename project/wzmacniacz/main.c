@@ -192,7 +192,8 @@ int main(void) {
         EEPROM[a] = EEPROMread(a);
     }
     setImpulsatorValue((lastVolume = EEPROM[E_VOLUME]));
-
+    setDS1267(lastVolume, lastVolume);
+    
     sei();
     
     while(1) {
