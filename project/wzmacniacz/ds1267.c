@@ -18,52 +18,37 @@ void initDS1267(void) {
     cbi(DS_PORT, CLK_PIN);
 }
 
-void setDS1267(uint8_t Stack, uint8_t Pot0, uint8_t Pot1) {
-    uint8_t temp;
+static inline void clockUpdate(void) {
+    sbi(DS_PORT, CLK_PIN);
+    cbi(DS_PORT, CLK_PIN);
+}
 
-    DS_PORT |= RST_PIN; // Wysoki RST - umożliwienie transmisji
+void setDS1267(unsigned char Pot0, unsigned char Pot1) {
+
+    sbi(DS_PORT, RST_PIN);
     _delay_us(C_DELAY); // jako t_cc
     
-    // Który Stack wybrać
-    if(Stack == 0) DS_PORT &= ~DQ_PIN;
-    else DS_PORT |= DQ_PIN;
+    //stack bit
+    cbi(DS_PORT, DQ_PIN);
+    clockUpdate();
 
-    // Clock sobie tyka
-    DS_PORT |= CLK_PIN;
-    _delay_us(C_DELAY); // Czas wysokiego stanu
-    DS_PORT &= ~CLK_PIN;
-    _delay_us(C_DELAY); // Czas niskiego stanu
-
-    // Wysłanie danych Pot1
-    temp = Pot1;
-
-    for(uint8_t i = 0; i < 8 ; i++) {
-        if((temp & 0x01) == 0) DS_PORT &= ~DQ_PIN; // Najmłodszy bit zawsze
-        else DS_PORT |= DQ_PIN;
-
-        DS_PORT |= CLK_PIN;
-        _delay_us(C_DELAY);
-        DS_PORT &= ~CLK_PIN;
-        _delay_us(C_DELAY);
-
-        temp = temp >> 1; // Przesunięcie rejestru
+    for(int i = 0; i < 8 ; i++) {
+        if(((Pot1 << i) & 128)) {
+            sbi(DS_PORT, DQ_PIN);
+        } else {
+            cbi(DS_PORT, DQ_PIN);
+        }
+        clockUpdate();
     }
 
-    // Wysłanie informacji o Pot0
-    temp = Pot0;
-
-    for(uint8_t i = 0; i < 8 ; i++) {
-        if((temp & 0x01) == 0) DS_PORT &= ~DQ_PIN;
-        else DS_PORT |= DQ_PIN;
-
-        DS_PORT |= CLK_PIN;
-        _delay_us(C_DELAY); //
-        DS_PORT &= ~CLK_PIN;
-        _delay_us(C_DELAY); // Niski CLK
-
-        temp = temp >> 1;
+    for(int i = 0; i < 8 ; i++) {
+        if(((Pot0 << i) & 128)) {
+            sbi(DS_PORT, DQ_PIN);
+        } else {
+            cbi(DS_PORT, DQ_PIN);
+        }
+        clockUpdate();
     }
 
-    DS_PORT &= ~RST_PIN; // Opuszczenie Resetu
- 
+    cbi(DS_PORT, RST_PIN);
 }

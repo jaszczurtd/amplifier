@@ -186,7 +186,7 @@ int main(void) {
     ADC_Init(true);
     init74150();
     
-    Impulsator_Init(256);
+    Impulsator_Init(255);
     setImpulsatorStep(1);
     for(int a = 0; a < sizeof(EEPROM); a++) {
         EEPROM[a] = EEPROMread(a);
@@ -220,6 +220,9 @@ int main(void) {
         EEPROM[E_VOLUME] = getImpulsatorValue();
         if(lastVolume != EEPROM[E_VOLUME]) {
             lastVolume = EEPROM[E_VOLUME];
+            
+            setDS1267(lastVolume, lastVolume);
+            
             eepromWrite = true;
         }
         
