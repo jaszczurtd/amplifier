@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A302CBDA23BE1EE900B14F96 /* 74574.c in Sources */ = {isa = PBXBuildFile; fileRef = A302CBD923BE1EE900B14F96 /* 74574.c */; };
 		A304161023A53440000D6180 /* Impulsator.c in Sources */ = {isa = PBXBuildFile; fileRef = A304160F23A53440000D6180 /* Impulsator.c */; };
 		A32D820E23A8022700B6546B /* i2cEeprom.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D820D23A8022700B6546B /* i2cEeprom.c */; };
 		A349451023AEB7F5009A636E /* ds1267.c in Sources */ = {isa = PBXBuildFile; fileRef = A349450F23AEB7F5009A636E /* ds1267.c */; };
@@ -21,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A302CBD823BE1EE900B14F96 /* 74574.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 74574.h; sourceTree = "<group>"; };
+		A302CBD923BE1EE900B14F96 /* 74574.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = 74574.c; sourceTree = "<group>"; };
 		A304160E23A53440000D6180 /* Impulsator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Impulsator.h; sourceTree = "<group>"; };
 		A304160F23A53440000D6180 /* Impulsator.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Impulsator.c; sourceTree = "<group>"; };
 		A32D820C23A8022700B6546B /* i2cEeprom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = i2cEeprom.h; sourceTree = "<group>"; };
@@ -112,6 +115,8 @@
 				A349451A23B7A79D009A636E /* pwm.h */,
 				A3DB6C2723BA670400F4ACE5 /* 74150.c */,
 				A3DB6C2623BA670400F4ACE5 /* 74150.h */,
+				A302CBD923BE1EE900B14F96 /* 74574.c */,
+				A302CBD823BE1EE900B14F96 /* 74574.h */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -244,6 +249,7 @@
 				A34F48BA239BFFAA00D9D1E2 /* main.c in Sources */,
 				A349451023AEB7F5009A636E /* ds1267.c in Sources */,
 				A3DB6C2823BA670400F4ACE5 /* 74150.c in Sources */,
+				A302CBDA23BE1EE900B14F96 /* 74574.c in Sources */,
 				A3EA49E723AC2FEF00071DE3 /* UART.c in Sources */,
 				A349451923B5335C009A636E /* adc.c in Sources */,
 				A304161023A53440000D6180 /* Impulsator.c in Sources */,

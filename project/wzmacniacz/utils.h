@@ -25,6 +25,7 @@
 #include "adc.h"
 #include "pwm.h"
 #include "74150.h"
+#include "74574.h"
 #include "ds1267.h"
 
 #ifndef true

@@ -185,6 +185,7 @@ int main(void) {
     PWM_Init(true, false);
     ADC_Init(true);
     init74150();
+    init74574();
     
     Impulsator_Init(255);
     setImpulsatorStep(1);
