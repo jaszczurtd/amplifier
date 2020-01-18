@@ -18,6 +18,8 @@ References:
 #include <avr/io.h>
 #include "utils.h"
 
+#if DS18B20_ENABLED
+
 //setup connection
 #define DS18B20_PORT PORTB
 #define DS18B20_DDR DDRB
@@ -46,6 +48,8 @@ References:
 double ds18b20_gettemp(void);
 int *ds18b20_gettemp_decimal(void);
 void ds18b20_delayResult(void);
+
+#endif
 
 #endif
 

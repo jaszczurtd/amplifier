@@ -44,6 +44,7 @@ int read74150(void) {
         } else {
             cbi(PORTD, PD7);
         }
+        _delay_us(1);
         
         if(bit_is_set(PIND, PD3)) {
             res = a;

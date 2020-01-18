@@ -8,6 +8,8 @@
 #ifndef utils_h
 #define utils_h
 
+#define DS18B20_ENABLED false
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <inttypes.h>
@@ -27,6 +29,7 @@
 #include "74150.h"
 #include "74574.h"
 #include "ds1267.h"
+#include "PCF8563.h"
 
 #ifndef true
 #define true 1

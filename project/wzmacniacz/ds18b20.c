@@ -13,6 +13,8 @@ Please refer to LICENSE file for licensing information.
 
 #include "ds18b20.h"
 
+#if DS18B20_ENABLED
+
 /*
  * ds18b20 init
  */
@@ -167,3 +169,6 @@ int *ds18b20_gettemp_decimal(void) {
 void ds18b20_delayResult(void) {
     readFrequency = DS18B20_READ_FREQUENCY;
 }
+
+#endif
+

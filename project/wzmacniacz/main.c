@@ -9,8 +9,6 @@
  *
  */
 
-#define DS18B20_ENABLED true
-
 #include "main.h"
 
 static bool powerIsOn = false;
@@ -143,9 +141,6 @@ void setup(void) {
     sbi(DDRD,PA0);    //LED
 }
 
-static int temp[2] = {0, 0};
-
-
 static int lastADC = 0;
 static int lastVolume = 0;
 
@@ -234,16 +229,7 @@ int main(void) {
             eepromWrite = true;
         }
         
-#if DS18B20_ENABLED
-        int *t = ds18b20_gettemp_decimal();
-        temp[0] = t[0]; temp[1] = t[1];
-#endif
-        
         PWM_SetValue(true, false, EEPROM[E_VOLUME]);
-        
-        if(eepromWrite || activeInput != I_74150_NOT_ACTIVE) {
-            ds18b20_delayResult();
-        }
         
         memset(s, 0, sizeof(s));
         snprintf(s, sizeof(s), "%d %d", EEPROM[E_VOLUME], rc5);
@@ -252,7 +238,7 @@ int main(void) {
         PCD_GotoXYFont(0,1);
 
         memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%d.%d %d %d", temp[0], temp[1], adc, activeInput);
+        snprintf(s, sizeof(s), "%d %d", adc, activeInput);
         PCD_print(FONT_1X, (byte*)s);
         
         PCD_Upd();
