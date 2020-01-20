@@ -15,5 +15,7 @@
 #include "utils.h"
 
 void init74574(void);
+void clearPorts(void);
+void setPower(bool state);
 
 #endif /* _4574_h */

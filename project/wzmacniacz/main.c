@@ -152,7 +152,7 @@ static bool eepromWrite = false;
 static unsigned char EEPROM[10];
 
 int main(void) {
-    
+  
     cli();
 
     wdt_enable( WDTO_1S );
@@ -162,6 +162,8 @@ int main(void) {
     PCD_Clr();
     PCD_Upd();
 
+     
+     
     /*
     PCD_GotoXYFont(0,0);
 
@@ -174,6 +176,8 @@ int main(void) {
      
     */
     
+   
+    
     RC5_Init();
     initDS1267();
     TWI_Init();
@@ -181,6 +185,8 @@ int main(void) {
     ADC_Init(true);
     init74150();
     init74574();
+
+    PWM_SetValue(true, false, 13);
     
     Impulsator_Init(255);
     setImpulsatorStep(1);
@@ -191,6 +197,8 @@ int main(void) {
     setDS1267(lastVolume, lastVolume);
     
     sei();
+    
+    setPower(false);
     
     while(1) {
         wdt_reset();
@@ -229,7 +237,7 @@ int main(void) {
             eepromWrite = true;
         }
         
-        PWM_SetValue(true, false, EEPROM[E_VOLUME]);
+        
         
         memset(s, 0, sizeof(s));
         snprintf(s, sizeof(s), "%d %d", EEPROM[E_VOLUME], rc5);
@@ -258,7 +266,6 @@ int main(void) {
     }
     return 0;
 
-    
     /*
     
     cli();
@@ -351,5 +358,5 @@ int main(void) {
         delay_ms(MAIN_DELAY_TIME);
         
     }
-     */
+  */
 }

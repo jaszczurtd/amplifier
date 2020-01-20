@@ -3,7 +3,6 @@
 //  Index
 //
 //  Created by Marcin Kielesiński on 21/12/2019.
-//  Copyright © 2019 Commend. All rights reserved.
 //
 
 #include "ds1267.h"
