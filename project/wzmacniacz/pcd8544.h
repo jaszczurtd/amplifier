@@ -11,12 +11,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-
-#include <avr/pgmspace.h>
-#include <avr/interrupt.h>
-#include <avr/io.h>
-#include <util/delay.h>
-
+#include <inttypes.h>
 
 #include "utils.h"
 
@@ -46,9 +41,6 @@
 // --------------- Pamięc Podręczna dla LCD ( 84 * 48 ) / 8 = 504 bytes
 #define LCD_CACHE_SIZE             ( ( LCD_X_RES * LCD_Y_RES ) / 8)
 
-// --------------- Definicje Typów
-typedef unsigned char              byte;
-
 // --------------- Enumeratorki
 typedef enum {
     LCD_CMD  = 0,
@@ -73,18 +65,18 @@ typedef enum {
 void PCD_Ini        ( void );
 void PCD_Clr        ( void );
 void PCD_Upd        ( void );
-void PCD_Img        ( const byte *imageData );
-void PCD_Contr      ( byte contrast);
-byte PCD_GotoXYFont ( byte x, byte y );
-byte PCD_Chr        ( LcdFontSize size, byte ch );
-byte PCD_Str        ( LcdFontSize size, byte dataArray[] );
-byte PCD_FStr       ( LcdFontSize size, const byte *dataPtr );
-byte PCD_print      ( LcdFontSize size, byte *dataPtr );
-byte PCD_Pixel      ( byte x, byte y, LcdPixelMode mode );
-byte PCD_Line       ( byte x1, byte x2, byte y1, byte y2, LcdPixelMode mode );
-byte PCD_Rect       ( byte x1, byte x2, byte y1, byte y2, LcdPixelMode mode );
-byte PCD_SBar       ( byte baseX, byte baseY, byte height, byte width, LcdPixelMode mode );
-byte PCD_Bars       ( byte data[], byte numbBars, byte width, byte multiplier );
+void PCD_Img        ( const unsigned char *imageData );
+void PCD_Contr      ( unsigned char contrast);
+unsigned char PCD_GotoXYFont ( unsigned char x, unsigned char y );
+unsigned char PCD_Chr        ( LcdFontSize size, unsigned char ch );
+unsigned char PCD_Str        ( LcdFontSize size, unsigned char dataArray[] );
+unsigned char PCD_FStr       ( LcdFontSize size, const unsigned char *dataPtr );
+unsigned char PCD_print      ( LcdFontSize size, unsigned char *dataPtr );
+unsigned char PCD_Pixel      ( unsigned char x, unsigned char y, LcdPixelMode mode );
+unsigned char PCD_Line       ( unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2, LcdPixelMode mode );
+unsigned char PCD_Rect       ( unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2, LcdPixelMode mode );
+unsigned char PCD_SBar       ( unsigned char baseX, unsigned char baseY, unsigned char height, unsigned char width, LcdPixelMode mode );
+unsigned char PCD_Bars       ( unsigned char data[], unsigned char numbBars, unsigned char width, unsigned char multiplier );
 
 
 

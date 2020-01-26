@@ -37,10 +37,10 @@ typedef enum {
 ///////////////////ADAPTED FOR ATMEGA32 by Hydrawerk 2014//////////////////////
 /////////////////Well, I only changed some register names.////////////////////
 
-const uint8_t trans[4] = {0x01, 0x91, 0x9b, 0xfb};
-volatile uint16_t command;
-uint8_t ccounter;
-volatile uint8_t has_new;
+const unsigned char trans[4] = {0x01, 0x91, 0x9b, 0xfb};
+volatile int command;
+unsigned char ccounter;
+volatile unsigned char has_new;
 State state = STATE_BEGIN;
 static int resultCommand = 0;
 static int counter = 0;
@@ -99,7 +99,7 @@ int RC5_NewCommandReceived(void) {
 
 ISR(INT0_vect) {
     
-    uint16_t delay = TCNT1;
+    int delay = TCNT1;
 
     /* TSOP2236 pulls the data line up, giving active low,
      * so the output is inverted. If data pin is high then the edge
@@ -111,7 +111,7 @@ ISR(INT0_vect) {
      *  4 - long space
      *  6 - long pulse
      */
-    uint8_t event = (RC5_PIN & _BV(RC5_PIN_N)) ? 2 : 0;
+    unsigned char event = (RC5_PIN & _BV(RC5_PIN_N)) ? 2 : 0;
     
     if(delay > LONG_MIN && delay < LONG_MAX) {
         event += 4;

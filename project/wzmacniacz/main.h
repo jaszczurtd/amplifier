@@ -14,6 +14,20 @@
 #include <avr/wdt.h>
 
 #include "utils.h"
+#include "twi_i2c.h"
+#include "pcd8544.h"
+#include "rc5.h"
+#include "Impulsator.h"
+#include "i2cEeprom.h"
+#include "UART.h"
+#include "ds18b20.h"
+#include "adc.h"
+#include "pwm.h"
+#include "74150.h"
+#include "74574.h"
+#include "ds1267.h"
+#include "PCF8563.h"
+
 
 typedef unsigned char uint8_t;
 

@@ -149,7 +149,7 @@ static int eepromDelay = 0;
 #define E_VOLUME 0
 
 static bool eepromWrite = false;
-static unsigned char EEPROM[10];
+static unsigned char MEM[10];
 
 int main(void) {
   
@@ -157,6 +157,15 @@ int main(void) {
 
     wdt_enable( WDTO_1S );
     
+    init74574();
+    RC5_Init();
+    initDS1267();
+    TWI_Init();
+    PWM_Init(true, false);
+    ADC_Init(true);
+    init74150();
+    PCF_Init(PCF_TIMER_INTERRUPT_ENABLE);
+
     PCD_Ini();
     PCD_Contr(0x3f);
     PCD_Clr();
@@ -178,22 +187,15 @@ int main(void) {
     
    
     
-    RC5_Init();
-    initDS1267();
-    TWI_Init();
-    PWM_Init(true, false);
-    ADC_Init(true);
-    init74150();
-    init74574();
 
     PWM_SetValue(true, false, 13);
     
     Impulsator_Init(255);
     setImpulsatorStep(1);
-    for(int a = 0; a < sizeof(EEPROM); a++) {
-        EEPROM[a] = EEPROMread(a);
+    for(int a = 0; a < sizeof(MEM); a++) {
+        MEM[a] = EEPROMread(a);
     }
-    setImpulsatorValue((lastVolume = EEPROM[E_VOLUME]));
+    setImpulsatorValue((lastVolume = MEM[E_VOLUME]));
     setDS1267(lastVolume, lastVolume);
     
     sei();
@@ -222,9 +224,9 @@ int main(void) {
                 break;
         }
         
-        EEPROM[E_VOLUME] = getImpulsatorValue();
-        if(lastVolume != EEPROM[E_VOLUME]) {
-            lastVolume = EEPROM[E_VOLUME];
+        MEM[E_VOLUME] = getImpulsatorValue();
+        if(lastVolume != MEM[E_VOLUME]) {
+            lastVolume = MEM[E_VOLUME];
             
             setDS1267(lastVolume, lastVolume);
             
@@ -237,28 +239,34 @@ int main(void) {
             eepromWrite = true;
         }
         
-        
+        PCF_DateTime pcfDateTime;
+        PCF_GetDateTime(&pcfDateTime);
         
         memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%d %d", EEPROM[E_VOLUME], rc5);
+        snprintf(s, sizeof(s), "%d %d", MEM[E_VOLUME], rc5);
+        PCD_print(FONT_1X, (unsigned char*)s);
         
-        PCD_print(FONT_1X, (byte*)s);
         PCD_GotoXYFont(0,1);
-
         memset(s, 0, sizeof(s));
         snprintf(s, sizeof(s), "%d %d", adc, activeInput);
-        PCD_print(FONT_1X, (byte*)s);
+        PCD_print(FONT_1X, (unsigned char*)s);
+
+        PCD_GotoXYFont(0,2);
+        memset(s, 0, sizeof(s));
+        snprintf(s, sizeof(s), "%d:%d %d", pcfDateTime.hour, pcfDateTime.minute, pcfDateTime.second);
+        PCD_print(FONT_1X, (unsigned char*)s);
+
         
         PCD_Upd();
 
-        delay_ms(MAIN_DELAY_TIME);
+        _delay_ms(MAIN_DELAY_TIME);
         
         if(eepromDelay-- <= 0) {
             eepromDelay = WRITE_EEPROM_DELAY;
             
             if(eepromWrite) {
-                for(int a = 0; a < sizeof(EEPROM); a++) {
-                    EEPROMwrite(a, EEPROM[a]);
+                for(int a = 0; a < sizeof(MEM); a++) {
+                    EEPROMwrite(a, MEM[a]);
                 }
                 eepromWrite = false;
             }

@@ -10,15 +10,14 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-
 #include <string.h>
-#include <avr/io.h>
-#include <util/delay.h>
-#include <avr/interrupt.h>
+
+#include "twi_i2c.h"
 #include "utils.h"
 
+#define EEPROM_ADDR_WR 0xa0
+#define EEPROM_ADDR_RD 0xa1
 
-void TWI_Init(void);
 bool EEPROMwrite(unsigned char ucAddress, unsigned char ucData);
 unsigned char EEPROMread(unsigned char ucAddress);
 

@@ -17,19 +17,45 @@
 #include <util/delay.h>
 #include <avr/wdt.h>
 #include <avr/pgmspace.h>
+#include <avr/interrupt.h>
+#include <avr/io.h>
 
-#include "pcd8544.h"
-#include "rc5.h"
-#include "Impulsator.h"
-#include "i2cEeprom.h"
-#include "UART.h"
-#include "ds18b20.h"
-#include "adc.h"
-#include "pwm.h"
-#include "74150.h"
-#include "74574.h"
-#include "ds1267.h"
-#include "PCF8563.h"
+
+#ifdef WDT_ENABLE
+#define WDR()    wdt_reset()
+#else
+#define WDR()
+#endif
+
+#define NOP() __asm__ __volatile__ ("nop")
+
+#ifndef CYCLES_PER_US
+#define CYCLES_PER_US ((F_CPU+500000)/1000000)
+#endif
+
+#ifndef GCC_VERSION
+#define GCC_VERSION (__GNUC__ * 1000 + __GNUC_MINOR__)
+#endif
+
+#ifndef cbi
+#define cbi(PORT, BIT) (_SFR_BYTE(PORT) &= ~_BV(BIT))
+#endif
+
+#ifndef sbi
+#define sbi(PORT, BIT) (_SFR_BYTE(PORT) |= _BV(BIT))
+#endif
+
+#ifndef tbi
+#define tbi(PORT, BIT)    (_SFR_BYTE(PORT) ^= _BV(BIT))
+#endif
+
+#define DDR(x) (_SFR_IO8(_SFR_IO_ADDR(x)-1))
+
+#define PIN(x) (_SFR_IO8(_SFR_IO_ADDR(x)-2))
+
+#define EEPROM __attribute__((section(".eeprom")))
+
+#define ESTR(s) ({static char __c[] EEPROM = (s); __c;})
 
 #ifndef true
 #define true 1
@@ -40,20 +66,104 @@
 #endif
 
 #ifndef TRUE
-#define TRUE  1
+#define TRUE    1
 #endif
+
 #ifndef FALSE
-#define FALSE 0
+#define FALSE    0
 #endif
 
-/* compatibilty macros for old style */
-#ifndef cbi
-#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+#ifdef    UBRR
+#define _UBRR_    UBRR
 #endif
 
-#ifndef sbi
-#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+#ifdef    UBRR0
+#define _UBRR_    UBRR0
 #endif
+
+#ifdef    UBRR0L
+#define _UBRR_    UBRR0L
+#endif
+
+#ifdef    UBRRH
+#define _UBRRH_    UBRRH
+#endif
+
+#ifdef    UBRR0H
+#define _UBRRH_    UBRR0H
+#endif
+
+#ifdef    UBRRHI
+#define _UBRRH_    UBRRHI
+#endif
+
+#ifdef    UDR
+#define _UDR_    UDR
+#endif
+
+#ifdef    UDR0
+#define _UDR_    UDR0
+#endif
+
+#ifdef    UCR
+#define _UCR_    UCR
+#endif
+
+#ifdef    UCSRB
+#define _UCR_    UCSRB
+#endif
+
+#ifdef    UCSR0B
+#define _UCR_    UCSR0B
+#endif
+
+#ifdef    USR
+#define _USR_    USR
+#endif
+
+#ifdef    UCSRA
+#define _USR_    UCSRA
+#endif
+
+#ifdef    UCSR0A
+#define _USR_    UCSR0A
+#endif
+
+#ifdef SIG_UART0_RECV
+#define SIG_UART_RECV          SIG_UART0_RECV
+#endif
+
+#ifdef SIG_UART0_DATA
+#define SIG_UART_DATA          SIG_UART0_DATA
+#endif
+
+#ifdef SIG_UART0_TRANS
+#define SIG_UART_TRANS         SIG_UART0_TRANS
+#endif
+
+//0 - 99 binary to BCD code conversion
+#define BinToBCD(bin) ((((bin) / 10) << 4) + ((bin) % 10))
+
+
+// ---------------------------------------------------------------
+
+typedef unsigned char      u08;    ///< Typ 8 bitowy bez znaku
+typedef          char      s08;    ///< Typ 8 bitowy ze znakiem
+typedef unsigned short     u16;    ///< Typ 16 bitowy bez znaku
+typedef          short     s16;    ///< Typ 16 bitowy ze znakiem
+typedef unsigned long      u32;    ///< Typ 32 bitowy bez znaku
+typedef          long      s32;    ///< Typ 32 bitowy ze znakiem
+typedef unsigned long long u64;    ///< Typ 64 bitowy bez znaku
+typedef          long long s64;    ///< Typ 64 bitowy ze znakiem
+
+// ---------------------------------------------------------------
+
+typedef unsigned char      UCHAR;    ///< Typ 8 bitowy bez znaku
+typedef unsigned short     WORD;    ///< Typ 16 bitowy bez znaku
+typedef unsigned long      DWORD;    ///< Typ 32 bitowy bez znaku
+typedef char*             LPCTSTR;    ///< Wskaünik do ≥aÒcucha znakÛw
+// ---------------------------------------------------------------
+
 
 #ifndef bitClear
 #define bitClear(dest, bit) dest &= ~(_BV(bit))
@@ -67,7 +177,6 @@
 #define boolP(x) (x) ? "true" : "false"
 #endif
 
-void delay_ms(int ms);
 int strlength(char *s);
 int binatoi(char *s);
 char *decToBinary(int n);

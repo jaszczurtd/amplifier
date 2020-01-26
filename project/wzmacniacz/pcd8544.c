@@ -12,11 +12,11 @@
 #include "pcd8544.h"
 
 
-static void PCD_Snd    ( byte data, LcdCmdData cd );
+static void PCD_Snd    ( unsigned char data, LcdCmdData cd );
 static void Delay      ( void );
 
 // --------------------------  bufor cache w SRAM 84*48 bits or 504 bytes
-static byte  LcdCache [ LCD_CACHE_SIZE ];
+static unsigned char  LcdCache [ LCD_CACHE_SIZE ];
 static int   LcdCacheIdx;
 static int   LoWaterMark;
 static int   HiWaterMark;
@@ -24,7 +24,7 @@ static bool  UpdateLcd;
 
 // Tablica znaków 5x7 .....
 
-static const byte PROGMEM FontLookup [][5] =
+static const unsigned char PROGMEM FontLookup [][5] =
 {
     { 0x00, 0x00, 0x00, 0x00, 0x00 },   /* spacja */
     { 0x00, 0x00, 0x2f, 0x00, 0x00 },   /* ! */
@@ -160,7 +160,7 @@ void PCD_Ini ( void ) {
 // Ustawia kontrast LCD
 // Wartosc  w zakresie 0x00 do 0x7F.
 
-void PCD_Contr ( byte contrast ) {
+void PCD_Contr ( unsigned char contrast ) {
     PCD_Snd( 0x21, LCD_CMD );
     
     // Ustawienie poziomu kontrastu
@@ -173,7 +173,7 @@ void PCD_Contr ( byte contrast ) {
 // PCD_Clr
 // Czyci LCD
 void PCD_Clr ( void ) {
-    memset(LcdCache,0x00,LCD_CACHE_SIZE);
+    memset(LcdCache, 0x00, sizeof(LcdCache));
     
     LoWaterMark = 0;
     HiWaterMark = LCD_CACHE_SIZE - 1;
@@ -184,7 +184,7 @@ void PCD_Clr ( void ) {
 
 // PCD_GotoXYFont
 // Ustawienie kursora z uwzglednieniem bazowej czcionki 5x7
-byte PCD_GotoXYFont ( byte x, byte y ) {
+unsigned char PCD_GotoXYFont ( unsigned char x, unsigned char y ) {
     if( x > 14)
         return OUT_OF_BORDER;
     if( y > 6)
@@ -198,9 +198,9 @@ byte PCD_GotoXYFont ( byte x, byte y ) {
 // PCD_Chr
 // Wyswietla znaki
 
-byte PCD_Chr ( LcdFontSize size, byte ch ) {
-    byte i, c;
-    byte b1, b2;
+unsigned char PCD_Chr ( LcdFontSize size, unsigned char ch ) {
+    unsigned char i, c;
+    unsigned char b1, b2;
     int  tmpIdx;
     
     if ( LcdCacheIdx < LoWaterMark ) {
@@ -272,9 +272,9 @@ byte PCD_Chr ( LcdFontSize size, byte ch ) {
 
 // PCD_Str
 
-byte PCD_Str ( LcdFontSize size, byte dataArray[] ) {
-    byte tmpIdx=0;
-    byte response;
+unsigned char PCD_Str ( LcdFontSize size, unsigned char dataArray[] ) {
+    unsigned char tmpIdx=0;
+    unsigned char response;
     while( dataArray[ tmpIdx ] != '\0' ) {
         // wysłanie znaku
         response = PCD_Chr( size, dataArray[ tmpIdx ] );
@@ -290,9 +290,9 @@ byte PCD_Str ( LcdFontSize size, byte dataArray[] ) {
 // Wyswietla String
 // Przykład uzycia :  LcdFStr(FONT_1X, PSTR("Witaj"));
 
-byte PCD_FStr ( LcdFontSize size, const byte *dataPtr ) {
-    byte c;
-    byte response;
+unsigned char PCD_FStr ( LcdFontSize size, const unsigned char *dataPtr ) {
+    unsigned char c;
+    unsigned char response;
     for ( c = pgm_read_byte( dataPtr ); c; ++dataPtr, c = pgm_read_byte( dataPtr ) ) {
         
         response = PCD_Chr( size, c );
@@ -302,10 +302,10 @@ byte PCD_FStr ( LcdFontSize size, const byte *dataPtr ) {
     return OK;
 }
 
-byte PCD_print ( LcdFontSize size, byte *dataPtr ) {
-    byte c;
-    byte response;
-    byte a = 0;
+unsigned char PCD_print ( LcdFontSize size, unsigned char *dataPtr ) {
+    unsigned char c;
+    unsigned char response;
+    unsigned char a = 0;
     
     while ((c = dataPtr[a++]) != '\0') {
         response = PCD_Chr( size, c );
@@ -320,10 +320,10 @@ byte PCD_print ( LcdFontSize size, byte *dataPtr ) {
 // PCD_Pixel
 // Wyswietla pixel o zadanych współrzędnych X, Y
 
-byte PCD_Pixel ( byte x, byte y, LcdPixelMode mode ) {
+unsigned char PCD_Pixel ( unsigned char x, unsigned char y, LcdPixelMode mode ) {
     int  index;
-    byte  offset;
-    byte  data;
+    unsigned char  offset;
+    unsigned char  data;
     
     // obliczenie ramek
     if ( x > LCD_X_RES ) return OUT_OF_BORDER;
@@ -367,9 +367,9 @@ byte PCD_Pixel ( byte x, byte y, LcdPixelMode mode ) {
 // PCD_Line
 // Pozwala na rysowanie lini  o zadanych współrzędnych
 
-byte PCD_Line ( byte x1, byte x2, byte y1, byte y2, LcdPixelMode mode ) {
+unsigned char PCD_Line ( unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2, LcdPixelMode mode ) {
     int dx, dy, stepx, stepy, fraction;
-    byte response;
+    unsigned char response;
     
     dy = y2 - y1;
     dx = x2 - x1;
@@ -443,10 +443,10 @@ byte PCD_Line ( byte x1, byte x2, byte y1, byte y2, LcdPixelMode mode ) {
 // PCD_SBar
 // Pozwala na rysowanie słupka
 
-byte PCD_SBar ( byte baseX, byte baseY, byte width, byte height, LcdPixelMode mode ) {
-    byte tmpIdxX,tmpIdxY;
+unsigned char PCD_SBar ( unsigned char baseX, unsigned char baseY, unsigned char width, unsigned char height, LcdPixelMode mode ) {
+    unsigned char tmpIdxX,tmpIdxY;
     
-    byte response;
+    unsigned char response;
     
     // Sprawdzenie ramek
     if ( ( baseX > LCD_X_RES ) || ( baseY > LCD_Y_RES ) ) return OUT_OF_BORDER;
@@ -470,10 +470,10 @@ byte PCD_SBar ( byte baseX, byte baseY, byte width, byte height, LcdPixelMode mo
 // PCD_Bars
 // Pozwala na rysowanie wielu słupków
 
-byte PCD_Bars ( byte data[], byte numbBars, byte width, byte multiplier ) {
-    byte b;
-    byte tmpIdx = 0;
-    byte response;
+unsigned char PCD_Bars ( unsigned char data[], unsigned char numbBars, unsigned char width, unsigned char multiplier ) {
+    unsigned char b;
+    unsigned char tmpIdx = 0;
+    unsigned char response;
     
     for ( b = 0;  b < numbBars ; b++ ) {
         // obliczenie ramek (LCD_X_RES)
@@ -497,9 +497,9 @@ byte PCD_Bars ( byte data[], byte numbBars, byte width, byte multiplier ) {
 // PCD_Rect
 // Rysuje prostokąt o zadanych parametrach
 
-byte PCD_Rect ( byte x1, byte x2, byte y1, byte y2, LcdPixelMode mode ) {
-    byte tmpIdxX,tmpIdxY;
-    byte response;
+unsigned char PCD_Rect ( unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2, LcdPixelMode mode ) {
+    unsigned char tmpIdxX,tmpIdxY;
+    unsigned char response;
     
     // Sprawdzenie ramek
     if ( ( x1 > LCD_X_RES ) ||  ( x2 > LCD_X_RES ) || ( y1 > LCD_Y_RES ) || ( y2 > LCD_Y_RES ) )
@@ -526,7 +526,7 @@ byte PCD_Rect ( byte x1, byte x2, byte y1, byte y2, LcdPixelMode mode ) {
 // PCD_Img
 // Wyswietla bitmape
 
-void PCD_Img ( const byte *imageData ) {
+void PCD_Img ( const unsigned char *imageData ) {
     
     memcpy_P(LcdCache,imageData,LCD_CACHE_SIZE);
     
@@ -569,7 +569,7 @@ void PCD_Upd ( void ) {
 // PCD_Snd
 // Wysyła dane do wyswietlacza
 
-static void PCD_Snd ( byte data, LcdCmdData cd ) {
+static void PCD_Snd ( unsigned char data, LcdCmdData cd ) {
     // Właczenie kontrolera - aktywny przy LOW
     LCD_PORT &= ~( _BV( LCD_CE_PIN ) );
     
