@@ -202,6 +202,19 @@ int main(void) {
     
     setPower(false);
     
+    /*
+    PCF_DateTime pcfDateTime;
+    memset(&pcfDateTime, 0, sizeof(PCF_DateTime));
+    pcfDateTime.day = 27;
+    pcfDateTime.month = 1;
+    pcfDateTime.year = 2020;
+    pcfDateTime.hour = 0;
+    pcfDateTime.minute = 45;
+    pcfDateTime.second = 20;
+    
+    PCF_SetDateTime(&pcfDateTime);
+    */
+    
     while(1) {
         wdt_reset();
         
