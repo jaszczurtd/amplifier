@@ -15,6 +15,8 @@
 
 #define I_74150_NOT_ACTIVE -1
 
+#define I_74150_POWER 5
+
 void init74150(void);
 int read74150(void);
 

@@ -61,5 +61,9 @@ void RC5_Reset(void);
  */
 int RC5_NewCommandReceived(void);
 
+#define RC5_POWER       12300
+#define RC5_VOLUME_UP   12304
+#define RC5_VOLUME_DOWN 12305
+
 #endif
 

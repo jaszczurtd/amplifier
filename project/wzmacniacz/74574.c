@@ -45,7 +45,7 @@ void clearPorts(void) {
     cbi(PORTC, PC6);
 }
 
-void setPower(bool state) {
+void setLoudness(bool state) {
     cbi(PORTC, PC6);
     
     _delay_us(1);

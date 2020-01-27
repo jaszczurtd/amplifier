@@ -16,6 +16,6 @@
 
 void init74574(void);
 void clearPorts(void);
-void setPower(bool state);
+void setLoudness(bool state);
 
 #endif /* _4574_h */

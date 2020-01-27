@@ -11,9 +11,19 @@
 
 #include "main.h"
 
+static int lastADC = 0;
+static int lastVolume = 0;
+
+static int eepromDelay = 0;
+static bool eepromWrite = false;
+static unsigned char MEM[10];
+
 static bool powerIsOn = false;
 static int powerResCounter = 0;
 static int speakersCounter = 0;
+
+static int rc5Code, switchCode;
+static PCF_DateTime pcfDateTime;
 
 static bool tapeIsOn = false,
     radioIsOn = false,
@@ -41,9 +51,6 @@ bool dac_sw(void) {
     return bit_is_clear(PINB,PB4);
 }
 
-bool power_sw(void) {
-    return bit_is_clear(PINB,PB5);
-}
 
 void generic(bool x) {
     if(x)sbi(PORTA,PD0);
@@ -68,11 +75,6 @@ void radio(bool x) {
 void dac(bool x) {
     if(x)sbi(PORTA,PD4);
     else    cbi(PORTA,PD4);
-}
-
-void power(bool x) {
-    if(x)sbi(PORTA,PD5);
-    else    cbi(PORTA,PD5);
 }
 
 void powerRes(bool x) {
@@ -109,10 +111,90 @@ void applyInputs(void) {
     dac(dacIsOn);
 }
 
+void storeToEEPROM(void) {
+    if(eepromDelay-- <= 0) {
+        eepromDelay = WRITE_EEPROM_DELAY;
+        
+        if(eepromWrite) {
+            for(int a = 0; a < sizeof(MEM); a++) {
+                EEPROMwrite(a, MEM[a]);
+            }
+            eepromWrite = false;
+        }
+    }
+}
+
+void power(bool x) {
+    if(x)sbi(PORTB,PB2);
+    else    cbi(PORTB,PB2);
+}
+
+void readCommands(void) {
+    switchCode = read74150();
+    rc5Code = RC5_NewCommandReceived();
+    WR();
+    _delay_ms(MAIN_DELAY_TIME);
+}
+
+bool power_sw(void) {
+    return (switchCode == I_74150_POWER) || (rc5Code == RC5_POWER);
+}
+
+
 void setup(void) {
+    cli();
+    
+    wdt_enable( WDTO_1S );
+    
     powerIsOn = false;
+    sbi(DDRB,PB2);    //power
+    power(false);
+
     powerResCounter = 0;
     
+    init74574();
+    RC5_Init();
+    initDS1267();
+    TWI_Init();
+    PWM_Init(true, false);
+    ADC_Init(true);
+    init74150();
+    PCF_Init(PCF_TIMER_INTERRUPT_ENABLE);
+    Impulsator_Init(255);
+    setImpulsatorStep(1);
+
+    PCD_Ini();
+    PCD_Contr(0x3f);
+    PCD_Clr();
+    PCD_Upd();
+    
+    PWM_SetValue(true, false, 0);
+    
+    for(int a = 0; a < sizeof(MEM); a++) {
+        MEM[a] = EEPROMread(a);
+    }
+    setImpulsatorValue((lastVolume = MEM[E_VOLUME]));
+    setDS1267(lastVolume, lastVolume);
+    
+    sei();
+    
+
+    setLoudness(false);
+    
+
+    
+    
+     /*
+     PCD_GotoXYFont(0,0);
+     
+     PCD_FStr(FONT_1X,(unsigned char*)PSTR(" Czesc moje"));
+     PCD_GotoXYFont(0,1);
+     PCD_FStr(FONT_1X,(unsigned char*)PSTR("  koffanie "));
+     PCD_GotoXYFont(0,2);
+     PCD_FStr(FONT_1X,(unsigned char*)PSTR("--!@#$%^&*()--"));
+     PCD_SBar ( 0, 25, 16, 12, PIXEL_ON);
+     
+     
     sbi(DDRA,PA0);    //uniw
     sbi(DDRA,PA1);    //magn
     sbi(DDRA,PA2);    //gram
@@ -139,68 +221,17 @@ void setup(void) {
     dacIsOn = true;    //default input
     
     sbi(DDRD,PA0);    //LED
+     
+     */
 }
 
-static int lastADC = 0;
-static int lastVolume = 0;
-
-static int eepromDelay = 0;
-
-#define E_VOLUME 0
-
-static bool eepromWrite = false;
-static unsigned char MEM[10];
 
 int main(void) {
-  
-    cli();
-
-    wdt_enable( WDTO_1S );
+ 
+    char s[120];
     
-    init74574();
-    RC5_Init();
-    initDS1267();
-    TWI_Init();
-    PWM_Init(true, false);
-    ADC_Init(true);
-    init74150();
-    PCF_Init(PCF_TIMER_INTERRUPT_ENABLE);
-
-    PCD_Ini();
-    PCD_Contr(0x3f);
-    PCD_Clr();
-    PCD_Upd();
-
-     
-     
-    /*
-    PCD_GotoXYFont(0,0);
-
-    PCD_FStr(FONT_1X,(unsigned char*)PSTR(" Czesc moje"));
-    PCD_GotoXYFont(0,1);
-    PCD_FStr(FONT_1X,(unsigned char*)PSTR("  koffanie "));
-    PCD_GotoXYFont(0,2);
-    PCD_FStr(FONT_1X,(unsigned char*)PSTR("--!@#$%^&*()--"));
-    PCD_SBar ( 0, 25, 16, 12, PIXEL_ON);
-     
-    */
+    setup();
     
-   
-    
-
-    PWM_SetValue(true, false, 13);
-    
-    Impulsator_Init(255);
-    setImpulsatorStep(1);
-    for(int a = 0; a < sizeof(MEM); a++) {
-        MEM[a] = EEPROMread(a);
-    }
-    setImpulsatorValue((lastVolume = MEM[E_VOLUME]));
-    setDS1267(lastVolume, lastVolume);
-    
-    sei();
-    
-    setPower(false);
     
     /*
     PCF_DateTime pcfDateTime;
@@ -218,72 +249,89 @@ int main(void) {
     while(1) {
         wdt_reset();
         
-        char s[120];
-        
         PCD_Clr();
         PCD_GotoXYFont(0,0);
         
-        int activeInput = read74150();
-        
-        int rc5 = RC5_NewCommandReceived();
-        switch(rc5) {
-            case RC5_VOLUME_UP:
-                Impulsator_increase();
-                eepromWrite = true;
-                break;
-            case RC5_VOLUME_DOWN:
-                Impulsator_decrease();
-                eepromWrite = true;
-                break;
-        }
-        
-        MEM[E_VOLUME] = getImpulsatorValue();
-        if(lastVolume != MEM[E_VOLUME]) {
-            lastVolume = MEM[E_VOLUME];
-            
-            setDS1267(lastVolume, lastVolume);
-            
-            eepromWrite = true;
-        }
-        
-        int adc = getADCValue();
-        if(lastADC != adc) {
-            lastADC = adc;
-            eepromWrite = true;
-        }
-        
-        PCF_DateTime pcfDateTime;
-        PCF_GetDateTime(&pcfDateTime);
-        
-        memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%d %d", MEM[E_VOLUME], rc5);
-        PCD_print(FONT_1X, (unsigned char*)s);
-        
-        PCD_GotoXYFont(0,1);
-        memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%d %d", adc, activeInput);
-        PCD_print(FONT_1X, (unsigned char*)s);
+        switchCode = read74150();
+        rc5Code = RC5_NewCommandReceived();
 
-        PCD_GotoXYFont(0,2);
-        memset(s, 0, sizeof(s));
-        snprintf(s, sizeof(s), "%d:%d %d", pcfDateTime.hour, pcfDateTime.minute, pcfDateTime.second);
-        PCD_print(FONT_1X, (unsigned char*)s);
-
-        
-        PCD_Upd();
-
-        _delay_ms(MAIN_DELAY_TIME);
-        
-        if(eepromDelay-- <= 0) {
-            eepromDelay = WRITE_EEPROM_DELAY;
+        if(powerIsOn) {
             
-            if(eepromWrite) {
-                for(int a = 0; a < sizeof(MEM); a++) {
-                    EEPROMwrite(a, MEM[a]);
-                }
-                eepromWrite = false;
+            switch(rc5Code) {
+                case RC5_VOLUME_UP:
+                    Impulsator_increase();
+                    eepromWrite = true;
+                    break;
+                case RC5_VOLUME_DOWN:
+                    Impulsator_decrease();
+                    eepromWrite = true;
+                    break;
             }
+            
+            MEM[E_VOLUME] = getImpulsatorValue();
+            if(lastVolume != MEM[E_VOLUME]) {
+                lastVolume = MEM[E_VOLUME];
+                
+                setDS1267(lastVolume, lastVolume);
+                
+                eepromWrite = true;
+            }
+            
+            int adc = getADCValue();
+            if(lastADC != adc) {
+                lastADC = adc;
+                eepromWrite = true;
+            }
+            
+            memset(s, 0, sizeof(s));
+            snprintf(s, sizeof(s), "%d %d", MEM[E_VOLUME], rc5Code);
+            PCD_print(FONT_1X, (unsigned char*)s);
+            
+            PCD_GotoXYFont(0,1);
+            memset(s, 0, sizeof(s));
+            snprintf(s, sizeof(s), "%d %d", adc, switchCode);
+            PCD_print(FONT_1X, (unsigned char*)s);
+
+
+            
+            PCD_Upd();
+            storeToEEPROM();
+            
+        } else {
+            //power off mode
+            if(power_sw()) {
+                while (power_sw()) {readCommands(); }
+                power(powerIsOn = true);
+                continue;
+            }
+            
+            PCF_GetDateTime(&pcfDateTime);
+
+            PCD_GotoXYFont(2, 1);
+            memset(s, 0, sizeof(s));
+            
+            snprintf(s, sizeof(s), "%02d-%02d %d", pcfDateTime.day, pcfDateTime.month, pcfDateTime.year);
+            PCD_print(FONT_1X, (unsigned char*)s);
+            
+            PCD_GotoXYFont(2, 3);
+            memset(s, 0, sizeof(s));
+            
+            char second = ' ';
+            if(pcfDateTime.second %2 == 0) {
+                second = ':';
+            }
+            
+            snprintf(s, sizeof(s), "%02d%c%02d", pcfDateTime.hour, second, pcfDateTime.minute);
+            PCD_print(FONT_2X, (unsigned char*)s);
+            
+            PCD_GotoXYFont(12, 3);
+            memset(s, 0, sizeof(s));
+            snprintf(s, sizeof(s), "%02d", pcfDateTime.second);
+            PCD_print(FONT_1X, (unsigned char*)s);
+
+            PCD_Upd();
         }
+        _delay_ms(MAIN_DELAY_TIME);
     }
     return 0;
 
