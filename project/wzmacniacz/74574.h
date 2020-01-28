@@ -9,9 +9,6 @@
 #define _4574_h
 
 #include <stdio.h>
-#include <string.h>
-#include <avr/io.h>
-#include <util/delay.h>
 #include "utils.h"
 
 void init74574(void);

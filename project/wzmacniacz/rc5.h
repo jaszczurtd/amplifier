@@ -19,12 +19,10 @@
 #ifndef RC5_H
 #define RC5_H
 
-#include <stdint.h>
 #include <stdbool.h>
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <inttypes.h>
 
 #include "utils.h"
 
@@ -61,9 +59,13 @@ void RC5_Reset(void);
  */
 int RC5_NewCommandReceived(void);
 
-#define RC5_POWER       12300
-#define RC5_VOLUME_UP   12304
-#define RC5_VOLUME_DOWN 12305
+#define RC5_POWER           12300
+#define RC5_VOLUME_UP       12304
+#define RC5_VOLUME_DOWN     12305
+#define RC5_CLOCK_SET       8250
+#define RC5_MENU            8210
+#define RC5_MENU_MINUS      8206
+#define RC5_MENU_PLUS       8205
 
 #endif
 

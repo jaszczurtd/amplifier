@@ -20,6 +20,7 @@
 		A34F48DE239EF69A00D9D1E2 /* pcd8544.c in Sources */ = {isa = PBXBuildFile; fileRef = A34F48DD239EF69A00D9D1E2 /* pcd8544.c */; };
 		A3DB6C2823BA670400F4ACE5 /* 74150.c in Sources */ = {isa = PBXBuildFile; fileRef = A3DB6C2723BA670400F4ACE5 /* 74150.c */; };
 		A3DCEA2223DDD36B0057B8A0 /* twi_i2c.c in Sources */ = {isa = PBXBuildFile; fileRef = A3DCEA2123DDD36B0057B8A0 /* twi_i2c.c */; };
+		A3DCEA2523DF68EF0057B8A0 /* clockPart.c in Sources */ = {isa = PBXBuildFile; fileRef = A3DCEA2423DF68EF0057B8A0 /* clockPart.c */; };
 		A3EA49E723AC2FEF00071DE3 /* UART.c in Sources */ = {isa = PBXBuildFile; fileRef = A3EA49E623AC2FEF00071DE3 /* UART.c */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,8 @@
 		A3DB6C2723BA670400F4ACE5 /* 74150.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = 74150.c; sourceTree = "<group>"; };
 		A3DCEA2023DDD36B0057B8A0 /* twi_i2c.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = twi_i2c.h; sourceTree = "<group>"; };
 		A3DCEA2123DDD36B0057B8A0 /* twi_i2c.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = twi_i2c.c; sourceTree = "<group>"; };
+		A3DCEA2323DF68EF0057B8A0 /* clockPart.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = clockPart.h; sourceTree = "<group>"; };
+		A3DCEA2423DF68EF0057B8A0 /* clockPart.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = clockPart.c; sourceTree = "<group>"; };
 		A3EA49E523AC2FEF00071DE3 /* UART.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UART.h; sourceTree = "<group>"; };
 		A3EA49E623AC2FEF00071DE3 /* UART.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = UART.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -82,6 +85,8 @@
 				A34F48E923A02EDA00D9D1E2 /* tools */,
 				A34F48B9239BFFAA00D9D1E2 /* main.c */,
 				A34F48CE239C029500D9D1E2 /* main.h */,
+				A3DCEA2423DF68EF0057B8A0 /* clockPart.c */,
+				A3DCEA2323DF68EF0057B8A0 /* clockPart.h */,
 				A34F48CF239C030000D9D1E2 /* version.h */,
 				A34F48BB239BFFAA00D9D1E2 /* Makefiles */,
 			);
@@ -260,6 +265,7 @@
 				A34F48BA239BFFAA00D9D1E2 /* main.c in Sources */,
 				A349451023AEB7F5009A636E /* ds1267.c in Sources */,
 				A3DB6C2823BA670400F4ACE5 /* 74150.c in Sources */,
+				A3DCEA2523DF68EF0057B8A0 /* clockPart.c in Sources */,
 				A302CBDA23BE1EE900B14F96 /* 74574.c in Sources */,
 				A3EA49E723AC2FEF00071DE3 /* UART.c in Sources */,
 				A349451923B5335C009A636E /* adc.c in Sources */,
@@ -405,6 +411,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G3944GUFEE;
+				GCC_OPTIMIZATION_LEVEL = 1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -414,6 +421,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G3944GUFEE;
+				GCC_OPTIMIZATION_LEVEL = 1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -432,6 +440,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G3944GUFEE;
+				GCC_OPTIMIZATION_LEVEL = 1;
 			};
 			name = Release;
 		};
@@ -440,6 +449,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G3944GUFEE;
+				GCC_OPTIMIZATION_LEVEL = 1;
 			};
 			name = Debug;
 		};
@@ -448,6 +458,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G3944GUFEE;
+				GCC_OPTIMIZATION_LEVEL = 1;
 			};
 			name = Release;
 		};
@@ -456,6 +467,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G3944GUFEE;
+				GCC_OPTIMIZATION_LEVEL = 1;
 			};
 			name = Debug;
 		};
@@ -464,6 +476,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = G3944GUFEE;
+				GCC_OPTIMIZATION_LEVEL = 1;
 			};
 			name = Release;
 		};

@@ -14,11 +14,11 @@
 #include <stdbool.h>
 #include <inttypes.h>
 #include <string.h>
-#include <util/delay.h>
 #include <avr/wdt.h>
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include <util/delay.h>
 
 
 #ifdef WDT_ENABLE
@@ -177,6 +177,7 @@ typedef char*             LPCTSTR;    ///< Wskaünik do ≥aÒcucha znakÛw
 #define boolP(x) (x) ? "true" : "false"
 #endif
 
+void delay_ms(int ms);
 int strlength(char *s);
 int binatoi(char *s);
 char *decToBinary(int n);

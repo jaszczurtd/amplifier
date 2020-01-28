@@ -18,11 +18,11 @@ static int eepromDelay = 0;
 static bool eepromWrite = false;
 static unsigned char MEM[10];
 
-static bool powerIsOn = false;
+bool powerIsOn = false;
 static int powerResCounter = 0;
 static int speakersCounter = 0;
 
-static int rc5Code, switchCode;
+int rc5Code, switchCode;
 static PCF_DateTime pcfDateTime;
 
 static bool tapeIsOn = false,
@@ -129,11 +129,13 @@ void power(bool x) {
     else    cbi(PORTB,PB2);
 }
 
-void readCommands(void) {
+void readCommands(int time) {
     switchCode = read74150();
     rc5Code = RC5_NewCommandReceived();
+    if(time > 0) {
+        delay_ms(time);
+    }
     WR();
-    _delay_ms(MAIN_DELAY_TIME);
 }
 
 bool power_sw(void) {
@@ -247,15 +249,18 @@ int main(void) {
     */
     
     while(1) {
-        wdt_reset();
-        
         PCD_Clr();
         PCD_GotoXYFont(0,0);
         
-        switchCode = read74150();
-        rc5Code = RC5_NewCommandReceived();
+        readCommands(0);
 
         if(powerIsOn) {
+            
+            if(power_sw()) {
+                while (power_sw()) { readCommands(READ_COMMANDS_DELAY_TIME); }
+                power(powerIsOn = false);
+                continue;
+            }
             
             switch(rc5Code) {
                 case RC5_VOLUME_UP:
@@ -297,38 +302,16 @@ int main(void) {
             PCD_Upd();
             storeToEEPROM();
             
-        } else {
-            //power off mode
+        } else {             //power off mode
+
             if(power_sw()) {
-                while (power_sw()) {readCommands(); }
+                while (power_sw()) { readCommands(READ_COMMANDS_DELAY_TIME); }
                 power(powerIsOn = true);
+                setClockSetMode(false);
                 continue;
             }
             
-            PCF_GetDateTime(&pcfDateTime);
-
-            PCD_GotoXYFont(2, 1);
-            memset(s, 0, sizeof(s));
-            
-            snprintf(s, sizeof(s), "%02d-%02d %d", pcfDateTime.day, pcfDateTime.month, pcfDateTime.year);
-            PCD_print(FONT_1X, (unsigned char*)s);
-            
-            PCD_GotoXYFont(2, 3);
-            memset(s, 0, sizeof(s));
-            
-            char second = ' ';
-            if(pcfDateTime.second %2 == 0) {
-                second = ':';
-            }
-            
-            snprintf(s, sizeof(s), "%02d%c%02d", pcfDateTime.hour, second, pcfDateTime.minute);
-            PCD_print(FONT_2X, (unsigned char*)s);
-            
-            PCD_GotoXYFont(12, 3);
-            memset(s, 0, sizeof(s));
-            snprintf(s, sizeof(s), "%02d", pcfDateTime.second);
-            PCD_print(FONT_1X, (unsigned char*)s);
-
+            clockMainFunction();
             PCD_Upd();
         }
         _delay_ms(MAIN_DELAY_TIME);
