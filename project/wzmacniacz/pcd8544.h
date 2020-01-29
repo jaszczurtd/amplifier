@@ -14,6 +14,9 @@
 
 #include "utils.h"
 
+#define S_WIDTH 14
+#define S_HEIGHT 6
+
 // --------------- Wartoci zwrotne
 #define OK                         0
 #define OUT_OF_BORDER              1
@@ -76,7 +79,5 @@ unsigned char PCD_Line       ( unsigned char x1, unsigned char x2, unsigned char
 unsigned char PCD_Rect       ( unsigned char x1, unsigned char x2, unsigned char y1, unsigned char y2, LcdPixelMode mode );
 unsigned char PCD_SBar       ( unsigned char baseX, unsigned char baseY, unsigned char height, unsigned char width, LcdPixelMode mode );
 unsigned char PCD_Bars       ( unsigned char data[], unsigned char numbBars, unsigned char width, unsigned char multiplier );
-
-
 
 #endif  /*  _PCD8544_H_ */

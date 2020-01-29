@@ -37,16 +37,25 @@ const char *getItem(unsigned char number) {
     return items[number];
 }
 
+void setItemVisible(void) {
+    itemVisible = true;
+    itemVisibilityCounter = 0;
+}
+
 void setItem(bool increase) {
     switch(activeItem) {
         case 0:
             if(increase) {
                 if(pcfDateTime.day < 31) {
                     pcfDateTime.day++;
+                } else {
+                    pcfDateTime.day = 1;
                 }
             } else {
                 if(pcfDateTime.day > 1) {
                     pcfDateTime.day--;
+                } else {
+                    pcfDateTime.day = 31;
                 }
             }
             break;
@@ -55,10 +64,14 @@ void setItem(bool increase) {
             if(increase) {
                 if(pcfDateTime.month < 12) {
                     pcfDateTime.month++;
+                } else {
+                    pcfDateTime.month = 1;
                 }
             } else {
                 if(pcfDateTime.month > 1) {
                     pcfDateTime.month--;
+                } else {
+                    pcfDateTime.month = 12;
                 }
             }
             break;
@@ -67,10 +80,14 @@ void setItem(bool increase) {
             if(increase) {
                 if(pcfDateTime.year < PCF_MAX_YEAR) {
                     pcfDateTime.year++;
+                } else {
+                    pcfDateTime.year = PCF_MIN_YEAR;
                 }
             } else {
                 if(pcfDateTime.year > PCF_MIN_YEAR) {
                     pcfDateTime.year--;
+                } else {
+                    pcfDateTime.year = PCF_MAX_YEAR;
                 }
             }
             break;
@@ -79,10 +96,14 @@ void setItem(bool increase) {
             if(increase) {
                 if(pcfDateTime.hour < 23) {
                     pcfDateTime.hour++;
+                } else {
+                    pcfDateTime.hour = 0;
                 }
             } else {
                 if(pcfDateTime.hour > 0) {
                     pcfDateTime.hour--;
+                } else {
+                    pcfDateTime.hour = 23;
                 }
             }
             break;
@@ -91,10 +112,14 @@ void setItem(bool increase) {
             if(increase) {
                 if(pcfDateTime.minute < 59) {
                     pcfDateTime.minute++;
+                } else {
+                    pcfDateTime.minute = 0;
                 }
             } else {
                 if(pcfDateTime.minute > 0) {
                     pcfDateTime.minute--;
+                } else {
+                    pcfDateTime.minute = 59;
                 }
             }
             break;
@@ -103,22 +128,26 @@ void setItem(bool increase) {
             if(increase) {
                 if(pcfDateTime.second < 59) {
                     pcfDateTime.second++;
+                } else {
+                    pcfDateTime.second = 0;
                 }
             } else {
                 if(pcfDateTime.second > 0) {
                     pcfDateTime.second--;
+                } else {
+                    pcfDateTime.second = 59;
                 }
             }
             break;
     }
+    setItemVisible();
 }
 
 void setClockSetMode(bool enabled) {
     clockSetMode = enabled;
     if(clockSetMode) {
         activeItem = 0;
-        itemVisibilityCounter = 0;
-        itemVisible = true;
+        setItemVisible();
     }
 }
 
@@ -130,6 +159,7 @@ void clockMainFunction(void) {
         
         if(rc5Code == RC5_CLOCK_SET && !powerIsOn) {
             setClockSetMode(true);
+            setItemVisible();
             return;
         }
         
@@ -155,6 +185,34 @@ void clockMainFunction(void) {
         snprintf(s, BUF_L, "%02d", pcfDateTime.second);
         PCD_print(FONT_1X, (unsigned char*)s);
         
+        char *weekday = "";
+        switch(pcfDateTime.weekday) {
+            case 0:
+                weekday = "poniedzialek";
+                break;
+            case 1:
+                weekday = "wtorek";
+                break;
+            case 2:
+                weekday = "sroda";
+                break;
+            case 3:
+                weekday = "czwartek";
+                break;
+            case 4:
+                weekday = "piatek";
+                break;
+            case 5:
+                weekday = "sobota";
+                break;
+            case 6:
+                weekday = "niedziela";
+                break;
+        }
+        
+        PCD_GotoXYFont((S_WIDTH - strlength(weekday)) / 2, 4);
+        PCD_print(FONT_1X, (unsigned char*)weekday);
+        
     } else {
         
         switch(rc5Code) {
@@ -167,7 +225,6 @@ void clockMainFunction(void) {
                     PCF_SetDateTime(&pcfDateTime);
                     return;
                 }
-                itemVisible = true;
                 break;
                 
             case RC5_MENU_PLUS:
