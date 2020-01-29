@@ -44,6 +44,8 @@
 
 #define E_VOLUME 0
 
+#define BUF_L 120
+
 void readCommands(int time);
 
 #endif

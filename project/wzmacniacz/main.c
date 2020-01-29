@@ -25,6 +25,8 @@ static int speakersCounter = 0;
 int rc5Code, switchCode;
 static PCF_DateTime pcfDateTime;
 
+char s[BUF_L];
+
 static bool tapeIsOn = false,
     radioIsOn = false,
     dacIsOn = false,
@@ -229,24 +231,8 @@ void setup(void) {
 
 
 int main(void) {
- 
-    char s[120];
     
     setup();
-    
-    
-    /*
-    PCF_DateTime pcfDateTime;
-    memset(&pcfDateTime, 0, sizeof(PCF_DateTime));
-    pcfDateTime.day = 27;
-    pcfDateTime.month = 1;
-    pcfDateTime.year = 2020;
-    pcfDateTime.hour = 0;
-    pcfDateTime.minute = 45;
-    pcfDateTime.second = 20;
-    
-    PCF_SetDateTime(&pcfDateTime);
-    */
     
     while(1) {
         PCD_Clr();
@@ -288,13 +274,13 @@ int main(void) {
                 eepromWrite = true;
             }
             
-            memset(s, 0, sizeof(s));
-            snprintf(s, sizeof(s), "%d %d", MEM[E_VOLUME], rc5Code);
+            memset(s, 0, BUF_L);
+            snprintf(s, BUF_L, "%d %d", MEM[E_VOLUME], rc5Code);
             PCD_print(FONT_1X, (unsigned char*)s);
             
             PCD_GotoXYFont(0,1);
-            memset(s, 0, sizeof(s));
-            snprintf(s, sizeof(s), "%d %d", adc, switchCode);
+            memset(s, 0, BUF_L);
+            snprintf(s, BUF_L, "%d %d", adc, switchCode);
             PCD_print(FONT_1X, (unsigned char*)s);
 
 

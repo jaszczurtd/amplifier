@@ -34,6 +34,8 @@
 
 #define PCF_DISABLE_ALARM                80
 
+#define PCF_MAX_YEAR 2100
+#define PCF_MIN_YEAR 1900
 
 typedef struct {
     unsigned char minute;

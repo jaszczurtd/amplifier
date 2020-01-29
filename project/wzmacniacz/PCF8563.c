@@ -131,7 +131,7 @@ unsigned char PCF_GetAlarm(PCF_Alarm *alarm)
 
 unsigned char PCF_SetDateTime(PCF_DateTime *dateTime)
 {
-    if (dateTime->second >= 60 || dateTime->minute >= 60 || dateTime->hour >= 24 || dateTime->day > 32 || dateTime->weekday > 6 || dateTime->month > 12 || dateTime->year < 1900 || dateTime->year >= 2100)
+    if (dateTime->second >= 60 || dateTime->minute >= 60 || dateTime->hour >= 24 || dateTime->day > 32 || dateTime->weekday > 6 || dateTime->month > 12 || dateTime->year < PCF_MIN_YEAR || dateTime->year >= PCF_MAX_YEAR)
     {
         return 1;
     }

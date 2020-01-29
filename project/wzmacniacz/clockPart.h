@@ -13,6 +13,7 @@
 
 extern int rc5Code, switchCode;
 extern bool powerIsOn;
+extern char s[];
 
 void setClockSetMode(bool enabled);
 void clockMainFunction(void);
