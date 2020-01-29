@@ -23,9 +23,11 @@ static int powerResCounter = 0;
 static int speakersCounter = 0;
 
 int rc5Code, switchCode;
-static PCF_DateTime pcfDateTime;
 
 char s[BUF_L];
+
+static int powerLEDDelay = 0;
+static unsigned char powerLEDValue = 0;
 
 static bool tapeIsOn = false,
     radioIsOn = false,
@@ -154,6 +156,9 @@ void setup(void) {
     sbi(DDRB,PB2);    //power
     power(false);
 
+    powerLEDDelay = 0;
+    powerLEDValue = 0;
+    
     powerResCounter = 0;
     
     init74574();
@@ -171,8 +176,6 @@ void setup(void) {
     PCD_Contr(0x3f);
     PCD_Clr();
     PCD_Upd();
-    
-    PWM_SetValue(true, false, 0);
     
     for(int a = 0; a < sizeof(MEM); a++) {
         MEM[a] = EEPROMread(a);
@@ -288,6 +291,13 @@ int main(void) {
             PCD_Upd();
             storeToEEPROM();
             
+            if(powerLEDValue < 255) {
+                if(powerLEDDelay++ > POWER_LED_DELAY){
+                    powerLEDDelay = 0;
+                    powerLEDValue++;
+                }
+            }
+
         } else {             //power off mode
 
             if(power_sw()) {
@@ -299,7 +309,16 @@ int main(void) {
             
             clockMainFunction();
             PCD_Upd();
+            
+            if(powerLEDValue > 0) {
+                if(powerLEDDelay++ > POWER_LED_DELAY){
+                    powerLEDDelay = 0;
+                    powerLEDValue--;
+                }
+            }
         }
+        PWM_SetValue(true, false, powerLEDValue);
+
         _delay_ms(MAIN_DELAY_TIME);
     }
     return 0;

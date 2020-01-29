@@ -37,6 +37,8 @@
 
 #define WRITE_EEPROM_DELAY 10
 
+#define POWER_LED_DELAY 1
+
 #ifndef MAIN_H
 #define MAIN_H
 
