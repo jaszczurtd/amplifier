@@ -27,6 +27,8 @@
 #define WDR()
 #endif
 
+#define WR wdt_reset
+
 #define NOP() __asm__ __volatile__ ("nop")
 
 #ifndef CYCLES_PER_US

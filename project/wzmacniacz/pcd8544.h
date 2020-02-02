@@ -14,6 +14,8 @@
 
 #include "utils.h"
 
+#define BUF_L 120
+
 #define S_WIDTH 14
 #define S_HEIGHT 6
 

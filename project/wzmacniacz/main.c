@@ -11,156 +11,39 @@
 
 #include "main.h"
 
-static int lastADC = 0;
 static int lastVolume = 0;
-
-static int eepromDelay = 0;
-static bool eepromWrite = false;
-static unsigned char MEM[10];
-
-bool powerIsOn = false;
-static int powerResCounter = 0;
-static int speakersCounter = 0;
-
-int rc5Code, switchCode;
-
-char s[BUF_L];
 
 static int powerLEDDelay = 0;
 static unsigned char powerLEDValue = 0;
 
-static bool tapeIsOn = false,
-    radioIsOn = false,
-    dacIsOn = false,
-    genericIsOn = false,
-    piezoIsOn = false;
-
-bool generic_sw(void) {
-    return bit_is_clear(PINB,PB0);
-}
-
-bool tape_sw(void) {
-    return bit_is_clear(PINB,PB1);
-}
-
-bool piezo_sw(void) {
-    return bit_is_clear(PINB,PB2);
-}
-
-bool radio_sw(void) {
-    return bit_is_clear(PINB,PB3);
-}
-
-bool dac_sw(void) {
-    return bit_is_clear(PINB,PB4);
-}
-
-
-void generic(bool x) {
-    if(x)sbi(PORTA,PD0);
-    else    cbi(PORTA,PD0);
-}
-
-void tape(bool x) {
-    if(x)sbi(PORTA,PD1);
-    else    cbi(PORTA,PD1);
-}
-
-void piezo(bool x) {
-    if(x)sbi(PORTA,PD2);
-    else    cbi(PORTA,PD2);
-}
-
-void radio(bool x) {
-    if(x)sbi(PORTA,PD3);
-    else    cbi(PORTA,PD3);
-}
-
-void dac(bool x) {
-    if(x)sbi(PORTA,PD4);
-    else    cbi(PORTA,PD4);
-}
-
-void powerRes(bool x) {
-    if(x)sbi(PORTA,PD6);
-    else    cbi(PORTA,PD6);
-}
-
+static int speakersCounter = 0;
 void speakers(bool x) {
     if(x)sbi(PORTA,PD7);
     else    cbi(PORTA,PD7);
 }
 
-void resetInputs(void) {
-    generic(false);
-    tape(false);
-    piezo(false);
-    radio(false);
-    dac(false);
-}
+static int powerResCounter = 0;
 
-void resetMemoryInputs(void) {
-    genericIsOn = false;
-    tapeIsOn = false;
-    piezoIsOn = false;
-    radioIsOn = false;
-    dacIsOn = false;
-}
-
-void applyInputs(void) {
-    generic(genericIsOn);
-    tape(tapeIsOn);
-    piezo(piezoIsOn);
-    radio(radioIsOn);
-    dac(dacIsOn);
-}
-
-void storeToEEPROM(void) {
-    if(eepromDelay-- <= 0) {
-        eepromDelay = WRITE_EEPROM_DELAY;
-        
-        if(eepromWrite) {
-            for(int a = 0; a < sizeof(MEM); a++) {
-                EEPROMwrite(a, MEM[a]);
-            }
-            eepromWrite = false;
-        }
-    }
-}
-
+bool powerIsOn = false;
 void power(bool x) {
     if(x)sbi(PORTB,PB2);
     else    cbi(PORTB,PB2);
 }
-
-void readCommands(int time) {
-    switchCode = read74150();
-    rc5Code = RC5_NewCommandReceived();
-    if(time > 0) {
-        delay_ms(time);
-    }
-    WR();
-}
-
-bool power_sw(void) {
-    return (switchCode == I_74150_POWER) || (rc5Code == RC5_POWER);
-}
-
 
 void setup(void) {
     cli();
     
     wdt_enable( WDTO_1S );
     
-    powerIsOn = false;
-    sbi(DDRB,PB2);    //power
-    power(false);
+    initInputs();
+    
+    power(powerIsOn = DEFAULT_POWER_IS_ON);
 
     powerLEDDelay = 0;
     powerLEDValue = 0;
     
     powerResCounter = 0;
-    
+
     init74574();
     RC5_Init();
     initDS1267();
@@ -173,20 +56,16 @@ void setup(void) {
     setImpulsatorStep(1);
 
     PCD_Ini();
-    PCD_Contr(0x3f);
+    PCD_Contr(0x40);
     PCD_Clr();
     PCD_Upd();
     
-    for(int a = 0; a < sizeof(MEM); a++) {
-        MEM[a] = EEPROMread(a);
-    }
     setImpulsatorValue((lastVolume = MEM[E_VOLUME]));
     setDS1267(lastVolume, lastVolume);
     
     sei();
     
-
-    setLoudness(false);
+    setLoudness(MEM[E_LOUDNESS]);
     
 
     
@@ -246,19 +125,25 @@ int main(void) {
         if(powerIsOn) {
             
             if(power_sw()) {
-                while (power_sw()) { readCommands(READ_COMMANDS_DELAY_TIME); }
+                while (power_sw()) { RC(); }
                 power(powerIsOn = false);
+                clearPorts();
                 continue;
+            }
+            
+            if(loudness_sw()) {
+                while (loudness_sw()) { RC(); }
+                setLoudness(EORValue(E_LOUDNESS));
             }
             
             switch(rc5Code) {
                 case RC5_VOLUME_UP:
                     Impulsator_increase();
-                    eepromWrite = true;
+                    setStoreStatusFlag();
                     break;
                 case RC5_VOLUME_DOWN:
                     Impulsator_decrease();
-                    eepromWrite = true;
+                    setStoreStatusFlag();
                     break;
             }
             
@@ -268,14 +153,10 @@ int main(void) {
                 
                 setDS1267(lastVolume, lastVolume);
                 
-                eepromWrite = true;
+                setStoreStatusFlag();
             }
             
             int adc = getADCValue();
-            if(lastADC != adc) {
-                lastADC = adc;
-                eepromWrite = true;
-            }
             
             memset(s, 0, BUF_L);
             snprintf(s, BUF_L, "%d %d", MEM[E_VOLUME], rc5Code);
@@ -289,10 +170,10 @@ int main(void) {
 
             
             PCD_Upd();
-            storeToEEPROM();
+            storeStatusToEEPROM();
             
-            if(powerLEDValue < 255) {
-                if(powerLEDDelay++ > POWER_LED_DELAY){
+            if(powerLEDValue < POWER_LED_MAX_VALUE) {
+                if(powerLEDDelay++ > POWER_LED_DELAY_ON){
                     powerLEDDelay = 0;
                     powerLEDValue++;
                 }
@@ -304,6 +185,8 @@ int main(void) {
                 while (power_sw()) { readCommands(READ_COMMANDS_DELAY_TIME); }
                 power(powerIsOn = true);
                 setClockSetMode(false);
+                restoreStatusFromEEPROM();
+                restoreOutputs();
                 continue;
             }
             
@@ -311,7 +194,7 @@ int main(void) {
             PCD_Upd();
             
             if(powerLEDValue > 0) {
-                if(powerLEDDelay++ > POWER_LED_DELAY){
+                if(powerLEDDelay++ > POWER_LED_DELAY_OFF){
                     powerLEDDelay = 0;
                     powerLEDValue--;
                 }

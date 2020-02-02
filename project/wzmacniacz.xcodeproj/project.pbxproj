@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		A302CBDA23BE1EE900B14F96 /* 74574.c in Sources */ = {isa = PBXBuildFile; fileRef = A302CBD923BE1EE900B14F96 /* 74574.c */; };
 		A304161023A53440000D6180 /* Impulsator.c in Sources */ = {isa = PBXBuildFile; fileRef = A304160F23A53440000D6180 /* Impulsator.c */; };
+		A32A1E3323E7814D002C4426 /* Inputs.c in Sources */ = {isa = PBXBuildFile; fileRef = A32A1E3223E7814D002C4426 /* Inputs.c */; };
+		A32A1E3623E78787002C4426 /* Outputs.c in Sources */ = {isa = PBXBuildFile; fileRef = A32A1E3523E78787002C4426 /* Outputs.c */; };
 		A32D820E23A8022700B6546B /* i2cEeprom.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D820D23A8022700B6546B /* i2cEeprom.c */; };
 		A3350A8623D3B1E8003C3F26 /* PCF8563.c in Sources */ = {isa = PBXBuildFile; fileRef = A3350A8523D3B1E8003C3F26 /* PCF8563.c */; };
 		A349451023AEB7F5009A636E /* ds1267.c in Sources */ = {isa = PBXBuildFile; fileRef = A349450F23AEB7F5009A636E /* ds1267.c */; };
@@ -29,6 +31,10 @@
 		A302CBD923BE1EE900B14F96 /* 74574.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = 74574.c; sourceTree = "<group>"; };
 		A304160E23A53440000D6180 /* Impulsator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Impulsator.h; sourceTree = "<group>"; };
 		A304160F23A53440000D6180 /* Impulsator.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Impulsator.c; sourceTree = "<group>"; };
+		A32A1E3123E7814D002C4426 /* Inputs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Inputs.h; sourceTree = "<group>"; };
+		A32A1E3223E7814D002C4426 /* Inputs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Inputs.c; sourceTree = "<group>"; };
+		A32A1E3423E78787002C4426 /* Outputs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Outputs.h; sourceTree = "<group>"; };
+		A32A1E3523E78787002C4426 /* Outputs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = Outputs.c; sourceTree = "<group>"; };
 		A32D820C23A8022700B6546B /* i2cEeprom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = i2cEeprom.h; sourceTree = "<group>"; };
 		A32D820D23A8022700B6546B /* i2cEeprom.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = i2cEeprom.c; sourceTree = "<group>"; };
 		A3350A8423D3B1E8003C3F26 /* PCF8563.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCF8563.h; sourceTree = "<group>"; };
@@ -132,6 +138,10 @@
 				A3350A8423D3B1E8003C3F26 /* PCF8563.h */,
 				A3DCEA2123DDD36B0057B8A0 /* twi_i2c.c */,
 				A3DCEA2023DDD36B0057B8A0 /* twi_i2c.h */,
+				A32A1E3223E7814D002C4426 /* Inputs.c */,
+				A32A1E3123E7814D002C4426 /* Inputs.h */,
+				A32A1E3523E78787002C4426 /* Outputs.c */,
+				A32A1E3423E78787002C4426 /* Outputs.h */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -273,9 +283,11 @@
 				A34F48D2239C2DA500D9D1E2 /* utils.c in Sources */,
 				A32D820E23A8022700B6546B /* i2cEeprom.c in Sources */,
 				A3DCEA2223DDD36B0057B8A0 /* twi_i2c.c in Sources */,
+				A32A1E3323E7814D002C4426 /* Inputs.c in Sources */,
 				A349451623B51F60009A636E /* ds18b20.c in Sources */,
 				A349451C23B7A79E009A636E /* pwm.c in Sources */,
 				A34F48DE239EF69A00D9D1E2 /* pcd8544.c in Sources */,
+				A32A1E3623E78787002C4426 /* Outputs.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

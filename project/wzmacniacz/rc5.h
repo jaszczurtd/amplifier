@@ -67,5 +67,28 @@ int RC5_NewCommandReceived(void);
 #define RC5_MENU_MINUS      8206
 #define RC5_MENU_PLUS       8205
 
+#define RC5_RADIO           12303
+#define RC5_DAC             12348
+#define RC5_GEN             12332
+#define RC5_TAPE            12329
+#define RC5_PIEZO           12331
+
+#define RC5_PR_1            12289
+#define RC5_PR_2            12290
+#define RC5_PR_3            12291
+#define RC5_PR_4            12292
+#define RC5_PR_5            12293
+#define RC5_PR_6            12294
+#define RC5_PR_7            12295
+#define RC5_PR_8            12296
+
+#define RC5_LOUDNESS        12302
+
+#define RC5_MUTE            12301
+
+#define RC5_CHANNEL_PLUS    12320
+#define RC5_CHANNEL_MINUS   12321
+
+
 #endif
 

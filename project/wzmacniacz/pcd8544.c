@@ -11,6 +11,7 @@
 
 #include "pcd8544.h"
 
+char s[BUF_L];
 
 static void PCD_Snd    ( unsigned char data, LcdCmdData cd );
 static void Delay      ( void );

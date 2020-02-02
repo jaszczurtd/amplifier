@@ -27,9 +27,9 @@ void init74574(void) {
 
 void clearPorts(void) {
     //clock transition
-    sbi(PORTC, PC5);
-    sbi(PORTC, PC6);
-    
+    clockPort(PORT_OUTPUTS, false);
+    clockPort(PORT_PROGRAMS, false);
+
     //set initial state to "off"
     cbi(PORTC, PC7);
     cbi(PORTA, PA1);
@@ -41,23 +41,24 @@ void clearPorts(void) {
     cbi(PORTA, PA7);
     
     //clock transition
-    cbi(PORTC, PC5);
-    cbi(PORTC, PC6);
+    clockPort(PORT_OUTPUTS, true);
+    clockPort(PORT_PROGRAMS, true);
 }
 
-void setLoudness(bool state) {
-    cbi(PORTC, PC6);
-    
+void clockPort(unsigned char portNumber, bool state) {
+    switch(portNumber) {
+        case PORT_OUTPUTS:
+            
+            (state) ? sbi(PORTC, PC6) : cbi(PORTC, PC6);
+            
+            break;
+            
+        case PORT_PROGRAMS:
+            
+            (state) ? sbi(PORTC, PC5) : cbi(PORTC, PC5);
+
+            break;
+    }
     _delay_us(1);
-    (state) ? sbi(PORTA, PA3) : cbi(PORTA, PA3);
-    _delay_us(1);
-    
-    sbi(PORTC, PC6);
 }
 
-void setRadio(bool state) {
-    
-}
-
-//cbi(PORTC, PC5);
-//sbi(PORTC, PC5);

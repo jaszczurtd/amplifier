@@ -27,28 +27,27 @@
 #include "74574.h"
 #include "ds1267.h"
 #include "PCF8563.h"
-
+#include "Inputs.h"
+#include "Outputs.h"
 #include "clockPart.h"
+
+extern int rc5Code, switchCode;
+extern unsigned char MEM[];
+extern char s[];
 
 #define MAIN_DELAY_TIME 10 //in ms
 #define POWER_RES_COUNTER 100       //* MAIN_DELAY_TIME
 #define SPEAKERS_COUNTER 20         //POWER_RES_COUNTER + (* MAIN_DELAY_TIME)
 #define READ_COMMANDS_DELAY_TIME (WRITE_EEPROM_DELAY * 2)
 
-#define WRITE_EEPROM_DELAY 10
+#define POWER_LED_DELAY_ON 0
+#define POWER_LED_DELAY_OFF 0
+#define POWER_LED_MAX_VALUE 128
 
-#define POWER_LED_DELAY 1
+#define DEFAULT_POWER_IS_ON true
 
 #ifndef MAIN_H
 #define MAIN_H
-
-#define WR wdt_reset
-
-#define E_VOLUME 0
-
-#define BUF_L 120
-
-void readCommands(int time);
 
 #endif
 

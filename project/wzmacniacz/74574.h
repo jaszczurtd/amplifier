@@ -11,8 +11,13 @@
 #include <stdio.h>
 #include "utils.h"
 
+#define PORT_OUTPUTS 0
+#define PORT_PROGRAMS 1
+
 void init74574(void);
 void clearPorts(void);
-void setLoudness(bool state);
+void clockPort(unsigned char portNumber, bool state);
+
+
 
 #endif /* _4574_h */

@@ -53,3 +53,39 @@ unsigned char EEPROMread(unsigned char ucAddress) {
     return data;
 }
 
+static int eepromDelay = 0;
+static bool eepromWrite = false;
+unsigned char MEM[10];
+
+inline void setStoreStatusFlag(void) {
+    eepromWrite = true;
+}
+
+inline bool EORValue(unsigned char address) {
+    if(MEM[address]) {
+        MEM[address] = false;
+    } else {
+        MEM[address] = true;
+    }
+    setStoreStatusFlag();
+    return MEM[address];
+}
+
+void storeStatusToEEPROM(void) {
+    if(eepromDelay-- <= 0) {
+        eepromDelay = WRITE_EEPROM_DELAY;
+        
+        if(eepromWrite) {
+            for(int a = 0; a < sizeof(MEM); a++) {
+                EEPROMwrite(a, MEM[a]);
+            }
+            eepromWrite = false;
+        }
+    }
+}
+
+void restoreStatusFromEEPROM(void) {
+    for(int a = 0; a < sizeof(MEM); a++) {
+        MEM[a] = EEPROMread(a);
+    }
+}
