@@ -37,6 +37,7 @@ void setLoudness(bool state) {
 void setRadio(bool state) {
     clockPort(PORT_OUTPUTS, false);
     
+    
     clockPort(PORT_OUTPUTS, true);
 }
 
