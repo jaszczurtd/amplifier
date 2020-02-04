@@ -60,6 +60,7 @@ void setup(void) {
     PCD_Clr();
     PCD_Upd();
     
+    restoreStatusFromEEPROM();
     setImpulsatorValue((lastVolume = MEM[E_VOLUME]));
     setDS1267(lastVolume, lastVolume);
     

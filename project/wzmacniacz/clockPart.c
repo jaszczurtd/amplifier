@@ -188,25 +188,25 @@ void clockMainFunction(void) {
         char *weekday = "";
         switch(pcfDateTime.weekday) {
             case 0:
-                weekday = "poniedzialek";
+                weekday = "Poniedzialek";
                 break;
             case 1:
-                weekday = "wtorek";
+                weekday = "Wtorek";
                 break;
             case 2:
-                weekday = "sroda";
+                weekday = "Sroda";
                 break;
             case 3:
-                weekday = "czwartek";
+                weekday = "Czwartek";
                 break;
             case 4:
-                weekday = "piatek";
+                weekday = "Piatek";
                 break;
             case 5:
-                weekday = "sobota";
+                weekday = "Sobota";
                 break;
             case 6:
-                weekday = "niedziela";
+                weekday = "Niedziela";
                 break;
         }
         
@@ -269,5 +269,28 @@ void clockMainFunction(void) {
         
         PCD_print(FONT_1X, (unsigned char*)s);
     }
+}
 
+static unsigned char lastSecondValue = -1;
+static unsigned char secondsToCount = 0;
+void startTimerForSeconds(unsigned char seconds) {
+    secondsToCount = seconds;
+    lastSecondValue = -1;
+}
+
+bool checkIfTimerReached(void) {
+    if(secondsToCount == 0) {
+        return true;
+    }
+    
+    PCF_GetDateTime(&pcfDateTime);
+    if(lastSecondValue == -1) {
+        lastSecondValue = pcfDateTime.second;
+        return false;
+    }
+    if(lastSecondValue != pcfDateTime.second) {
+        lastSecondValue = pcfDateTime.second;
+        secondsToCount--;
+    }
+    return false;
 }

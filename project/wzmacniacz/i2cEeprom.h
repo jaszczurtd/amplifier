@@ -20,12 +20,14 @@
 
 #define WRITE_EEPROM_DELAY 10
 
-#define E_VOLUME    0
-#define E_LOUDNESS  1
-#define E_RADIO     2
-#define E_DAC       3
-#define E_TAPE      4
-#define E_PIEZO     5
+#define E_RADIO     0
+#define E_DAC       1
+#define E_GENERIC   2
+#define E_TAPE      3
+#define E_PIEZO     4
+
+#define E_VOLUME    5
+#define E_LOUDNESS  6
 
 bool EEPROMwrite(unsigned char ucAddress, unsigned char ucData);
 unsigned char EEPROMread(unsigned char ucAddress);

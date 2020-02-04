@@ -7,12 +7,25 @@
 
 #include "Outputs.h"
 
+char *outputs[5] = {
+    "Radio",
+    "Konwerter D/A",
+    "Uniwersalne",
+    "CD/Magnetofon",
+    "Gramofon"
+};
+
+const char *getOutputString(unsigned char index) {
+    return outputs[index];
+}
+
 void restoreOutputs(void) {
     setLoudness(MEM[E_LOUDNESS]);
     setRadio(MEM[E_RADIO]);
     setDAC(MEM[E_DAC]);
     setTape(MEM[E_TAPE]);
     setPiezo(MEM[E_PIEZO]);
+    setGeneric(MEM[E_GENERIC]);
 }
 
 void setLoudness(bool state) {
@@ -34,6 +47,12 @@ void setDAC(bool state) {
 }
 
 void setTape(bool state) {
+    clockPort(PORT_OUTPUTS, false);
+    
+    clockPort(PORT_OUTPUTS, true);
+}
+
+void setGeneric(bool state) {
     clockPort(PORT_OUTPUTS, false);
     
     clockPort(PORT_OUTPUTS, true);

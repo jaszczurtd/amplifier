@@ -15,6 +15,8 @@
 
 extern unsigned char MEM[];
 
+const char *getOutputString(unsigned char index);
+
 void restoreOutputs(void);
 
 void setLoudness(bool state);
@@ -22,6 +24,7 @@ void setRadio(bool state);
 void setDAC(bool state);
 void setTape(bool state);
 void setPiezo(bool state);
+void setGeneric(bool state);
 
 void setPowerRes(bool state);
 void setSpeakers(bool state);

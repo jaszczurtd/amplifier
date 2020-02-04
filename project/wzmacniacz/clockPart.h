@@ -18,4 +18,8 @@ extern char s[];
 void setClockSetMode(bool enabled);
 void clockMainFunction(void);
 
+void startTimerForSeconds(unsigned char seconds);
+bool checkIfTimerReached(void);
+
+
 #endif /* clockPart_h */
