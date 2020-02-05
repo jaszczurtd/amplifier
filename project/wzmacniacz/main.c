@@ -16,13 +16,12 @@ static int lastVolume = 0;
 static int powerLEDDelay = 0;
 static unsigned char powerLEDValue = 0;
 
+static bool speakersSequenceEnd = false;
+static bool speakersFlag = false;
 static int speakersCounter = 0;
-void speakers(bool x) {
-    if(x)sbi(PORTA,PD7);
-    else    cbi(PORTA,PD7);
-}
 
 static int powerResCounter = 0;
+static bool powerResEnabled = false;
 
 bool powerIsOn = false;
 void power(bool x) {
@@ -43,6 +42,11 @@ void setup(void) {
     powerLEDValue = 0;
     
     powerResCounter = 0;
+    powerResEnabled = false;
+    speakersSequenceEnd = false;
+    speakersFlag = false;
+    
+    speakersCounter = 0;
 
     init74574();
     RC5_Init();
@@ -61,15 +65,12 @@ void setup(void) {
     PCD_Upd();
     
     restoreStatusFromEEPROM();
+    restoreOutputs();
+    
     setImpulsatorValue((lastVolume = MEM[E_VOLUME]));
     setDS1267(lastVolume, lastVolume);
     
     sei();
-    
-    setLoudness(MEM[E_LOUDNESS]);
-    
-
-    
     
      /*
      PCD_GotoXYFont(0,0);
@@ -82,36 +83,8 @@ void setup(void) {
      PCD_SBar ( 0, 25, 16, 12, PIXEL_ON);
      
      
-    sbi(DDRA,PA0);    //uniw
-    sbi(DDRA,PA1);    //magn
-    sbi(DDRA,PA2);    //gram
-    sbi(DDRA,PA3);    //radio
-    sbi(DDRA,PA4);    //dac
-    sbi(DDRA,PD5);    //power
-    sbi(DDRA,PA6);    //power 2
-    sbi(DDRA,PA7);    //glosniki
-    
-    cbi(DDRB,PB0); //switch uniw
-    cbi(DDRB,PB1);    //switch magn
-    cbi(DDRB,PB2);    //switch gram
-    cbi(DDRB,PB3);    //switch radio
-    cbi(DDRB,PB4);    //switch dac
-    cbi(DDRB,PB5);    //switch power
-    
-    power(false);
-    powerRes(false);
-    speakers(false);
-    
-    resetMemoryInputs();
-    resetInputs();
-    
-    dacIsOn = true;    //default input
-    
-    sbi(DDRD,PA0);    //LED
-     
      */
 }
-
 
 int main(void) {
     
@@ -125,10 +98,40 @@ int main(void) {
 
         if(powerIsOn) {
             
+            if(!powerResEnabled) {
+                if(powerResCounter < POWER_RES_COUNTER) {
+                    powerResCounter++;
+                } else {
+                    setPowerRes(powerResEnabled = true);
+                    
+                    _delay_ms(DELAY_BETWEEN_STATES);
+                    
+                    restoreStatusFromEEPROM();
+                    restoreOutputs();
+                }
+            } else {
+                if(!speakersSequenceEnd) {
+                    if(speakersCounter < SPEAKERS_COUNTER) {
+                        speakersCounter++;
+                    } else {
+                        setSpeakers(speakersFlag = true);
+                        
+                        speakersSequenceEnd = true;
+                    }
+                }
+            }
+            
             if(power_sw()) {
                 while (power_sw()) { RC(); }
-                power(powerIsOn = false);
+                
+                setSpeakers(speakersFlag = false);
+                delay_ms(DELAY_BETWEEN_STATES);
                 clearPorts();
+                delay_ms(100);
+                
+                power(powerIsOn = false);
+                setPowerRes(false);
+                powerResEnabled = false;
                 continue;
             }
             
@@ -146,8 +149,39 @@ int main(void) {
                     Impulsator_decrease();
                     setStoreStatusFlag();
                     break;
+                case RC5_MUTE:
+                    waitForRC5(RC5_MUTE);
+                    
+                    if(speakersFlag) {
+                        speakersFlag = false;
+                    } else {
+                        speakersFlag = true;
+                    }
+                    setSpeakers(speakersFlag);
+                    break;
             }
             
+            if(tape_sw()) {
+                while (tape_sw()) { RC(); }
+                setSpecifiedOutputDisableOthers(E_TAPE);
+            }
+            if(radio_sw()) {
+                while (radio_sw()) { RC(); }
+                setSpecifiedOutputDisableOthers(E_RADIO);
+            }
+            if(dac_sw()) {
+                while (dac_sw()) { RC(); }
+                setSpecifiedOutputDisableOthers(E_DAC);
+            }
+            if(piezo_sw()) {
+                while (piezo_sw()) { RC(); }
+                setSpecifiedOutputDisableOthers(E_PIEZO);
+            }
+            if(generic_sw()) {
+                while (generic_sw()) { RC(); }
+                setSpecifiedOutputDisableOthers(E_GENERIC);
+            }
+
             MEM[E_VOLUME] = getImpulsatorValue();
             if(lastVolume != MEM[E_VOLUME]) {
                 lastVolume = MEM[E_VOLUME];
@@ -165,29 +199,35 @@ int main(void) {
             
             PCD_GotoXYFont(0,1);
             memset(s, 0, BUF_L);
-            snprintf(s, BUF_L, "%d %d", adc, switchCode);
+            snprintf(s, BUF_L, "%d %d %d", adc, switchCode, checkIfTimerReached());
             PCD_print(FONT_1X, (unsigned char*)s);
 
+            PCD_GotoXYFont((S_WIDTH - strlength((char*)getOutputDisplayString())) / 2, 2);
+            memset(s, 0, BUF_L);
+            strcpy(s, getOutputDisplayString());
+            PCD_print(FONT_1X, (unsigned char*)s);
 
-            
             PCD_Upd();
             storeStatusToEEPROM();
             
             if(powerLEDValue < POWER_LED_MAX_VALUE) {
-                if(powerLEDDelay++ > POWER_LED_DELAY_ON){
-                    powerLEDDelay = 0;
-                    powerLEDValue++;
-                }
+                powerLEDValue++;
             }
 
         } else {             //power off mode
 
             if(power_sw()) {
                 while (power_sw()) { readCommands(READ_COMMANDS_DELAY_TIME); }
+                
+                speakersSequenceEnd = speakersFlag = false;
+                
+                powerResCounter = 0;
+                speakersCounter = 0;
+                setPowerRes(powerResEnabled = false);
+                
                 power(powerIsOn = true);
                 setClockSetMode(false);
-                restoreStatusFromEEPROM();
-                restoreOutputs();
+                
                 continue;
             }
             
@@ -195,109 +235,13 @@ int main(void) {
             PCD_Upd();
             
             if(powerLEDValue > 0) {
-                if(powerLEDDelay++ > POWER_LED_DELAY_OFF){
-                    powerLEDDelay = 0;
-                    powerLEDValue--;
-                }
+                powerLEDValue--;
             }
         }
         PWM_SetValue(true, false, powerLEDValue);
 
         _delay_ms(MAIN_DELAY_TIME);
     }
+    
     return 0;
-
-    /*
-    
-    cli();
-    wdt_enable( WDTO_1S );
-    
-    setup();
-    sei();
-    while (1) {
-        
-        wdt_reset();
-        
-        if(powerIsOn) {
-            if(powerResCounter < POWER_RES_COUNTER) {
-                powerResCounter++;
-            } else {
-                powerRes(true);
-                applyInputs();
-                if(speakersCounter < SPEAKERS_COUNTER) {
-                    speakersCounter++;
-                } else {
-                    speakers(true);
-                }
-            }
-            
-            if(generic_sw()) {
-                resetInputs();
-                resetMemoryInputs();
-                
-                generic(genericIsOn = true);
-                while(generic_sw()) {WR}
-            }
-            
-            if(tape_sw()) {
-                resetInputs();
-                resetMemoryInputs();
-                
-                tape(tapeIsOn = true);
-                while(tape_sw()) {WR}
-            }
-            
-            if(piezo_sw()) {
-                resetInputs();
-                resetMemoryInputs();
-                
-                piezo(piezoIsOn = true);
-                while(piezo_sw()) {WR}
-            }
-            
-            if(radio_sw()) {
-                resetInputs();
-                resetMemoryInputs();
-                
-                radio(radioIsOn = true);
-                while(radio_sw()) {WR}
-            }
-            
-            if(dac_sw()) {
-                resetInputs();
-                resetMemoryInputs();
-                
-                dac(dacIsOn = true);
-                while(dac_sw()) {WR}
-            }
-            
-            if(power_sw()) {                //action power off
-                while(power_sw()) {WR}
-                
-                speakersCounter = 0;
-                speakers(false);
-                delay_ms(10);
-                resetInputs();
-                delay_ms(100);
-                
-                power(powerIsOn = false);
-                
-                powerResCounter = 0;
-                powerRes(false);
-            }
-            
-        } else {
-            
-            if(power_sw()) {                //action power on
-                while(power_sw()) {WR}
-                
-                power(powerIsOn = true);
-            }
-            
-        }
-        
-        delay_ms(MAIN_DELAY_TIME);
-        
-    }
-  */
 }

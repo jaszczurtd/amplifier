@@ -12,12 +12,15 @@
 #include "utils.h"
 #include "74574.h"
 #include "i2cEeprom.h"
+#include "pcd8544.h"
 
 extern unsigned char MEM[];
 
+const char *getOutputDisplayString(void);
 const char *getOutputString(unsigned char index);
 
 void restoreOutputs(void);
+void setSpecifiedOutputDisableOthers(unsigned char index);
 
 void setLoudness(bool state);
 void setRadio(bool state);

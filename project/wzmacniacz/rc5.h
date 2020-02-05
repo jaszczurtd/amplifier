@@ -89,6 +89,7 @@ int RC5_NewCommandReceived(void);
 #define RC5_CHANNEL_PLUS    12320
 #define RC5_CHANNEL_MINUS   12321
 
+#define waitForRC5(code) while (rc5Code == code) {  readCommands(READ_COMMANDS_DELAY_TIME); }
 
 #endif
 

@@ -9,8 +9,6 @@
 
 #define ITEM_VISIBILITY_CYCLES_COUNTER 20
 
-#define waitFor(code) while (rc5Code == code) {  readCommands(READ_COMMANDS_DELAY_TIME); }
-
 static PCF_DateTime pcfDateTime;
 static bool clockSetMode = false;
 
@@ -217,7 +215,7 @@ void clockMainFunction(void) {
         
         switch(rc5Code) {
             case RC5_MENU:
-                waitFor(RC5_MENU);
+                waitForRC5(RC5_MENU);
                 
                 if(++activeItem > CLOCK_SETTABLE_ITEMS - 1) {
                     setClockSetMode(false);
@@ -228,12 +226,12 @@ void clockMainFunction(void) {
                 break;
                 
             case RC5_MENU_PLUS:
-                waitFor(RC5_MENU_PLUS);
+                waitForRC5(RC5_MENU_PLUS);
                 setItem(true);
                 break;
                 
             case RC5_MENU_MINUS:
-                waitFor(RC5_MENU_MINUS);
+                waitForRC5(RC5_MENU_MINUS);
                 setItem(false);
                 break;
         }

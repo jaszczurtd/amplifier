@@ -40,11 +40,11 @@ extern char s[];
 #define SPEAKERS_COUNTER 20         //POWER_RES_COUNTER + (* MAIN_DELAY_TIME)
 #define READ_COMMANDS_DELAY_TIME (WRITE_EEPROM_DELAY * 2)
 
-#define POWER_LED_DELAY_ON 0
-#define POWER_LED_DELAY_OFF 0
 #define POWER_LED_MAX_VALUE 128
 
 #define DEFAULT_POWER_IS_ON true
+
+#define DELAY_BETWEEN_STATES 30 //in ms
 
 #ifndef MAIN_H
 #define MAIN_H
