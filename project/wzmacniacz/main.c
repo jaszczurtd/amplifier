@@ -23,6 +23,8 @@ static int speakersCounter = 0;
 static int powerResCounter = 0;
 static bool powerResEnabled = false;
 
+static int volumeChangeTimer = 0;
+
 bool powerIsOn = false;
 void power(bool x) {
     if(x)sbi(PORTB,PB2);
@@ -47,6 +49,7 @@ void setup(void) {
     speakersFlag = false;
     
     speakersCounter = 0;
+    volumeChangeTimer = 0;
 
     init74574();
     RC5_Init();
@@ -84,6 +87,10 @@ void setup(void) {
      
      
      */
+}
+
+void setVolumeChangerTimer(void) {
+    volumeChangeTimer = VOL_CHANGE_TIME;
 }
 
 int main(void) {
@@ -144,10 +151,12 @@ int main(void) {
                 case RC5_VOLUME_UP:
                     Impulsator_increase();
                     setStoreStatusFlag();
+                    setVolumeChangerTimer();
                     break;
                 case RC5_VOLUME_DOWN:
                     Impulsator_decrease();
                     setStoreStatusFlag();
+                    setVolumeChangerTimer();
                     break;
                 case RC5_MUTE:
                     waitForRC5(RC5_MUTE);
@@ -191,6 +200,8 @@ int main(void) {
                 setStoreStatusFlag();
             }
             
+            
+            /*
             int adc = getADCValue();
             
             memset(s, 0, BUF_L);
@@ -202,11 +213,43 @@ int main(void) {
             snprintf(s, BUF_L, "%d %d %d", adc, switchCode, checkIfTimerReached());
             PCD_print(FONT_1X, (unsigned char*)s);
 
-            PCD_GotoXYFont((S_WIDTH - strlength((char*)getOutputDisplayString())) / 2, 2);
-            memset(s, 0, BUF_L);
-            strcpy(s, getOutputDisplayString());
-            PCD_print(FONT_1X, (unsigned char*)s);
+            */
+            
+            if(volumeChangeTimer <= 0) {
+                PCD_GotoXYFont(0, 0);
+                if(speakersFlag) {
+                    PCD_print(FONT_1X, (unsigned char*)getVolumeText());
+                } else {
+                    PCD_print(FONT_1X, (unsigned char*)"Brak dzwieku");
+                }
+                
+                PCD_GotoXYFont(0, 1);
+                if(MEM[E_LOUDNESS]) {
+                    PCD_print(FONT_1X, (unsigned char*)"Korektor wl.");
+                }
+                
+                PCD_GotoXYFont((S_WIDTH - strlength((char*)getOutputDisplayString())) / 2, 3);
+                memset(s, 0, BUF_L);
+                strcpy(s, getOutputDisplayString());
+                PCD_print(FONT_1X, (unsigned char*)s);
+                
+            } else {
+                volumeChangeTimer--;
 
+                PCD_GotoXYFont(0, 1);
+                PCD_print(FONT_1X, (unsigned char*)getVolumeText());
+
+                float percent = (getImpulsatorValue() * 100) / getImpulsatorMaxValue();
+                unsigned char width = ((percent / 100) * (LCD_X_RES - 2));
+                
+                PCD_Line(VOL_BAR_X, LCD_X_RES, VOL_BAR_Y, VOL_BAR_Y, PIXEL_ON);
+                PCD_Line(VOL_BAR_X, LCD_X_RES, VOL_BAR_Y + VOL_BAR_HEIGHT, VOL_BAR_Y + VOL_BAR_HEIGHT, PIXEL_ON);
+                PCD_Line(VOL_BAR_X, VOL_BAR_X, VOL_BAR_Y, VOL_BAR_Y + VOL_BAR_HEIGHT, PIXEL_ON);
+                PCD_Line(VOL_BAR_X + LCD_X_RES - 1, VOL_BAR_X + LCD_X_RES - 1, VOL_BAR_Y, VOL_BAR_Y + VOL_BAR_HEIGHT, PIXEL_ON);
+
+                PCD_SBar (VOL_BAR_X + 1, VOL_BAR_Y, width, VOL_BAR_HEIGHT, PIXEL_ON);
+            }
+            
             PCD_Upd();
             storeStatusToEEPROM();
             
@@ -223,6 +266,8 @@ int main(void) {
                 
                 powerResCounter = 0;
                 speakersCounter = 0;
+                volumeChangeTimer = 0;
+                
                 setPowerRes(powerResEnabled = false);
                 
                 power(powerIsOn = true);

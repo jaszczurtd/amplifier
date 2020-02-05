@@ -16,6 +16,7 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include "utils.h"
+#include "main.h"
 
 #define NONE 0
 #define LEFT 1
@@ -26,9 +27,11 @@ void Impulsator_decrease(void);
 void Impulsator_increase(void);
 
 void setImpulsatorMaxValue(int value);
+int getImpulsatorMaxValue(void);
 void setImpulsatorStep(int step);
 int getImpulsatorValue(void);
 void setImpulsatorValue(int value);
 void Read1StepEncoder(void);
+const char *getVolumeText(void);
 
 #endif /* Impulsator_h */

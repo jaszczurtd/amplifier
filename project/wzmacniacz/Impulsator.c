@@ -68,11 +68,16 @@ void setImpulsatorMaxValue(int value) {
     maxValue = value;
 }
 
+int getImpulsatorMaxValue(void) {
+    return maxValue;
+}
+
 void setImpulsatorStep(int step) {
     stepValue = step;
 }
 
 void Impulsator_decrease(void) {
+    setVolumeChangerTimer();
     if(currentValue > 0) {
         if(stepValueCounter++ > stepValue){
             currentValue--;
@@ -83,6 +88,7 @@ void Impulsator_decrease(void) {
 }
 
 void Impulsator_increase(void) {
+    setVolumeChangerTimer();
     if(currentValue < maxValue) {
         if(stepValueCounter++ > stepValue){
             currentValue++;
@@ -155,4 +161,10 @@ void setImpulsatorValue(int value) {
     } else {
         currentValue = value;
     }
+}
+
+static char vt[16];
+const char *getVolumeText(void) {
+    snprintf(vt, sizeof(vt), "Glosnosc: %d" , getImpulsatorValue());
+    return vt;
 }
