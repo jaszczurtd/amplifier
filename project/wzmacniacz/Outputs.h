@@ -14,6 +14,8 @@
 #include "i2cEeprom.h"
 #include "pcd8544.h"
 
+#define DELAY_BETWEEN_STATES 30     //in ms
+
 extern unsigned char MEM[];
 
 const char *getOutputDisplayString(void);
@@ -31,5 +33,10 @@ void setGeneric(bool state);
 
 void setPowerRes(bool state);
 void setSpeakers(bool state);
+
+void restorePrograms(void);
+void setProgram(int index, bool state);
+void setSpecifiedProgramDisableOthers(unsigned char index);
+void disableAllPrograms(void);
 
 #endif /* Outputs_h */

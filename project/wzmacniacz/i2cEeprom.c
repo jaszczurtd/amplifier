@@ -55,7 +55,7 @@ unsigned char EEPROMread(unsigned char ucAddress) {
 
 static int eepromDelay = 0;
 static bool eepromWrite = false;
-unsigned char MEM[10];
+unsigned char MEM[EEPROM_SIZE];
 
 inline void setStoreStatusFlag(void) {
     eepromWrite = true;
@@ -76,7 +76,7 @@ void storeStatusToEEPROM(void) {
         eepromDelay = WRITE_EEPROM_DELAY;
         
         if(eepromWrite) {
-            for(int a = 0; a < sizeof(MEM); a++) {
+            for(int a = 0; a < EEPROM_SIZE; a++) {
                 EEPROMwrite(a, MEM[a]);
             }
             eepromWrite = false;
@@ -85,7 +85,7 @@ void storeStatusToEEPROM(void) {
 }
 
 void restoreStatusFromEEPROM(void) {
-    for(int a = 0; a < sizeof(MEM); a++) {
+    for(int a = 0; a < EEPROM_SIZE; a++) {
         MEM[a] = EEPROMread(a);
     }
 }

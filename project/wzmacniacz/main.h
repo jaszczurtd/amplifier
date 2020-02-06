@@ -35,9 +35,9 @@ extern int rc5Code, switchCode;
 extern unsigned char MEM[];
 extern char s[];
 
-void setVolumeChangerTimer(void);
+extern void setVolumeChangerTimer(void);
 
-#define MAIN_DELAY_TIME 10 //in ms
+#define MAIN_DELAY_TIME 10          //in ms
 #define POWER_RES_COUNTER 100       //* MAIN_DELAY_TIME
 #define SPEAKERS_COUNTER 20         //POWER_RES_COUNTER + (* MAIN_DELAY_TIME)
 #define READ_COMMANDS_DELAY_TIME (WRITE_EEPROM_DELAY * 2)
@@ -46,8 +46,6 @@ void setVolumeChangerTimer(void);
 
 
 #define DEFAULT_POWER_IS_ON true
-
-#define DELAY_BETWEEN_STATES 30 //in ms
 
 #define VOL_CHANGE_TIME 55
 #define VOL_BAR_HEIGHT 9

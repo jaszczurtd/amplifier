@@ -13,7 +13,6 @@
 
 static int lastVolume = 0;
 
-static int powerLEDDelay = 0;
 static unsigned char powerLEDValue = 0;
 
 static bool speakersSequenceEnd = false;
@@ -26,7 +25,7 @@ static bool powerResEnabled = false;
 static int volumeChangeTimer = 0;
 
 bool powerIsOn = false;
-void power(bool x) {
+void setPower(bool x) {
     if(x)sbi(PORTB,PB2);
     else    cbi(PORTB,PB2);
 }
@@ -38,11 +37,8 @@ void setup(void) {
     
     initInputs();
     
-    power(powerIsOn = DEFAULT_POWER_IS_ON);
-
-    powerLEDDelay = 0;
     powerLEDValue = 0;
-    
+
     powerResCounter = 0;
     powerResEnabled = false;
     speakersSequenceEnd = false;
@@ -51,6 +47,8 @@ void setup(void) {
     speakersCounter = 0;
     volumeChangeTimer = 0;
 
+    setPower(powerIsOn = DEFAULT_POWER_IS_ON);
+    
     init74574();
     RC5_Init();
     initDS1267();
@@ -74,22 +72,9 @@ void setup(void) {
     setDS1267(lastVolume, lastVolume);
     
     sei();
-    
-     /*
-     PCD_GotoXYFont(0,0);
-     
-     PCD_FStr(FONT_1X,(unsigned char*)PSTR(" Czesc moje"));
-     PCD_GotoXYFont(0,1);
-     PCD_FStr(FONT_1X,(unsigned char*)PSTR("  koffanie "));
-     PCD_GotoXYFont(0,2);
-     PCD_FStr(FONT_1X,(unsigned char*)PSTR("--!@#$%^&*()--"));
-     PCD_SBar ( 0, 25, 16, 12, PIXEL_ON);
-     
-     
-     */
 }
 
-void setVolumeChangerTimer(void) {
+inline void setVolumeChangerTimer(void) {
     volumeChangeTimer = VOL_CHANGE_TIME;
 }
 
@@ -136,7 +121,7 @@ int main(void) {
                 clearPorts();
                 delay_ms(100);
                 
-                power(powerIsOn = false);
+                setPower(powerIsOn = false);
                 setPowerRes(false);
                 powerResEnabled = false;
                 continue;
@@ -270,7 +255,7 @@ int main(void) {
                 
                 setPowerRes(powerResEnabled = false);
                 
-                power(powerIsOn = true);
+                setPower(powerIsOn = true);
                 setClockSetMode(false);
                 
                 continue;
