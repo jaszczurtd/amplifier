@@ -236,7 +236,7 @@ int main(void) {
             PCD_Upd();
             
             if(powerLEDValue < POWER_LED_MAX_VALUE) {
-                PWM_SetValue(true, false, powerLEDValue++);
+                PWM_SetValue(true, false, ++powerLEDValue);
             }
 
         } else {             //power off mode
@@ -263,7 +263,7 @@ int main(void) {
             PCD_Upd();
             
             if(powerLEDValue > 0) {
-                PWM_SetValue(true, false, powerLEDValue--);
+                PWM_SetValue(true, false, --powerLEDValue);
             }
         }
 

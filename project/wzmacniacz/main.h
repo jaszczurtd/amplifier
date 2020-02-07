@@ -43,7 +43,7 @@ extern void setVolumeChangerTimer(void);
 #define SPEAKERS_COUNTER 20         //POWER_RES_COUNTER + (* MAIN_DELAY_TIME)
 #define READ_COMMANDS_DELAY_TIME (MAIN_DELAY_TIME * 2)
 
-#define POWER_LED_MAX_VALUE 128
+#define POWER_LED_MAX_VALUE 160
 
 
 #define DEFAULT_POWER_IS_ON true
