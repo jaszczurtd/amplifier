@@ -18,7 +18,7 @@
 #define EEPROM_ADDR_WR 0xa0
 #define EEPROM_ADDR_RD 0xa1
 
-#define WRITE_EEPROM_DELAY 10
+#define WRITE_EEPROM_DELAY 300
 
 #define EEPROM_SIZE 15
 
@@ -43,10 +43,10 @@
 bool EEPROMwrite(unsigned char ucAddress, unsigned char ucData);
 unsigned char EEPROMread(unsigned char ucAddress);
 
-extern void setStoreStatusFlag(void);
+extern void setStoreStatusFlag(bool value);
 extern bool EORValue(unsigned char address);
 
-void storeStatusToEEPROM(void);
+bool storeStatusToEEPROM(void);
 void restoreStatusFromEEPROM(void);
 
 #endif /* i2cEeprom_h */

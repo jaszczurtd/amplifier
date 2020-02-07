@@ -10,7 +10,7 @@
 
 #include <stdio.h>
 #include "utils.h"
-#include "74574.h"
+#include "pcf8574a.h"
 #include "i2cEeprom.h"
 #include "pcd8544.h"
 

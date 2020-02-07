@@ -49,7 +49,6 @@ void setup(void) {
 
     setPower(powerIsOn = DEFAULT_POWER_IS_ON);
     
-    init74574();
     RC5_Init();
     initDS1267();
     TWI_Init();
@@ -77,6 +76,7 @@ void setup(void) {
 inline void setVolumeChangerTimer(void) {
     volumeChangeTimer = VOL_CHANGE_TIME;
 }
+
 
 int main(void) {
     
@@ -135,12 +135,10 @@ int main(void) {
             switch(rc5Code) {
                 case RC5_VOLUME_UP:
                     Impulsator_increase();
-                    setStoreStatusFlag();
                     setVolumeChangerTimer();
                     break;
                 case RC5_VOLUME_DOWN:
                     Impulsator_decrease();
-                    setStoreStatusFlag();
                     setVolumeChangerTimer();
                     break;
                 case RC5_MUTE:
@@ -182,7 +180,7 @@ int main(void) {
                 
                 setDS1267(lastVolume, lastVolume);
                 
-                setStoreStatusFlag();
+                setStoreStatusFlag(true);
             }
             
             
@@ -236,10 +234,9 @@ int main(void) {
             }
             
             PCD_Upd();
-            storeStatusToEEPROM();
             
             if(powerLEDValue < POWER_LED_MAX_VALUE) {
-                powerLEDValue++;
+                PWM_SetValue(true, false, powerLEDValue++);
             }
 
         } else {             //power off mode
@@ -257,6 +254,7 @@ int main(void) {
                 
                 setPower(powerIsOn = true);
                 setClockSetMode(false);
+                setStoreStatusFlag(true);
                 
                 continue;
             }
@@ -265,12 +263,13 @@ int main(void) {
             PCD_Upd();
             
             if(powerLEDValue > 0) {
-                powerLEDValue--;
+                PWM_SetValue(true, false, powerLEDValue--);
             }
         }
-        PWM_SetValue(true, false, powerLEDValue);
 
-        _delay_ms(MAIN_DELAY_TIME);
+        if(!storeStatusToEEPROM()) {
+            _delay_ms(MAIN_DELAY_TIME);
+        }
     }
     
     return 0;

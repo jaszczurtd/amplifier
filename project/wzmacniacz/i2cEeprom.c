@@ -57,8 +57,8 @@ static int eepromDelay = 0;
 static bool eepromWrite = false;
 unsigned char MEM[EEPROM_SIZE];
 
-inline void setStoreStatusFlag(void) {
-    eepromWrite = true;
+inline void setStoreStatusFlag(bool value) {
+    eepromWrite = value;
 }
 
 inline bool EORValue(unsigned char address) {
@@ -67,11 +67,11 @@ inline bool EORValue(unsigned char address) {
     } else {
         MEM[address] = true;
     }
-    setStoreStatusFlag();
+    setStoreStatusFlag(true);
     return MEM[address];
 }
 
-void storeStatusToEEPROM(void) {
+bool storeStatusToEEPROM(void) {
     if(eepromDelay-- <= 0) {
         eepromDelay = WRITE_EEPROM_DELAY;
         
@@ -81,7 +81,9 @@ void storeStatusToEEPROM(void) {
             }
             eepromWrite = false;
         }
+        return true;
     }
+    return false;
 }
 
 void restoreStatusFromEEPROM(void) {

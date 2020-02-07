@@ -24,7 +24,7 @@
 #include "adc.h"
 #include "pwm.h"
 #include "74150.h"
-#include "74574.h"
+#include "pcf8574a.h"
 #include "ds1267.h"
 #include "PCF8563.h"
 #include "Inputs.h"
@@ -32,6 +32,7 @@
 #include "clockPart.h"
 
 extern int rc5Code, switchCode;
+
 extern unsigned char MEM[];
 extern char s[];
 
@@ -40,7 +41,7 @@ extern void setVolumeChangerTimer(void);
 #define MAIN_DELAY_TIME 10          //in ms
 #define POWER_RES_COUNTER 100       //* MAIN_DELAY_TIME
 #define SPEAKERS_COUNTER 20         //POWER_RES_COUNTER + (* MAIN_DELAY_TIME)
-#define READ_COMMANDS_DELAY_TIME (WRITE_EEPROM_DELAY * 2)
+#define READ_COMMANDS_DELAY_TIME (MAIN_DELAY_TIME * 2)
 
 #define POWER_LED_MAX_VALUE 128
 
