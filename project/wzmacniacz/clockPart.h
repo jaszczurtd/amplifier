@@ -18,6 +18,9 @@ extern char s[];
 void setClockSetMode(bool enabled);
 void clockMainFunction(void);
 
+void getTime(void);
+void printClockHour(unsigned char x, unsigned char y);
+
 void startTimerForSeconds(unsigned char seconds);
 bool checkIfTimerReached(void);
 

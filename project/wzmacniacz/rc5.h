@@ -21,10 +21,8 @@
 
 #include <stdbool.h>
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
 #include "utils.h"
+#include "Impulsator.h"
 
 //pin configuration
 

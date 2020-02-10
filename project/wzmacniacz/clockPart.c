@@ -149,11 +149,33 @@ void setClockSetMode(bool enabled) {
     }
 }
 
+void getTime(void) {
+    PCF_GetDateTime(&pcfDateTime);
+}
+
+void printClockHour(unsigned char x, unsigned char y) {
+    PCD_GotoXYFont(x, y);
+    
+    char second = ' ';
+    if(pcfDateTime.second %2 == 0) {
+        second = ':';
+    }
+    
+    memset(s, 0, BUF_L);
+    snprintf(s, BUF_L, "%02d%c%02d", pcfDateTime.hour, second, pcfDateTime.minute);
+    PCD_print(FONT_2X, (unsigned char*)s);
+    
+    PCD_GotoXYFont(x + 10, y);
+    memset(s, 0, BUF_L);
+    snprintf(s, BUF_L, "%02d", pcfDateTime.second);
+    PCD_print(FONT_1X, (unsigned char*)s);
+}
+
 void clockMainFunction(void) {
     
     if(!clockSetMode) {
     
-        PCF_GetDateTime(&pcfDateTime);
+        getTime();
         
         if(rc5Code == RC5_CLOCK_SET && !powerIsOn) {
             setClockSetMode(true);
@@ -167,21 +189,7 @@ void clockMainFunction(void) {
         snprintf(s, BUF_L, "%02d-%02d %d", pcfDateTime.day, pcfDateTime.month, pcfDateTime.year);
         PCD_print(FONT_1X, (unsigned char*)s);
         
-        PCD_GotoXYFont(2, 3);
-        memset(s, 0, BUF_L);
-        
-        char second = ' ';
-        if(pcfDateTime.second %2 == 0) {
-            second = ':';
-        }
-        
-        snprintf(s, BUF_L, "%02d%c%02d", pcfDateTime.hour, second, pcfDateTime.minute);
-        PCD_print(FONT_2X, (unsigned char*)s);
-        
-        PCD_GotoXYFont(12, 3);
-        memset(s, 0, BUF_L);
-        snprintf(s, BUF_L, "%02d", pcfDateTime.second);
-        PCD_print(FONT_1X, (unsigned char*)s);
+        printClockHour(2, 3);
         
         char *weekday = "";
         switch(pcfDateTime.weekday) {

@@ -7,26 +7,7 @@
 
 #include "Outputs.h"
 
-static char outputString[S_WIDTH + 1];
-
-const char *getOutputDisplayString(void) {
-    return outputString;
-}
-
-static char *outputs[5] = {
-    "Uniwersalne",
-    "CD/Magnetofon",
-    "Gramofon",
-    "Radio",
-    "Konwerter D/A",
-};
-
 static unsigned char outputsRegister = 0;
-static unsigned char programsRegister = 0;
-
-const char *getOutputString(unsigned char bit) {
-    return outputs[bit];
-}
 
 inline bool EORBit(unsigned char bit) {
     if(bit_is_set(MEM[E_OUTPUTS], bit)) {
@@ -38,18 +19,20 @@ inline bool EORBit(unsigned char bit) {
 }
 
 bool getLoudness(void) {
-    return bit_is_set(MEM[E_OUTPUTS], BIT_LOUDNESS);
+    return checkIfOutputIsActive(BIT_LOUDNESS);
+}
+
+bool checkIfOutputIsActive(unsigned char bit) {
+    return bit_is_set(MEM[E_OUTPUTS], bit);
 }
 
 void restoreOutputs(void) {
     
     setLoudness(getLoudness());
 
-    const char *pointer = NULL;
     if(bit_is_set(MEM[E_OUTPUTS], BIT_RADIO)){
         restorePrograms();
         setRadio(true);
-        pointer = getOutputString(BIT_RADIO);
     } else {
         setRadio(false);
         disableAllPrograms();
@@ -57,36 +40,26 @@ void restoreOutputs(void) {
     
     if(bit_is_set(MEM[E_OUTPUTS], BIT_DAC)){
         setDAC(true);
-        pointer = getOutputString(BIT_DAC);
     } else {
         setDAC(false);
     }
 
     if(bit_is_set(MEM[E_OUTPUTS], BIT_TAPE)){
         setTape(true);
-        pointer = getOutputString(BIT_TAPE);
     } else {
         setTape(false);
     }
 
     if(bit_is_set(MEM[E_OUTPUTS], BIT_PIEZO)){
         setPiezo(true);
-        pointer = getOutputString(BIT_PIEZO);
     } else {
         setPiezo(false);
     }
 
     if(bit_is_set(MEM[E_OUTPUTS], BIT_GENERIC)){
         setGeneric(true);
-        pointer = getOutputString(BIT_GENERIC);
     } else {
         setGeneric(false);
-    }
-
-    if(pointer != NULL) {
-        strncpy(outputString, pointer, S_WIDTH);
-    } else {
-        memset(outputString, 0, S_WIDTH + 1);
     }
 }
 
@@ -198,7 +171,7 @@ void setProgram(int bit, bool state) {
     if(state) {
         bitSet(MEM[E_PROGRAMS], bit);
     } else {
-        bitClear(MEM[E_PROGRAMS], bit); 
+        bitClear(MEM[E_PROGRAMS], bit);
     }
 }
 
@@ -209,3 +182,19 @@ void setSpecifiedProgramDisableOthers(unsigned char bit) {
     setStoreStatusFlag(true);
 }
 
+const int frequency = FM_MIN_FREQUENCY;
+static char frequencyString[6];
+const char *getFrequencyValueString(void) {
+    
+    float num = ((float)frequency) / 10.0f;
+    int intpart = (int)num;
+    int decpart = ((float)(num - intpart)) * 10;
+    
+    snprintf(frequencyString, sizeof(frequencyString), "%d.%d", intpart, decpart);
+    
+    return frequencyString;
+}
+
+const char *getFrequencyString(void) {
+    return "Mhz";
+}

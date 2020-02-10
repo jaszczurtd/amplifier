@@ -211,10 +211,23 @@ int main(void) {
                     PCD_print(FONT_1X, (unsigned char*)"Korektor wl.");
                 }
                 
-                PCD_GotoXYFont((S_WIDTH - strlength((char*)getOutputDisplayString())) / 2, 3);
-                memset(s, 0, BUF_L);
-                strcpy(s, getOutputDisplayString());
-                PCD_print(FONT_1X, (unsigned char*)s);
+                if(checkIfOutputIsActive(BIT_RADIO)) {
+                    unsigned char x1 = 2, x2 = 10;
+                    if(strlen(getFrequencyValueString()) > 4) {
+                        x1 = 1;
+                        x2 = 11;
+                    }
+                    
+                    PCD_GotoXYFont(x1, 4);
+                    PCD_print(FONT_2X, (unsigned char*)getFrequencyValueString());
+                    
+                    PCD_GotoXYFont(x2, 4);
+                    PCD_print(FONT_1X, (unsigned char*)getFrequencyString());
+
+                } else {
+                    getTime();
+                    printClockHour(1, 4);
+                }
                 
             } else {
                 volumeChangeTimer--;

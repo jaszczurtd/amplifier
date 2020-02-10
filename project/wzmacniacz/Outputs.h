@@ -25,14 +25,16 @@
 #define BIT_POWER_RES 6
 #define BIT_SPEAKERS 7
 
+#define FM_MIN_FREQUENCY 875
+#define FM_MAX_FREQUENCY 1080
+
 extern unsigned char MEM[];
 
-const char *getOutputDisplayString(void);
-const char *getOutputString(unsigned char bit);
 extern bool EORBit(unsigned char address);
 
 void restoreOutputs(void);
 void setSpecifiedOutputDisableOthers(unsigned char bit);
+bool checkIfOutputIsActive(unsigned char bit);
 
 bool getLoudness(void);
 void setLoudness(bool state);
@@ -50,5 +52,8 @@ void restorePrograms(void);
 void setProgram(int bit, bool state);
 void setSpecifiedProgramDisableOthers(unsigned char bit);
 void disableAllPrograms(void);
+
+const char *getFrequencyValueString(void);
+const char *getFrequencyString(void);
 
 #endif /* Outputs_h */

@@ -8,13 +8,14 @@
 #include "Impulsator.h"
 
 //experimental value
-#define DETERMINATION_TIME 250
+#define DETERMINATION_TIME 150
 
 static int currentValue, maxValue, stepValue, stepValueCounter;
 static bool determined = false;
 static int pulses = 0;
 static char delta = NONE;
 static bool lastLeft = false, lastRight = false;
+static char preDetermination = NONE;
 
 bool getImpulsatorLSW(void) {
     return bit_is_clear(PINC, PC6);
@@ -33,6 +34,7 @@ void determination(int deltaTo) {
             pulses = DETERMINATION_TIME;
             break;
         case NONE:
+            preDetermination = NONE;
             determined = false;
             delta = NONE;
             pulses = 0;
@@ -115,6 +117,15 @@ void Read1StepEncoder(void) {
     
     if(movement) {
         
+        if(preDetermination == NONE){
+            if(left && !right) {
+                preDetermination = LEFT;
+            }
+            if(!left && right) {
+                preDetermination = RIGHT;
+            }
+        }
+        
         if(left) i++;
         if(right) i ^= 3;
         i -= last;
@@ -123,9 +134,13 @@ void Read1StepEncoder(void) {
         if(delta == NONE) {
             if(i & 1) {
                 if(i & 2) {
-                    determination(RIGHT);
+                    if(preDetermination == RIGHT){
+                        determination(RIGHT);
+                    }
                 } else {
-                    determination(LEFT);
+                    if(preDetermination == LEFT){
+                        determination(LEFT);
+                    }
                 }
             }
         }
