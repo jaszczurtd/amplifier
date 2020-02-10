@@ -61,16 +61,6 @@ inline void setStoreStatusFlag(bool value) {
     eepromWrite = value;
 }
 
-inline bool EORValue(unsigned char address) {
-    if(MEM[address]) {
-        MEM[address] = false;
-    } else {
-        MEM[address] = true;
-    }
-    setStoreStatusFlag(true);
-    return MEM[address];
-}
-
 bool storeStatusToEEPROM(void) {
     if(eepromDelay-- <= 0) {
         eepromDelay = WRITE_EEPROM_DELAY;

@@ -17,11 +17,11 @@ static char delta = NONE;
 static bool lastLeft = false, lastRight = false;
 
 bool getImpulsatorLSW(void) {
-    return bit_is_clear(PIND, PD0);
+    return bit_is_clear(PINC, PC6);
 }
 
 bool getImpulsatorRSW(void) {
-    return bit_is_clear(PIND, PD1);
+    return bit_is_clear(PINC, PC7);
 }
 
 void determination(int deltaTo) {
@@ -50,8 +50,8 @@ void Impulsator_Init(int max) {
     
     TCNT2 = 0;
 
-    cbi(DDRD,PD0);
-    cbi(DDRD,PD1);
+    cbi(DDRC, PC6);
+    cbi(DDRC, PC7);
 
     lastLeft = getImpulsatorLSW();
     lastRight = getImpulsatorRSW();

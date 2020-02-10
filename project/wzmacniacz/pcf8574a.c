@@ -24,7 +24,7 @@ void pcf8574writeByte(unsigned char outputs, unsigned char value) {
 }
 
 void clearPorts(void) {
-    pcf8574writeByte(PCF8574_WRITE_ADDR_A, 0);
-    pcf8574writeByte(PCF8574_WRITE_ADDR_B, 0);
+    pcf8574writeByte(PORT_OUTPUTS, 0);
+    pcf8574writeByte(PORT_PROGRAMS, 0);
 }
 

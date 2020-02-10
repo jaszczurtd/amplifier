@@ -26,8 +26,8 @@ static int volumeChangeTimer = 0;
 
 bool powerIsOn = false;
 void setPower(bool x) {
-    if(x)sbi(PORTB,PB2);
-    else    cbi(PORTB,PB2);
+    if(x)sbi(PORTC, PC5);
+    else    cbi(PORTC, PC5);
 }
 
 void setup(void) {
@@ -35,6 +35,8 @@ void setup(void) {
     
     wdt_enable( WDTO_1S );
     
+    sbi(DDRC, PC5);
+
     initInputs();
     
     powerLEDValue = 0;
@@ -59,6 +61,8 @@ void setup(void) {
     Impulsator_Init(255);
     setImpulsatorStep(1);
 
+    clearPorts();
+    
     PCD_Ini();
     PCD_Contr(0x40);
     PCD_Clr();
@@ -95,10 +99,7 @@ int main(void) {
                     powerResCounter++;
                 } else {
                     setPowerRes(powerResEnabled = true);
-                    
                     _delay_ms(DELAY_BETWEEN_STATES);
-                    
-                    restoreStatusFromEEPROM();
                     restoreOutputs();
                 }
             } else {
@@ -107,7 +108,6 @@ int main(void) {
                         speakersCounter++;
                     } else {
                         setSpeakers(speakersFlag = true);
-                        
                         speakersSequenceEnd = true;
                     }
                 }
@@ -118,7 +118,7 @@ int main(void) {
                 
                 setSpeakers(speakersFlag = false);
                 delay_ms(DELAY_BETWEEN_STATES);
-                clearPorts();
+                clearOutputs();
                 delay_ms(100);
                 
                 setPower(powerIsOn = false);
@@ -129,7 +129,7 @@ int main(void) {
             
             if(loudness_sw()) {
                 while (loudness_sw()) { RC(); }
-                setLoudness(EORValue(E_LOUDNESS));
+                setLoudness(EORBit(BIT_LOUDNESS));
             }
             
             switch(rc5Code) {
@@ -155,23 +155,23 @@ int main(void) {
             
             if(tape_sw()) {
                 while (tape_sw()) { RC(); }
-                setSpecifiedOutputDisableOthers(E_TAPE);
+                setSpecifiedOutputDisableOthers(BIT_TAPE);
             }
             if(radio_sw()) {
                 while (radio_sw()) { RC(); }
-                setSpecifiedOutputDisableOthers(E_RADIO);
+                setSpecifiedOutputDisableOthers(BIT_RADIO);
             }
             if(dac_sw()) {
                 while (dac_sw()) { RC(); }
-                setSpecifiedOutputDisableOthers(E_DAC);
+                setSpecifiedOutputDisableOthers(BIT_DAC);
             }
             if(piezo_sw()) {
                 while (piezo_sw()) { RC(); }
-                setSpecifiedOutputDisableOthers(E_PIEZO);
+                setSpecifiedOutputDisableOthers(BIT_PIEZO);
             }
             if(generic_sw()) {
                 while (generic_sw()) { RC(); }
-                setSpecifiedOutputDisableOthers(E_GENERIC);
+                setSpecifiedOutputDisableOthers(BIT_GENERIC);
             }
 
             MEM[E_VOLUME] = getImpulsatorValue();
@@ -207,7 +207,7 @@ int main(void) {
                 }
                 
                 PCD_GotoXYFont(0, 1);
-                if(MEM[E_LOUDNESS]) {
+                if(getLoudness()) {
                     PCD_print(FONT_1X, (unsigned char*)"Korektor wl.");
                 }
                 
