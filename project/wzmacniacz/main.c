@@ -209,6 +209,8 @@ int main(void) {
                 PCD_GotoXYFont(0, 1);
                 if(getLoudness()) {
                     PCD_print(FONT_1X, (unsigned char*)"Korektor wl.");
+                } else {
+                    PCD_print(FONT_1X, (unsigned char*)"Korektor wyl.");
                 }
                 
                 if(checkIfOutputIsActive(BIT_RADIO)) {
