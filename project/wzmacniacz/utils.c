@@ -14,17 +14,10 @@ void delay_ms(int ms) {
     }
 }
 
-int strlength(char *s) {
-    unsigned char p = 0;
-    
-    while(*s++)p++;
-    return p;
-}
-
 int binatoi(char *s) {
     int i,l=0,w=1;
     
-    for(i=0; i < strlength(s); i++)
+    for(i=0; i < strlen(s); i++)
     {
         if (s [i]=='1')
         {

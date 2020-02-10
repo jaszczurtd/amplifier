@@ -216,7 +216,7 @@ void clockMainFunction(void) {
                 break;
         }
         
-        PCD_GotoXYFont((S_WIDTH - strlength(weekday)) / 2, 4);
+        PCD_GotoXYFont((S_WIDTH - strlen(weekday)) / 2, 4);
         PCD_print(FONT_1X, (unsigned char*)weekday);
         
     } else {

@@ -180,7 +180,6 @@ typedef char*             LPCTSTR;    ///< Wskaünik do ≥aÒcucha znakÛw
 #endif
 
 void delay_ms(int ms);
-int strlength(char *s);
 int binatoi(char *s);
 char *decToBinary(int n);
 
