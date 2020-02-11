@@ -50,3 +50,8 @@ char *decToBinary(int n) {
     }
     return binaryNum;
 }
+
+unsigned char BinToBCD(unsigned char bin) {
+    return ((((bin) / 10) << 4) + ((bin) % 10));
+}
+

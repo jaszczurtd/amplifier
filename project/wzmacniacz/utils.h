@@ -143,8 +143,6 @@
 #define SIG_UART_TRANS         SIG_UART0_TRANS
 #endif
 
-//0 - 99 binary to BCD code conversion
-#define BinToBCD(bin) ((((bin) / 10) << 4) + ((bin) % 10))
 
 
 // ---------------------------------------------------------------
@@ -182,5 +180,6 @@ typedef char*             LPCTSTR;    ///< Wskaünik do ≥aÒcucha znakÛw
 void delay_ms(int ms);
 int binatoi(char *s);
 char *decToBinary(int n);
+unsigned char BinToBCD(unsigned char bin);
 
 #endif /* utils_h */
