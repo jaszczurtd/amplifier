@@ -13,6 +13,7 @@
 #include "pcf8574a.h"
 #include "i2cEeprom.h"
 #include "pcd8544.h"
+#include "adc.h"
 
 #define DELAY_BETWEEN_STATES 30     //in ms
 
@@ -25,12 +26,20 @@
 #define BIT_POWER_RES 6
 #define BIT_SPEAKERS 7
 
+enum progs {
+    BIT_PR_1 = 0, BIT_PR_2, BIT_PR_3, BIT_PR_4, BIT_PR_5, BIT_PR_6, BIT_PR_7, BIT_PR_8
+};
+
 #define FM_MIN_FREQUENCY 875
 #define FM_MAX_FREQUENCY 1080
 
 extern unsigned char MEM[];
 
 extern bool EORBit(unsigned char address);
+
+#if DEBUG_VAL
+extern debugval;
+#endif
 
 void restoreOutputs(void);
 void setSpecifiedOutputDisableOthers(unsigned char bit);

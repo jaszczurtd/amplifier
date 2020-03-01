@@ -13,6 +13,8 @@
 #include <util/delay.h>
 #include "utils.h"
 
+#define ADC_MAX_VALUE 1023
+
 void ADC_Init(bool interrupt);
 int getADCValue(void);
 

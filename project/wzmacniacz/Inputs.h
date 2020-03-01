@@ -25,4 +25,18 @@ bool radio_sw(void);
 bool dac_sw(void);
 bool loudness_sw(void);
 
+bool pr_1_sw(void);
+bool pr_2_sw(void);
+bool pr_3_sw(void);
+bool pr_4_sw(void);
+bool pr_5_sw(void);
+bool pr_6_sw(void);
+bool pr_7_sw(void);
+bool pr_8_sw(void);
+
+void readSelectorInputs(void);
+void readRadioInputs(void);
+bool pr_plus_sw(void);
+bool pr_minus_sw(void);
+    
 #endif /* Inputs_h */

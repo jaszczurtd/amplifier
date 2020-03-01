@@ -29,8 +29,12 @@ bool checkIfOutputIsActive(unsigned char bit) {
 void restoreOutputs(void) {
     
     setLoudness(getLoudness());
+    
+    if(MEM[E_OUTPUTS] == 0) {
+        setSpecifiedOutputDisableOthers(BIT_DAC);
+    }
 
-    if(bit_is_set(MEM[E_OUTPUTS], BIT_RADIO)){
+    if(checkIfOutputIsActive(BIT_RADIO)){
         restorePrograms();
         setRadio(true);
     } else {
@@ -38,25 +42,25 @@ void restoreOutputs(void) {
         disableAllPrograms();
     }
     
-    if(bit_is_set(MEM[E_OUTPUTS], BIT_DAC)){
+    if(checkIfOutputIsActive(BIT_DAC)){
         setDAC(true);
     } else {
         setDAC(false);
     }
 
-    if(bit_is_set(MEM[E_OUTPUTS], BIT_TAPE)){
+    if(checkIfOutputIsActive(BIT_TAPE)){
         setTape(true);
     } else {
         setTape(false);
     }
 
-    if(bit_is_set(MEM[E_OUTPUTS], BIT_PIEZO)){
+    if(checkIfOutputIsActive(BIT_PIEZO)){
         setPiezo(true);
     } else {
         setPiezo(false);
     }
 
-    if(bit_is_set(MEM[E_OUTPUTS], BIT_GENERIC)){
+    if(checkIfOutputIsActive(BIT_GENERIC)){
         setGeneric(true);
     } else {
         setGeneric(false);
@@ -160,6 +164,11 @@ void setSpeakers(bool state) {
 }
 
 void restorePrograms(void) {
+    
+    if(MEM[E_PROGRAMS] == 0) {
+        setSpecifiedProgramDisableOthers(BIT_PR_1);
+    }
+    
     pcf8574writeByte(PORT_PROGRAMS, MEM[E_PROGRAMS]);
 }
 
@@ -182,11 +191,13 @@ void setSpecifiedProgramDisableOthers(unsigned char bit) {
     setStoreStatusFlag(true);
 }
 
-const int frequency = FM_MIN_FREQUENCY;
 static char frequencyString[6];
 const char *getFrequencyValueString(void) {
     
-    float num = ((float)frequency) / 10.0f;
+    float percent = ((float)getADCValue() * 100) / ADC_MAX_VALUE;
+    float frequency = ((percent / 100) * (FM_MAX_FREQUENCY - FM_MIN_FREQUENCY));
+    
+    float num = ((float)(frequency + FM_MIN_FREQUENCY)) / 10.0f;
     int intpart = (int)num;
     int decpart = ((float)(num - intpart)) * 10;
     

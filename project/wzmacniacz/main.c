@@ -24,6 +24,10 @@ static bool powerResEnabled = false;
 
 static int volumeChangeTimer = 0;
 
+#if DEBUG_VAL
+int debugval = 0;
+#endif
+
 bool powerIsOn = false;
 void setPower(bool x) {
     if(x)sbi(PORTC, PC5);
@@ -119,6 +123,7 @@ int main(void) {
                 setSpeakers(speakersFlag = false);
                 delay_ms(DELAY_BETWEEN_STATES);
                 clearOutputs();
+                disableAllPrograms();
                 delay_ms(100);
                 
                 setPower(powerIsOn = false);
@@ -153,27 +158,9 @@ int main(void) {
                     break;
             }
             
-            if(tape_sw()) {
-                while (tape_sw()) { RC(); }
-                setSpecifiedOutputDisableOthers(BIT_TAPE);
-            }
-            if(radio_sw()) {
-                while (radio_sw()) { RC(); }
-                setSpecifiedOutputDisableOthers(BIT_RADIO);
-            }
-            if(dac_sw()) {
-                while (dac_sw()) { RC(); }
-                setSpecifiedOutputDisableOthers(BIT_DAC);
-            }
-            if(piezo_sw()) {
-                while (piezo_sw()) { RC(); }
-                setSpecifiedOutputDisableOthers(BIT_PIEZO);
-            }
-            if(generic_sw()) {
-                while (generic_sw()) { RC(); }
-                setSpecifiedOutputDisableOthers(BIT_GENERIC);
-            }
-
+            readSelectorInputs();
+            readRadioInputs();
+            
             MEM[E_VOLUME] = getImpulsatorValue();
             if(lastVolume != MEM[E_VOLUME]) {
                 lastVolume = MEM[E_VOLUME];
@@ -182,21 +169,6 @@ int main(void) {
                 
                 setStoreStatusFlag(true);
             }
-            
-            
-            /*
-            int adc = getADCValue();
-            
-            memset(s, 0, BUF_L);
-            snprintf(s, BUF_L, "%d %d", MEM[E_VOLUME], rc5Code);
-            PCD_print(FONT_1X, (unsigned char*)s);
-            
-            PCD_GotoXYFont(0,1);
-            memset(s, 0, BUF_L);
-            snprintf(s, BUF_L, "%d %d %d", adc, switchCode, checkIfTimerReached());
-            PCD_print(FONT_1X, (unsigned char*)s);
-
-            */
             
             if(volumeChangeTimer <= 0) {
                 PCD_GotoXYFont(0, 0);
@@ -215,6 +187,7 @@ int main(void) {
                 
                 if(checkIfOutputIsActive(BIT_RADIO)) {
                     unsigned char x1 = 2, x2 = 10;
+                    
                     if(strlen(getFrequencyValueString()) > 4) {
                         x1 = 1;
                         x2 = 11;
@@ -230,6 +203,13 @@ int main(void) {
                     getTime();
                     printClockHour(1, 4);
                 }
+#if DEBUG_VAL
+                int adc = getADCValue();
+                PCD_GotoXYFont(0, 5);
+                memset(s, 0, BUF_L);
+                snprintf(s, BUF_L, "%d %d %d %d", adc, switchCode, rc5Code, debugval);
+                PCD_print(FONT_1X, (unsigned char*)s);
+#endif
                 
             } else {
                 volumeChangeTimer--;
