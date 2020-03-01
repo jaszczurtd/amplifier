@@ -22,11 +22,40 @@ static char year[5] = {0};
 static char hour[4] = {0};
 static char minute[4] = {0};
 static char second[4] = {0};
+static char weekday[14] = {0};
 
-#define CLOCK_SETTABLE_ITEMS 6
+#define CLOCK_SETTABLE_ITEMS 7
 static const char *items[CLOCK_SETTABLE_ITEMS] = {
-    day, month, year, hour, minute, second
+    day, month, year, hour, minute, second, weekday
 };
+                
+const char *getDayString(void) {
+    char *weekday = "";
+    switch(pcfDateTime.weekday) {
+        case 0:
+            weekday = "Poniedzialek";
+            break;
+        case 1:
+            weekday = "Wtorek";
+            break;
+        case 2:
+            weekday = "Sroda";
+            break;
+        case 3:
+            weekday = "Czwartek";
+            break;
+        case 4:
+            weekday = "Piatek";
+            break;
+        case 5:
+            weekday = "Sobota";
+            break;
+        case 6:
+            weekday = "Niedziela";
+            break;
+    }
+    return weekday;
+}
 
 const char *getItem(unsigned char number) {
     if(activeItem == number) {
@@ -137,6 +166,21 @@ void setItem(bool increase) {
                 }
             }
             break;
+            
+        case 6:
+            if(increase) {
+                if(pcfDateTime.weekday < 6) {
+                    pcfDateTime.weekday++;
+                } else {
+                    pcfDateTime.weekday = 0;
+                }
+            } else {
+                if(pcfDateTime.weekday > 0) {
+                    pcfDateTime.weekday--;
+                } else {
+                    pcfDateTime.weekday = 6;
+                }
+            }
     }
     setItemVisible();
 }
@@ -191,31 +235,7 @@ void clockMainFunction(void) {
         
         printClockHour(2, 3);
         
-        char *weekday = "";
-        switch(pcfDateTime.weekday) {
-            case 0:
-                weekday = "Poniedzialek";
-                break;
-            case 1:
-                weekday = "Wtorek";
-                break;
-            case 2:
-                weekday = "Sroda";
-                break;
-            case 3:
-                weekday = "Czwartek";
-                break;
-            case 4:
-                weekday = "Piatek";
-                break;
-            case 5:
-                weekday = "Sobota";
-                break;
-            case 6:
-                weekday = "Niedziela";
-                break;
-        }
-        
+        const char *weekday = getDayString();
         PCD_GotoXYFont((S_WIDTH - strlen(weekday)) / 2, 4);
         PCD_print(FONT_1X, (unsigned char*)weekday);
         
@@ -250,6 +270,7 @@ void clockMainFunction(void) {
         snprintf(hour, sizeof(hour), "%02d", pcfDateTime.hour);
         snprintf(minute, sizeof(minute), "%02d", pcfDateTime.minute);
         snprintf(second, sizeof(second), "%02d", pcfDateTime.second);
+        snprintf(weekday, sizeof(weekday), "%s", getDayString());
         
         if(itemVisibilityCounter++ > ITEM_VISIBILITY_CYCLES_COUNTER) {
             itemVisibilityCounter = 0;
@@ -272,8 +293,11 @@ void clockMainFunction(void) {
         memset(s, 0, BUF_L);
         snprintf(s, BUF_L, "%s:%s %s",
                  getItem(3), getItem(4), getItem(5) );
-        
+
         PCD_print(FONT_1X, (unsigned char*)s);
+        
+        PCD_GotoXYFont((S_WIDTH - strlen(getItem(6))) / 2, 3);
+        PCD_print(FONT_1X, (unsigned char*)getItem(6));
     }
 }
 
