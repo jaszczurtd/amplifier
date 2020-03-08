@@ -48,7 +48,7 @@ extern void setVolumeChangerTimer(void);
 #define POWER_LED_MAX_VALUE 160
 
 
-#define DEFAULT_POWER_IS_ON true
+#define DEFAULT_POWER_IS_ON false
 
 #define VOL_CHANGE_TIME 55
 #define VOL_BAR_HEIGHT 9
