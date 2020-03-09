@@ -10,7 +10,9 @@
 int rc5Code, switchCode;
 
 void initInputs(void) {
-    sbi(DDRB, PB2);    //power
+    sbi(DDRB, PB2);  //power
+    
+    cbi(DDRA, PA1);  //AM/FM
 }
 
 void readCommands(int time) {

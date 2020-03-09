@@ -30,8 +30,15 @@ enum progs {
     BIT_PR_1 = 0, BIT_PR_2, BIT_PR_3, BIT_PR_4, BIT_PR_5, BIT_PR_6, BIT_PR_7, BIT_PR_8
 };
 
+enum freq {
+    AM = 0, FM
+};
+
 #define FM_MIN_FREQUENCY 875
 #define FM_MAX_FREQUENCY 1080
+
+#define AM_MIN_FREQUENCY 165
+#define AM_MAX_FREQUENCY 285
 
 extern unsigned char MEM[];
 
@@ -62,6 +69,7 @@ void setProgram(int bit, bool state);
 void setSpecifiedProgramDisableOthers(unsigned char bit);
 void disableAllPrograms(void);
 
+unsigned char getActiveFreq(void);
 const char *getFrequencyValueString(void);
 const char *getFrequencyString(void);
 

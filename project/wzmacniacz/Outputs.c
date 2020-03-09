@@ -191,21 +191,43 @@ void setSpecifiedProgramDisableOthers(unsigned char bit) {
     setStoreStatusFlag(true);
 }
 
-static char frequencyString[6];
+unsigned char getActiveFreq(void) {
+    if(bit_is_clear(PINA, PC1)) {
+        return AM;
+    }
+    return FM;
+}
+
+static char frequencyValueString[6];
 const char *getFrequencyValueString(void) {
     
-    float percent = ((float)getADCValue() * 100) / ADC_MAX_VALUE;
-    float frequency = ((percent / 100) * (FM_MAX_FREQUENCY - FM_MIN_FREQUENCY));
+    int F_MIN = FM_MIN_FREQUENCY;
+    int F_MAX = FM_MAX_FREQUENCY;
     
-    float num = ((float)(frequency + FM_MIN_FREQUENCY)) / 10.0f;
+    if(getActiveFreq() == AM) {
+        F_MIN = AM_MIN_FREQUENCY;
+        F_MAX = AM_MAX_FREQUENCY;
+    }
+    
+    float percent = ((float)getADCValue() * 100) / ADC_MAX_VALUE;
+    float frequency = ((percent / 100) * (F_MAX - F_MIN));
+    
+    float num = ((float)(frequency + F_MIN)) / 10.0f;
     int intpart = (int)num;
     int decpart = ((float)(num - intpart)) * 10;
     
-    snprintf(frequencyString, sizeof(frequencyString), "%d.%d", intpart, decpart);
+    if(getActiveFreq() == AM) {
+        snprintf(frequencyValueString, sizeof(frequencyValueString), "%d%d", intpart, decpart);
+    } else {
+        snprintf(frequencyValueString, sizeof(frequencyValueString), "%d.%d", intpart, decpart);
+    }
     
-    return frequencyString;
+    return frequencyValueString;
 }
 
 const char *getFrequencyString(void) {
-    return "Mhz";
+    if(getActiveFreq() == AM) {
+        return "kHz";
+    }
+    return "MHz";
 }

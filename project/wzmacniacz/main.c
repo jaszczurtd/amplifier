@@ -188,9 +188,14 @@ int main(void) {
                 if(checkIfOutputIsActive(BIT_RADIO)) {
                     unsigned char x1 = 2, x2 = 10;
                     
-                    if(strlen(getFrequencyValueString()) > 4) {
-                        x1 = 1;
-                        x2 = 11;
+                    if(getActiveFreq() == AM) {
+                        x1 = 3;
+                        x2 = 10;
+                    } else {
+                        if(strlen(getFrequencyValueString()) > 4) {
+                            x1 = 1;
+                            x2 = 11;
+                        }
                     }
                     
                     PCD_GotoXYFont(x1, 4);
