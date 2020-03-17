@@ -10,7 +10,7 @@
 //experimental value
 #define DETERMINATION_TIME 10
 
-static int currentValue, maxValue, stepValue, stepValueCounter;
+static int currentValue, maxValue, stepValueCounter;
 static bool determined = false;
 static int pulses = 0;
 static char delta = NONE;
@@ -58,7 +58,6 @@ void Impulsator_Init(int max) {
     
     determination(NONE);
     
-    stepValue = 0;
     stepValueCounter = 0;
     
     setImpulsatorMaxValue(max);
@@ -72,11 +71,7 @@ int getImpulsatorMaxValue(void) {
     return maxValue;
 }
 
-void setImpulsatorStep(int step) {
-    stepValue = step;
-}
-
-void Impulsator_decrease(void) {
+void Impulsator_decrease(unsigned char stepValue) {
     setVolumeChangerTimer();
     if(currentValue > 0) {
         if(stepValueCounter++ > stepValue){
@@ -87,7 +82,7 @@ void Impulsator_decrease(void) {
     pulses = DETERMINATION_TIME;
 }
 
-void Impulsator_increase(void) {
+void Impulsator_increase(unsigned char stepValue) {
     setVolumeChangerTimer();
     if(currentValue < maxValue) {
         if(stepValueCounter++ > stepValue){
@@ -137,10 +132,10 @@ void Read1StepEncoder(void) {
         }
         if(movement){
             if(delta == RIGHT) {
-                Impulsator_increase();
+                Impulsator_increase(1);
             }
             if(delta == LEFT) {
-                Impulsator_decrease();
+                Impulsator_decrease(1);
             }
         }
     }

@@ -63,7 +63,6 @@ void setup(void) {
     init74150();
     PCF_Init(PCF_TIMER_INTERRUPT_ENABLE);
     Impulsator_Init(MAX_VOLUME);
-    setImpulsatorStep(1);
 
     clearPorts();
     
@@ -139,11 +138,11 @@ int main(void) {
             
             switch(rc5Code) {
                 case RC5_VOLUME_UP:
-                    Impulsator_increase();
+                    Impulsator_increase(2);
                     setVolumeChangerTimer();
                     break;
                 case RC5_VOLUME_DOWN:
-                    Impulsator_decrease();
+                    Impulsator_decrease(2);
                     setVolumeChangerTimer();
                     break;
                 case RC5_MUTE:

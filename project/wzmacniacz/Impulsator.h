@@ -25,12 +25,11 @@
 #define MAX_VOLUME 240
 
 void Impulsator_Init(int max);
-void Impulsator_decrease(void);
-void Impulsator_increase(void);
+void Impulsator_decrease(unsigned char stepValue);
+void Impulsator_increase(unsigned char stepValue);
 
 void setImpulsatorMaxValue(int value);
 int getImpulsatorMaxValue(void);
-void setImpulsatorStep(int step);
 int getImpulsatorValue(void);
 void setImpulsatorValue(int value);
 void Read1StepEncoder(void);
