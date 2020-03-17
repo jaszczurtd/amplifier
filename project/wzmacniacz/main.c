@@ -11,7 +11,7 @@
 
 #include "main.h"
 
-static int lastVolume = 0;
+static int lastVolume = -1;
 
 static unsigned char powerLEDValue = 0;
 
@@ -62,7 +62,7 @@ void setup(void) {
     ADC_Init(true);
     init74150();
     PCF_Init(PCF_TIMER_INTERRUPT_ENABLE);
-    Impulsator_Init(255);
+    Impulsator_Init(MAX_VOLUME);
     setImpulsatorStep(1);
 
     clearPorts();
@@ -165,8 +165,9 @@ int main(void) {
             if(lastVolume != MEM[E_VOLUME]) {
                 lastVolume = MEM[E_VOLUME];
                 
-                setDS1267(lastVolume, lastVolume);
+                unsigned char p = (lastVolume + 1);
                 
+                setDS1267(p, p);
                 setStoreStatusFlag(true);
             }
             
@@ -254,6 +255,9 @@ int main(void) {
                 
                 setPower(powerIsOn = true);
                 setClockSetMode(false);
+                
+                lastVolume = -1;
+                
                 setStoreStatusFlag(true);
                 
                 continue;
