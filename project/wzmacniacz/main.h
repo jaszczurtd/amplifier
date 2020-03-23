@@ -38,12 +38,17 @@ extern char s[];
 
 extern void setVolumeChangerTimer(void);
 
+void setVolume(bool toZero);
+
 #define DEBUG_VAL false
 
 #define MAIN_DELAY_TIME 10          //in ms
 #define POWER_RES_COUNTER 100       //* MAIN_DELAY_TIME
 #define SPEAKERS_COUNTER 35         //POWER_RES_COUNTER + (* MAIN_DELAY_TIME)
 #define READ_COMMANDS_DELAY_TIME (MAIN_DELAY_TIME * 2)
+
+#define POWER_OFF_DELAY 120
+#define LOUDNESS_DELAY 150
 
 #define POWER_LED_MAX_VALUE 160
 

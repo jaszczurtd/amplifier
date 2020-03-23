@@ -16,7 +16,7 @@ static int lastVolume = -1;
 static unsigned char powerLEDValue = 0;
 
 static bool speakersSequenceEnd = false;
-static bool speakersFlag = false;
+bool speakersFlag = false;
 static int speakersCounter = 0;
 
 static int powerResCounter = 0;
@@ -84,6 +84,14 @@ inline void setVolumeChangerTimer(void) {
     volumeChangeTimer = VOL_CHANGE_TIME;
 }
 
+void setVolume(bool toZero) {
+    unsigned char p = 1;
+    
+    if(!toZero) {
+        p = (lastVolume + 1);
+    }
+    setDS1267(p, p);
+}
 
 int main(void) {
     
@@ -120,10 +128,10 @@ int main(void) {
                 while (power_sw()) { RC(); }
                 
                 setSpeakers(speakersFlag = false);
-                delay_ms(DELAY_BETWEEN_STATES);
+                delay_ms(POWER_OFF_DELAY);
                 clearOutputs();
                 disableAllPrograms();
-                delay_ms(100);
+                delay_ms(POWER_OFF_DELAY);
                 
                 setPower(powerIsOn = false);
                 setPowerRes(false);
@@ -164,9 +172,7 @@ int main(void) {
             if(lastVolume != MEM[E_VOLUME]) {
                 lastVolume = MEM[E_VOLUME];
                 
-                unsigned char p = (lastVolume + 1);
-                
-                setDS1267(p, p);
+                setVolume(false);
                 setStoreStatusFlag(true);
             }
             

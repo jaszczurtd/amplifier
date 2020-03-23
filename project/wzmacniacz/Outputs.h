@@ -14,6 +14,7 @@
 #include "i2cEeprom.h"
 #include "pcd8544.h"
 #include "adc.h"
+#include "main.h"
 
 #define DELAY_BETWEEN_STATES 30     //in ms
 
@@ -43,6 +44,7 @@ enum freq {
 extern unsigned char MEM[];
 
 extern bool EORBit(unsigned char address);
+extern bool speakersFlag;
 
 #if DEBUG_VAL
 extern debugval;

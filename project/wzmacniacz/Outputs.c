@@ -30,6 +30,9 @@ void restoreOutputs(void) {
     
     setLoudness(getLoudness());
     
+    setVolume(true);
+    delay_ms(DELAY_BETWEEN_STATES);
+    
     if(MEM[E_OUTPUTS] == 0) {
         setSpecifiedOutputDisableOthers(BIT_DAC);
     }
@@ -65,6 +68,9 @@ void restoreOutputs(void) {
     } else {
         setGeneric(false);
     }
+    
+    delay_ms(DELAY_BETWEEN_STATES);
+    setVolume(false);
 }
 
 void setSpecifiedOutputDisableOthers(unsigned char bit) {
@@ -91,13 +97,27 @@ void clearOutputs(void) {
     pcf8574writeByte(PORT_OUTPUTS, outputsRegister);
 }
 
+static bool lastLoudness = false;
 void setLoudness(bool state) {
-    if(state) {
-        bitSet(outputsRegister, BIT_LOUDNESS);
-    } else {
-        bitClear(outputsRegister, BIT_LOUDNESS);
+    
+    if(lastLoudness != state) {
+        lastLoudness = state;
+        
+        setSpeakers(false);
+        setVolume(true);
+        delay_ms(LOUDNESS_DELAY);
+
+        if(state) {
+            bitSet(outputsRegister, BIT_LOUDNESS);
+        } else {
+            bitClear(outputsRegister, BIT_LOUDNESS);
+        }
+        pcf8574writeByte(PORT_OUTPUTS, outputsRegister);
+
+        delay_ms(LOUDNESS_DELAY);
+        setSpeakers(speakersFlag);
+        setVolume(false);
     }
-    pcf8574writeByte(PORT_OUTPUTS, outputsRegister);
 }
 
 void setRadio(bool state) {
@@ -185,10 +205,17 @@ void setProgram(int bit, bool state) {
 }
 
 void setSpecifiedProgramDisableOthers(unsigned char bit) {
+    
+    delay_ms(DELAY_BETWEEN_STATES);
+    setVolume(true);
+
     MEM[E_PROGRAMS] = 0;
     setProgram(bit, true);
     restorePrograms();
     setStoreStatusFlag(true);
+    
+    delay_ms(DELAY_BETWEEN_STATES);
+    setVolume(false);
 }
 
 unsigned char getActiveFreq(void) {
