@@ -262,6 +262,7 @@ int main(void) {
                 setClockSetMode(false);
                 
                 lastVolume = -1;
+                lastLoudness = -1;
                 
                 setStoreStatusFlag(true);
                 

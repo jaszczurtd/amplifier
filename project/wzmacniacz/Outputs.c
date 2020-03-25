@@ -97,8 +97,8 @@ void clearOutputs(void) {
     pcf8574writeByte(PORT_OUTPUTS, outputsRegister);
 }
 
-static bool lastLoudness = false;
-void setLoudness(bool state) {
+unsigned char lastLoudness = -1;
+void setLoudness(unsigned char state) {
     
     if(lastLoudness != state) {
         lastLoudness = state;

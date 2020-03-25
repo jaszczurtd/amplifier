@@ -32,6 +32,7 @@
 #include "clockPart.h"
 
 extern int rc5Code, switchCode;
+extern unsigned char lastLoudness;
 
 extern unsigned char MEM[];
 extern char s[];
