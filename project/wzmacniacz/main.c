@@ -88,7 +88,7 @@ void setVolume(bool toZero) {
     unsigned char p = 1;
     
     if(!toZero) {
-        p = (lastVolume + 1);
+        p = (getImpulsatorValue() + 1);
     }
     setDS1267(p, p);
 }
@@ -171,11 +171,10 @@ int main(void) {
             MEM[E_VOLUME] = getImpulsatorValue();
             if(lastVolume != MEM[E_VOLUME]) {
                 lastVolume = MEM[E_VOLUME];
-                
-                setVolume(false);
                 setStoreStatusFlag(true);
+                setVolume(false);
             }
-            
+
             if(volumeChangeTimer <= 0) {
                 PCD_GotoXYFont(0, 0);
                 if(speakersFlag) {

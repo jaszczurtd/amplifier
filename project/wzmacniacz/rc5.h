@@ -39,6 +39,8 @@
 
 #define RC5_STABILITY_VALUE 7
 
+#define RC5_VOLUME_INCREASE_VALUE 4
+
 /* Initialize timer and interrupt */
 void RC5_Init(void);
 
