@@ -76,3 +76,9 @@ test/unit/out/
 
 www/cache/
 __pycache__
+*.bin
+*.elf
+*.hex
+*.lst
+*.map
+*.srec
