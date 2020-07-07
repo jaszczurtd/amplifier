@@ -31,6 +31,8 @@
 #include "Outputs.h"
 #include "clockPart.h"
 
+#define WDT_ENABLE true
+
 extern int rc5Code, switchCode;
 extern unsigned char lastLoudness;
 

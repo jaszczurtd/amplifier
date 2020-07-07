@@ -62,7 +62,9 @@ void setup(void) {
     PWM_Init(true, false);
     ADC_Init(true);
     init74150();
+#if REAL_HARDWARE
     PCF_Init(PCF_TIMER_INTERRUPT_ENABLE);
+#endif
     Impulsator_Init(MAX_VOLUME);
 
     clearPorts();

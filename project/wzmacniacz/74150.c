@@ -18,7 +18,8 @@ void init74150(void) {
 
 static int result = 0;
 int read74150(void) {
-    
+
+#if REAL_HARDWARE
     register char res = I_74150_NOT_ACTIVE;
     register char hits = 0;
     
@@ -57,6 +58,8 @@ int read74150(void) {
     } else {
         result = I_74150_NOT_ACTIVE;
     }
-    
+#else
+    result = I_74150_NOT_ACTIVE;
+#endif
     return result;
 }

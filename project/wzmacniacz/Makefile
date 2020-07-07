@@ -3,7 +3,7 @@ F_CPU = 16000000
 PRG            = main
 OBJ            = main.o 74150.o adc.o clockPart.o ds18b20.o ds1267.o i2cEeprom.o Impulsator.o rc5.o twi_i2c.o UART.o utils.o pcd8544.o Inputs.o Outputs.o pcf8574a.o pcf8563.o pwm.o   
 MCU_TARGET     = atmega32
-OPTIMIZE       = -Os
+OPTIMIZE       = -O2
 
 DEFS           = -DF_CPU=$(F_CPU)UL
 LIBS           = -lm

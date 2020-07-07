@@ -194,7 +194,9 @@ void setClockSetMode(bool enabled) {
 }
 
 void getTime(void) {
+#if REAL_HARDWARE
     PCF_GetDateTime(&pcfDateTime);
+#endif
 }
 
 void printClockHour(unsigned char x, unsigned char y) {
@@ -215,8 +217,10 @@ void printClockHour(unsigned char x, unsigned char y) {
     PCD_print(FONT_1X, (unsigned char*)s);
 }
 
+
 void clockMainFunction(void) {
-    
+
+#if REAL_HARDWARE
     if(!clockSetMode) {
     
         getTime();
@@ -299,6 +303,23 @@ void clockMainFunction(void) {
         PCD_GotoXYFont((S_WIDTH - strlen(getItem(6))) / 2, 3);
         PCD_print(FONT_1X, (unsigned char*)getItem(6));
     }
+#else
+    static int lastCMD = 0;
+    static long increase = 0;
+
+	int cmd = RC5_NewCommandReceived();
+	if(lastCMD != cmd && cmd != 0) {
+		lastCMD = cmd;
+	}
+	PCD_GotoXYFont(0, 0);
+	PCD_print(FONT_1X, (unsigned char*)"debug");
+
+	PCD_GotoXYFont(0, 1);
+	snprintf(s, BUF_L, "rc5: %d %d", lastCMD, increase++);
+	PCD_print(FONT_1X, (unsigned char*)s);
+
+#endif
+    
 }
 
 static unsigned char lastSecondValue = -1;
