@@ -57,7 +57,6 @@ void setup(void) {
     setPower(powerIsOn = DEFAULT_POWER_IS_ON);
     
     RC5_Init();
-    initDS1267();
     TWI_Init();
     PWM_Init(true, false);
     ADC_Init(true);
@@ -78,7 +77,7 @@ void setup(void) {
     clearOutputs();
     
     setImpulsatorValue((lastVolume = MEM[E_VOLUME]));
-    setDS1267(lastVolume, lastVolume);
+    pcf8574writeByte(PORT_VOLUME, lastVolume);
     
     sei();
 }
@@ -88,12 +87,11 @@ inline void setVolumeChangerTimer(void) {
 }
 
 void setVolume(bool toZero) {
-    unsigned char p = 1;
-    
+    unsigned char p = 0;
     if(!toZero) {
-        p = (getImpulsatorValue() + 1);
+        p = getImpulsatorValue();
     }
-    setDS1267(p, p);
+    pcf8574writeByte(PORT_VOLUME, p);
 }
 
 int main(void) {

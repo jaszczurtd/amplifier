@@ -25,7 +25,6 @@
 #include "pwm.h"
 #include "74150.h"
 #include "pcf8574a.h"
-#include "ds1267.h"
 #include "PCF8563.h"
 #include "Inputs.h"
 #include "Outputs.h"
@@ -45,7 +44,7 @@ void setVolume(bool toZero);
 
 #define DEBUG_VAL false
 
-#define MAIN_DELAY_TIME 10          //in ms
+#define MAIN_DELAY_TIME 8          //in ms
 #define POWER_RES_COUNTER 100       //* MAIN_DELAY_TIME
 #define SPEAKERS_COUNTER 35         //POWER_RES_COUNTER + (* MAIN_DELAY_TIME)
 #define READ_COMMANDS_DELAY_TIME (MAIN_DELAY_TIME * 2)

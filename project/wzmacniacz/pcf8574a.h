@@ -14,9 +14,11 @@
 
 #define PCF8574_WRITE_ADDR_A     0x70
 #define PCF8574_WRITE_ADDR_B     0x72
+#define PCF8574_WRITE_ADDR_C     0x74
 
 #define PORT_OUTPUTS    0
 #define PORT_PROGRAMS   1
+#define PORT_VOLUME		2
 
 void pcf8574writeByte(unsigned char outputs, unsigned char value);
 void clearPorts(void);

@@ -315,7 +315,7 @@ void clockMainFunction(void) {
 	PCD_print(FONT_1X, (unsigned char*)"debug");
 
 	PCD_GotoXYFont(0, 1);
-	snprintf(s, BUF_L, "rc5: %d %d", lastCMD, increase++);
+	snprintf(s, BUF_L, "rc5: %d %ld", lastCMD, increase++);
 	PCD_print(FONT_1X, (unsigned char*)s);
 
 #endif
