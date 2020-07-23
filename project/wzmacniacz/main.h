@@ -3,10 +3,10 @@
  */
 
 #include "version.h" // Config file
+
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
-
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -30,8 +30,6 @@
 #include "Outputs.h"
 #include "clockPart.h"
 
-#define WDT_ENABLE true
-
 extern int rc5Code, switchCode;
 extern unsigned char lastLoudness;
 
@@ -41,8 +39,6 @@ extern char s[];
 extern void setVolumeChangerTimer(void);
 
 void setVolume(bool toZero);
-
-#define DEBUG_VAL false
 
 #define MAIN_DELAY_TIME 8          //in ms
 #define POWER_RES_COUNTER 100       //* MAIN_DELAY_TIME

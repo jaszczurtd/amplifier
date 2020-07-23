@@ -10,3 +10,7 @@
 
 // Version
 #define AUTOCOMP_VERSION 1
+
+//#define REAL_HARDWARE true
+#define WDT_ENABLE true
+#define DEBUG_VAL false

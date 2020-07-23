@@ -147,11 +147,11 @@ int main(void) {
             
             switch(rc5Code) {
                 case RC5_VOLUME_UP:
-                    Impulsator_increase(2);
+                    Impulsator_increase(1);
                     setVolumeChangerTimer();
                     break;
                 case RC5_VOLUME_DOWN:
-                    Impulsator_decrease(2);
+                    Impulsator_decrease(1);
                     setVolumeChangerTimer();
                     break;
                 case RC5_MUTE:
