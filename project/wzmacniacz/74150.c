@@ -6,6 +6,7 @@
 //
 
 #include "74150.h"
+#include "version.h"
 
 void init74150(void) {
     sbi(DDRD,PD7); //D
