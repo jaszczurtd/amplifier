@@ -91,6 +91,7 @@ void setVolume(bool toZero) {
     if(!toZero) {
         p = getImpulsatorValue();
     }
+    p += MIN_VOLUME;
     pcf8574writeByte(PORT_VOLUME, ~p);
 }
 
