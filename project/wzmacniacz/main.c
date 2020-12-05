@@ -92,7 +92,7 @@ void setVolume(bool toZero) {
         p = getImpulsatorValue();
     }
     p += MIN_VOLUME;
-    pcf8574writeByte(PORT_VOLUME, ~p);
+    pcf8574writeByte(PORT_VOLUME, p);
 }
 
 int main(void) {

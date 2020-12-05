@@ -181,5 +181,6 @@ void delay_ms(int ms);
 int binatoi(char *s);
 char *decToBinary(int n);
 unsigned char BinToBCD(unsigned char bin);
+unsigned char reverse(unsigned char b);
 
 #endif /* utils_h */

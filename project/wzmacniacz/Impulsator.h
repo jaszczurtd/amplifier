@@ -22,8 +22,8 @@
 #define LEFT 1
 #define RIGHT 2
 
-#define MIN_VOLUME 45
-#define MAX_VOLUME 255 - MIN_VOLUME
+#define MIN_VOLUME 0
+#define MAX_VOLUME 127 - MIN_VOLUME
 
 void Impulsator_Init(int max);
 void Impulsator_decrease(unsigned char stepValue);
