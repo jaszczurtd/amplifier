@@ -46,7 +46,7 @@ void setVolume(bool toZero);
 #define READ_COMMANDS_DELAY_TIME (MAIN_DELAY_TIME * 2)
 
 #define POWER_OFF_DELAY 120
-#define LOUDNESS_DELAY 150
+#define LOUDNESS_DELAY 160
 
 #define POWER_LED_MAX_VALUE 160
 

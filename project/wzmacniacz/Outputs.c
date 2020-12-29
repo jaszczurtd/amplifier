@@ -104,7 +104,6 @@ void setLoudness(unsigned char state) {
         lastLoudness = state;
         
         setSpeakers(false);
-        setVolume(true);
         delay_ms(LOUDNESS_DELAY);
 
         if(state) {
@@ -116,7 +115,6 @@ void setLoudness(unsigned char state) {
 
         delay_ms(LOUDNESS_DELAY);
         setSpeakers(speakersFlag);
-        setVolume(false);
     }
 }
 
