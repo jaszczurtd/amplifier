@@ -28,9 +28,10 @@ bool checkIfOutputIsActive(unsigned char bit) {
 
 void restoreOutputs(void) {
     
-    setLoudness(getLoudness());
-    
     setVolume(true);
+    
+    setLoudness(true, getLoudness());
+    
     delay_ms(DELAY_BETWEEN_STATES);
     
     if(MEM[E_OUTPUTS] == 0) {
@@ -98,13 +99,17 @@ void clearOutputs(void) {
 }
 
 unsigned char lastLoudness = -1;
-void setLoudness(unsigned char state) {
+void setLoudness(bool restoreOnly, unsigned char state) {
     
     if(lastLoudness != state) {
         lastLoudness = state;
         
         setSpeakers(false);
-        delay_ms(LOUDNESS_DELAY);
+        
+        if(restoreOnly) {
+            delay_ms(LOUDNESS_START_DELAY);
+        }
+        delay_ms(LOUDNESS_START_DELAY);
 
         if(state) {
             bitSet(outputsRegister, BIT_LOUDNESS);
@@ -113,7 +118,11 @@ void setLoudness(unsigned char state) {
         }
         pcf8574writeByte(PORT_OUTPUTS, outputsRegister);
 
-        delay_ms(LOUDNESS_DELAY);
+        if(restoreOnly) {
+            delay_ms(LOUDNESS_START_DELAY);
+        } else {
+            delay_ms(LOUDNESS_END_DELAY);
+        }
         setSpeakers(speakersFlag);
     }
 }

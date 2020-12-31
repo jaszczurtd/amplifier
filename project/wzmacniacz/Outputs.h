@@ -55,7 +55,7 @@ void setSpecifiedOutputDisableOthers(unsigned char bit);
 bool checkIfOutputIsActive(unsigned char bit);
 
 bool getLoudness(void);
-void setLoudness(unsigned char state);
+void setLoudness(bool restoreOnly, unsigned char state);
 void setRadio(bool state);
 void setDAC(bool state);
 void setTape(bool state);

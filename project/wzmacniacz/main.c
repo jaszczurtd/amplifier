@@ -38,7 +38,7 @@ void setPower(bool x) {
 void setup(void) {
     cli();
     
-    wdt_enable( WDTO_1S );
+    wdt_enable( WDTO_2S );
     
     sbi(DDRC, PC5);
 
@@ -143,7 +143,7 @@ int main(void) {
             
             if(loudness_sw()) {
                 while (loudness_sw()) { RC(); }
-                setLoudness(EORBit(BIT_LOUDNESS));
+                setLoudness(false, EORBit(BIT_LOUDNESS));
             }
             
             switch(rc5Code) {
