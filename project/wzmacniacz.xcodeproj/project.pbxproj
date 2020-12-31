@@ -12,7 +12,6 @@
 		A32A1E3623E78787002C4426 /* Outputs.c in Sources */ = {isa = PBXBuildFile; fileRef = A32A1E3523E78787002C4426 /* Outputs.c */; };
 		A32D820E23A8022700B6546B /* i2cEeprom.c in Sources */ = {isa = PBXBuildFile; fileRef = A32D820D23A8022700B6546B /* i2cEeprom.c */; };
 		A3350A8623D3B1E8003C3F26 /* PCF8563.c in Sources */ = {isa = PBXBuildFile; fileRef = A3350A8523D3B1E8003C3F26 /* PCF8563.c */; };
-		A349451023AEB7F5009A636E /* ds1267.c in Sources */ = {isa = PBXBuildFile; fileRef = A349450F23AEB7F5009A636E /* ds1267.c */; };
 		A349451623B51F60009A636E /* ds18b20.c in Sources */ = {isa = PBXBuildFile; fileRef = A349451523B51F60009A636E /* ds18b20.c */; };
 		A349451923B5335C009A636E /* adc.c in Sources */ = {isa = PBXBuildFile; fileRef = A349451823B5335C009A636E /* adc.c */; };
 		A349451C23B7A79E009A636E /* pwm.c in Sources */ = {isa = PBXBuildFile; fileRef = A349451B23B7A79D009A636E /* pwm.c */; };
@@ -37,8 +36,6 @@
 		A32D820D23A8022700B6546B /* i2cEeprom.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = i2cEeprom.c; sourceTree = "<group>"; };
 		A3350A8423D3B1E8003C3F26 /* PCF8563.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCF8563.h; sourceTree = "<group>"; };
 		A3350A8523D3B1E8003C3F26 /* PCF8563.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = PCF8563.c; sourceTree = "<group>"; };
-		A349450E23AEB7F5009A636E /* ds1267.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ds1267.h; sourceTree = "<group>"; };
-		A349450F23AEB7F5009A636E /* ds1267.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ds1267.c; sourceTree = "<group>"; };
 		A349451423B51F60009A636E /* ds18b20.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ds18b20.h; sourceTree = "<group>"; };
 		A349451523B51F60009A636E /* ds18b20.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ds18b20.c; sourceTree = "<group>"; };
 		A349451723B5335C009A636E /* adc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = adc.h; sourceTree = "<group>"; };
@@ -122,8 +119,6 @@
 				A32D820C23A8022700B6546B /* i2cEeprom.h */,
 				A3EA49E623AC2FEF00071DE3 /* UART.c */,
 				A3EA49E523AC2FEF00071DE3 /* UART.h */,
-				A349450F23AEB7F5009A636E /* ds1267.c */,
-				A349450E23AEB7F5009A636E /* ds1267.h */,
 				A349451523B51F60009A636E /* ds18b20.c */,
 				A349451423B51F60009A636E /* ds18b20.h */,
 				A349451823B5335C009A636E /* adc.c */,
@@ -273,7 +268,6 @@
 			files = (
 				A3350A8623D3B1E8003C3F26 /* PCF8563.c in Sources */,
 				A34F48BA239BFFAA00D9D1E2 /* main.c in Sources */,
-				A349451023AEB7F5009A636E /* ds1267.c in Sources */,
 				A3DB6C2823BA670400F4ACE5 /* 74150.c in Sources */,
 				A3DCEA2523DF68EF0057B8A0 /* clockPart.c in Sources */,
 				A3EA49E723AC2FEF00071DE3 /* UART.c in Sources */,
