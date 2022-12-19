@@ -22,7 +22,7 @@
 #define LEFT 1
 #define RIGHT 2
 
-#define MIN_VOLUME 0
+#define MIN_VOLUME 5
 #define MAX_VOLUME 127 - MIN_VOLUME
 
 void Impulsator_Init(int max);

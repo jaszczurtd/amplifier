@@ -48,7 +48,7 @@ void setVolume(bool toZero);
 
 #define POWER_OFF_DELAY 120
 #define LOUDNESS_START_DELAY 200
-#define LOUDNESS_END_DELAY 1100
+#define LOUDNESS_END_DELAY 500
 
 #define POWER_LED_MAX_VALUE 160
 
